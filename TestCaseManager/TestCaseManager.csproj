@@ -99,6 +99,12 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TestCaseManager.Core\TestCaseManager.Core.csproj">
+      <Project>{814060b0-1855-45b7-82fb-cd4935b46fff}</Project>
+      <Name>TestCaseManager.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
