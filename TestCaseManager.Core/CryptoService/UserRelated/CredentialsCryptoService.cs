@@ -7,11 +7,10 @@ using Org.BouncyCastle.Crypto.Modes;
 using Org.BouncyCastle.Crypto.Paddings;
 using Org.BouncyCastle.Crypto.Parameters;
 
-
-// @http://stackoverflow.com/questions/202011/encrypt-and-decrypt-a-string - TODO: register this into unity
+// @http://stackoverflow.com/questions/202011/encrypt-and-decrypt-a-string - TODO: register this into unity?
 namespace TestCaseManager.Core.CryptoService
 {
-    public class CryptoService<TBlockCipher, TDigest>
+    public class CredentialsCryptoService<TBlockCipher, TDigest>
         where TBlockCipher : IBlockCipher, new()
         where TDigest : IDigest, new()
     {
@@ -25,14 +24,14 @@ namespace TestCaseManager.Core.CryptoService
 
         private byte[] key;
 
-        public CryptoService(Encoding encoding, byte[] key, byte[] macKey)
+        public CredentialsCryptoService(Encoding encoding, byte[] key, byte[] macKey)
         {
             this.encoding = encoding;
             this.key = key;
             this.Init(key, macKey, new Pkcs7Padding());
         }
 
-        public CryptoService(Encoding encoding, byte[] key, byte[] macKey, IBlockCipherPadding padding)
+        public CredentialsCryptoService(Encoding encoding, byte[] key, byte[] macKey, IBlockCipherPadding padding)
         {
             this.encoding = encoding;
             this.key = key;
