@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCaseManager.DB", "TestC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCaseManager.Core", "TestCaseManager.Core\TestCaseManager.Core.csproj", "{814060B0-1855-45B7-82FB-CD4935B46FFF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCaseManager.Utilities", "TestCaseManager.Utilities\TestCaseManager.Utilities.csproj", "{41434473-90FF-4DBF-98C4-DCA88687E9DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{814060B0-1855-45B7-82FB-CD4935B46FFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{814060B0-1855-45B7-82FB-CD4935B46FFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{814060B0-1855-45B7-82FB-CD4935B46FFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41434473-90FF-4DBF-98C4-DCA88687E9DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41434473-90FF-4DBF-98C4-DCA88687E9DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41434473-90FF-4DBF-98C4-DCA88687E9DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41434473-90FF-4DBF-98C4-DCA88687E9DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

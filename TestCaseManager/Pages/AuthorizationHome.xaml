@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="TestCaseManager.Pages.AuthorizationHome"
+﻿<UserControl x:Class="TestCaseManager.Pages.AuthorizationPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -9,17 +9,18 @@
         <ScrollViewer Height="40" VerticalAlignment="Center" Margin="-28,13,240,115" HorizontalAlignment="Center">
             <Label Content="Username" FontWeight="Bold" VerticalAlignment="Top"/>
         </ScrollViewer>
+        
         <ScrollViewer Height="30" VerticalAlignment="Center" Margin="0,10,0,130">
-            <TextBox Height="26" TextWrapping="Wrap" Width="184" VerticalAlignment="Top"/>
+            <TextBox Name="Username" Height="26" TextWrapping="Wrap" Width="184" VerticalAlignment="Top" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
         </ScrollViewer>
         <ScrollViewer Height="40" VerticalAlignment="Center" Margin="-28,78,240,115" HorizontalAlignment="Center">
             <Label Content="Password" FontWeight="Bold" VerticalAlignment="Top" Height="16"/>
         </ScrollViewer>
         <ScrollViewer Height="30" VerticalAlignment="Center" Margin="0,45,0,100">
-            <PasswordBox Height="26" Width="184" VerticalAlignment="Top"/>
+            <PasswordBox Name="Password"  Height="26" Width="184" VerticalAlignment="Top" MaxLength="20"/>
         </ScrollViewer>
         <ScrollViewer Height="40" VerticalAlignment="Center" Margin="109,20,0,0">
-            <Button Content="Log in" HorizontalAlignment="Center" Width="75" Height="30" VerticalAlignment="Top"/>
-        </ScrollViewer>    
+            <Button Content="Log in" HorizontalAlignment="Center" Width="75" Height="30" VerticalAlignment="Top" Click="AuthorizeCredentials_Button" />
+        </ScrollViewer>
     </Grid>
 </UserControl>

@@ -57,6 +57,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Views\PasswordHelper\PasswordHelper.cs" />
+    <Compile Include="Views\PasswordViewModel.cs" />
+    <Compile Include="Views\TextboxViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -103,6 +106,10 @@
     <ProjectReference Include="..\TestCaseManager.Core\TestCaseManager.Core.csproj">
       <Project>{814060b0-1855-45b7-82fb-cd4935b46fff}</Project>
       <Name>TestCaseManager.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestCaseManager.Utilities\TestCaseManager.Utilities.csproj">
+      <Project>{41434473-90ff-4dbf-98c4-dca88687e9df}</Project>
+      <Name>TestCaseManager.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
