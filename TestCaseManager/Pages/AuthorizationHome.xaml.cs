@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using TestCaseManager.DB;
 using TestCaseManager.Views;
 
 namespace TestCaseManager.Pages
@@ -30,6 +31,12 @@ namespace TestCaseManager.Pages
 
         private void ValidatePassword()
         {
+            using (var db = new TestcaseManagerDB())
+            {
+                ApplicationUser user = new ApplicationUser() { Username = "Prdophian", Password = "1" };
+                db.ApplicationUsers.Add(user);
+                db.SaveChanges();
+            }
         }
     }
 }

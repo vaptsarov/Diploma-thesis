@@ -9,7 +9,7 @@ namespace TestCaseManager.Core
 {
     public class AuthenticationManager : IAuthenticate, IAdmin
     {
-        private static bool IsAdmin;
+        private static bool IsAnAdmin;
         private static bool IsAuthenticated;
         private static AuthenticationManager instance = null;  
         private static Object lockedObj = new Object();
