@@ -24,7 +24,7 @@ namespace TestCaseManager
     {
         public MainWindow()
         {
-            InitializeComponent();
+            InitializeComponent();           
         }
     }
 }

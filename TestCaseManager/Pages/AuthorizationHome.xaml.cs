@@ -16,20 +16,31 @@ namespace TestCaseManager.Pages
         private TextboxViewModel textboxViewModel = null;
 
         public AuthorizationPage()
-        {
-            InitializeComponent();
+        {        
+            this.InitializeComponent();
+            this.SetVisibilityForInvalidCredentialsLabel(false);
         }
 
         private void AuthorizeCredentials_Button(object sender, RoutedEventArgs e)
         {
-            textboxViewModel = new TextboxViewModel();
-            textboxViewModel.Username = this.Username.Text;
-            DataContext = textboxViewModel;
+            this.RegisterUsernameValidation();
+            this.SetVisibilityForInvalidCredentialsLabel(false);
 
-            this.ValidatePassword();
+            var isUserCorrect = this.IsUserCredentialsCorrect();
+            if (isUserCorrect == false)
+                this.SetVisibilityForInvalidCredentialsLabel();
+            else
+                this.Visibility = Visibility.Hidden;
         }
 
-        private void ValidatePassword()
+        private void RegisterUsernameValidation()
+        {
+            this.textboxViewModel = new TextboxViewModel();
+            this.textboxViewModel.Username = this.Username.Text;
+            this.DataContext = this.textboxViewModel;
+        }
+
+        private bool IsUserCredentialsCorrect()
         {
             using (var db = new TestcaseManagerDB())
             {
@@ -37,6 +48,16 @@ namespace TestCaseManager.Pages
                 db.ApplicationUsers.Add(user);
                 db.SaveChanges();
             }
+
+            return true;
+        }
+
+        private void SetVisibilityForInvalidCredentialsLabel(bool isVisible = true)
+        {
+            if (isVisible)
+                this.InvalidCredentials.Visibility = Visibility.Visible;
+            else
+                this.InvalidCredentials.Visibility = Visibility.Hidden;
         }
     }
 }
