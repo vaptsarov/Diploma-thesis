@@ -17,6 +17,8 @@ namespace TestCaseManager.Core
         private static AuthenticationManager instance = null;  
         private static Object lockedObj = new Object();
 
+        public event EventHandler Authenticated;
+
         public static AuthenticationManager Instance() 
         {  
             if (instance == null)  
@@ -45,6 +47,9 @@ namespace TestCaseManager.Core
 
             AuthenticationManager.IsAnAdmin = currentApplicationUser.IsAdmin;
             AuthenticationManager.IsReadOnly = currentApplicationUser.IsReadOnly;
+
+            if (this.Authenticated != null)
+                this.Authenticated(this, EventArgs.Empty);
         }
 
         public bool IsAdmin()

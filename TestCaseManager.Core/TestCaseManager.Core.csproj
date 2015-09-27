@@ -52,7 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationUsers\AppUserManager.cs" />
-    <Compile Include="AuthenticatePoint\Authenticate.cs" />
+    <Compile Include="AuthenticatePoint\AuthenticationManager.cs" />
     <Compile Include="AuthenticatePoint\IAdmin.cs" />
     <Compile Include="AuthenticatePoint\IAuthenticate.cs" />
     <Compile Include="CryptoService\CertificateRelated\X509Certificate2CryptoService.cs" />

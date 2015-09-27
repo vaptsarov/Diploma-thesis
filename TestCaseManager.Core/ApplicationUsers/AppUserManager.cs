@@ -48,7 +48,7 @@ namespace TestCaseManager.Core.ApplicationUsers
             return user;
         }
 
-        public ApplicationUser CreateAdminUser(string username, string password)
+        public ApplicationUser CreateUser(string username, string password, bool isAdmin = false, bool isReadOnly = false)
         {
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
                 throw new ArgumentException("Username or password was empty or null.");
@@ -58,8 +58,12 @@ namespace TestCaseManager.Core.ApplicationUsers
             {
                 user.Username = username;
                 user.Password = password;
-                user.IsReadOnly = false;
-                user.IsAdmin = true;
+
+                if(isReadOnly)
+                    user.IsReadOnly = true;
+
+                if(isAdmin)
+                    user.IsAdmin = true;
 
                 db.ApplicationUsers.Add(user);
                 db.SaveChanges();

@@ -1,19 +1,7 @@
 ﻿using FirstFloor.ModernUI.Windows.Controls;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using TestCaseManager.Views;
+using TestCaseManager.Core;
 
 namespace TestCaseManager
 {
@@ -24,7 +12,33 @@ namespace TestCaseManager
     {
         public MainWindow()
         {
-            InitializeComponent();           
+            this.InitializeComponent();
+            this.RegisterEvents();
+        }
+
+        private void RegisterEvents()
+        {
+            // Event for logged user
+            AuthenticationManager.Instance().Authenticated += (s, e) =>
+            {
+                var titleLink = this.TitleLinks.Where(link => link.DisplayName.Equals("Login")).First();
+                titleLink.DisplayName = "Logout";
+            };
+        }
+
+        private void Link_MouseClicked(object sender, MouseButtonEventArgs e)
+        {
+            //FrameworkElement link = e.OriginalSource as FrameworkElement;
+            //if (link != null)
+            //{
+            //    if (link.Name == "BreedLink")
+            //    {
+
+            //    }
+            //    else if (link.Name == "SpecieLink")
+            //    {
+            //    }
+            //}
         }
     }
 }
