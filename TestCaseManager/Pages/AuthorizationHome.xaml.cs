@@ -1,8 +1,11 @@
-﻿using System.Security;
+﻿using System;
+using System.Security;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using TestCaseManager.Core;
+using TestCaseManager.Core.ApplicationUsers;
 using TestCaseManager.DB;
 using TestCaseManager.Views;
 
@@ -26,11 +29,14 @@ namespace TestCaseManager.Pages
             this.RegisterUsernameValidation();
             this.SetVisibilityForInvalidCredentialsLabel(false);
 
-            var isUserCorrect = this.IsUserCredentialsCorrect();
+            var isUserCorrect = this.IsUserCredentialsCorrect(this.Username.Text, this.Password.SecurePassword);
             if (isUserCorrect == false)
                 this.SetVisibilityForInvalidCredentialsLabel();
             else
+            {
+                AuthenticationManager.Instance().RegisterUserForAuthentication(this.Username.Text, this.Password.SecurePassword);
                 this.Visibility = Visibility.Hidden;
+            }
         }
 
         private void RegisterUsernameValidation()
@@ -40,16 +46,21 @@ namespace TestCaseManager.Pages
             this.DataContext = this.textboxViewModel;
         }
 
-        private bool IsUserCredentialsCorrect()
+        private bool IsUserCredentialsCorrect(string username, SecureString password)
         {
-            using (var db = new TestcaseManagerDB())
+            AppUserManager userManager = new AppUserManager();
+
+            bool isUserCredentialsCorrect = true;
+            try
             {
-                ApplicationUser user = new ApplicationUser() { Username = "Prdophian", Password = "1" };
-                db.ApplicationUsers.Add(user);
-                db.SaveChanges();
+                userManager.GetUser(username, password);
+            }
+            catch(ArgumentNullException)
+            {
+                isUserCredentialsCorrect = false;
             }
 
-            return true;
+            return isUserCredentialsCorrect;
         }
 
         private void SetVisibilityForInvalidCredentialsLabel(bool isVisible = true)

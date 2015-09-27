@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
+using TestCaseManager.Core.ApplicationUsers;
 using TestCaseManager.Core.AuthenticatePoint;
+using TestCaseManager.DB;
 
 namespace TestCaseManager.Core
 {
     public class AuthenticationManager : IAuthenticate, IAdmin
     {
         private static bool IsAnAdmin;
-        private static bool IsAuthenticated;
+        private static bool IsReadOnly;
         private static AuthenticationManager instance = null;  
         private static Object lockedObj = new Object();
 
@@ -30,14 +33,18 @@ namespace TestCaseManager.Core
             return instance; 
         } 
 
-        public bool IsUserAuthenticated()
+        public bool IsUserReadOnly()
         {
-            return IsAuthenticated;
+            return IsReadOnly;
         }
 
-        public void RegisterUserForAuthentication(string username, string password)
+        public void RegisterUserForAuthentication(string username, SecureString password)
         {
-            // Call DB to check if the user is there with admin role - set IsAuthenticated.
+            AppUserManager userManager = new AppUserManager();
+            var currentApplicationUser = userManager.GetUser(username, password);
+
+            AuthenticationManager.IsAnAdmin = currentApplicationUser.IsAdmin;
+            AuthenticationManager.IsReadOnly = currentApplicationUser.IsReadOnly;
         }
 
         public bool IsAdmin()
