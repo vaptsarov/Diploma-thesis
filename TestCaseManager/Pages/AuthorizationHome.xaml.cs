@@ -29,13 +29,18 @@ namespace TestCaseManager.Pages
             this.RegisterUsernameValidation();
             this.SetVisibilityForInvalidCredentialsLabel(false);
 
-            var isUserCorrect = this.IsUserCredentialsCorrect(this.Username.Text, this.Password.SecurePassword);
-            if (isUserCorrect == false)
-                this.SetVisibilityForInvalidCredentialsLabel();
-            else
+            // Verification if both of the properties are null or empty
+            if((string.IsNullOrEmpty(this.Username.Text) && this.Password.SecurePassword != null) == false)
             {
-                AuthenticationManager.Instance().RegisterUserForAuthentication(this.Username.Text, this.Password.SecurePassword);
-                this.Visibility = Visibility.Hidden;
+                // Check whether the credentials are correct or not
+                var isUserCorrect = this.IsUserCredentialsCorrect(this.Username.Text, this.Password.SecurePassword);
+                if (isUserCorrect == false)
+                    this.SetVisibilityForInvalidCredentialsLabel();
+                else
+                {
+                    AuthenticationManager.Instance().RegisterUserForAuthentication(this.Username.Text, this.Password.SecurePassword);
+                    this.Visibility = Visibility.Hidden;
+                }
             }
         }
 
@@ -55,7 +60,11 @@ namespace TestCaseManager.Pages
             {
                 userManager.GetUser(username, password);
             }
-            catch(ArgumentNullException)
+            catch (ArgumentNullException)
+            {
+                isUserCredentialsCorrect = false;
+            }
+            catch (ArgumentException)
             {
                 isUserCredentialsCorrect = false;
             }
