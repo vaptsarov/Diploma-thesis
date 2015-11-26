@@ -42,7 +42,7 @@ namespace TestCaseManager.Core
 
         public void RegisterUserForAuthentication(string username, SecureString password)
         {
-            AppUserManager userManager = new AppUserManager();
+            UserManager userManager = new UserManager();
             var currentApplicationUser = userManager.GetUser(username, password);
 
             AuthenticationManager.IsAnAdmin = currentApplicationUser.IsAdmin;

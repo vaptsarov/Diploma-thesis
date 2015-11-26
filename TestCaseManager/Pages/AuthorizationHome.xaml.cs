@@ -53,7 +53,7 @@ namespace TestCaseManager.Pages
 
         private bool IsUserCredentialsCorrect(string username, SecureString password)
         {
-            AppUserManager userManager = new AppUserManager();
+            UserManager userManager = new UserManager();
 
             bool isUserCredentialsCorrect = true;
             try

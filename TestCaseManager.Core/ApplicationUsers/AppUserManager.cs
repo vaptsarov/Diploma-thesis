@@ -10,8 +10,19 @@ using TestCaseManager.Utilities;
 
 namespace TestCaseManager.Core.ApplicationUsers
 {
-    public class AppUserManager
+    public class UserManager
     {
+        private readonly AppConfigManager appConfigManager;
+        private readonly X509Certificate2CryptoService cryptoService;
+
+        public UserManager()
+        {
+            this.appConfigManager = new AppConfigManager();
+
+            X509Certificate2FromStoreResolver certificateResolver = new X509Certificate2FromStoreResolver(appConfigManager.GetCertificateThumbprint);
+            cryptoService = new X509Certificate2CryptoService(certificateResolver);
+        }
+
         public ApplicationUser GetUser(int userId)
         {
             if(userId < 0)
@@ -39,8 +50,17 @@ namespace TestCaseManager.Core.ApplicationUsers
             ApplicationUser user = null;
             using (var db = new TestcaseManagerDB())
             {
-                user = db.ApplicationUsers.Where(usr => usr.Username == username &&
-                    usr.Password == unsecuredPasswordString).FirstOrDefault();
+                var users = db.ApplicationUsers.Where(usr => usr.Username == username).ToList();
+
+                foreach (var usr in users)
+                {
+                    string decryptedPassword = cryptoService.Decrypt(usr.Password);
+                    if (decryptedPassword == unsecuredPasswordString)
+                    {
+                        user = usr;
+                        break;
+                    }
+                }
             }
 
             if (user == null)
@@ -58,10 +78,7 @@ namespace TestCaseManager.Core.ApplicationUsers
             using (var db = new TestcaseManagerDB())
             {
                 user.Username = username;
-
-                // TODO: Add app config manager for getting the thumbprint
-                X509Certificate2FromStoreResolver certificateResolver = new X509Certificate2FromStoreResolver("34E4DA20A1E34265D5CEE33210E6D2F3C0BF5C6A");
-                X509Certificate2CryptoService cryptoService = new X509Certificate2CryptoService(certificateResolver);
+             
                 string encryptedValue = cryptoService.Encrypt(password);
                 user.Password = encryptedValue;
 

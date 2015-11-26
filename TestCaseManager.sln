@@ -7,14 +7,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCaseManager.DB", "TestC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCaseManager.Core", "TestCaseManager.Core\TestCaseManager.Core.csproj", "{814060B0-1855-45B7-82FB-CD4935B46FFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCaseManager.Utilities", "TestCaseManager.Utilities\TestCaseManager.Utilities.csproj", "{41434473-90FF-4DBF-98C4-DCA88687E9DF}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B29964EF-6AB4-4F31-8A4F-090250605F47}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCaseManager.Utilities", "TestCaseManager.Utilities\TestCaseManager.Utilities.csproj", "{41434473-90FF-4DBF-98C4-DCA88687E9DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
