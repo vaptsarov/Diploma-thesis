@@ -57,6 +57,7 @@
     <Compile Include="AuthenticatePoint\IAuthenticate.cs" />
     <Compile Include="CryptoService\CertificateRelated\X509Certificate2CryptoService.cs" />
     <Compile Include="CryptoService\CertificateRelated\CryptoServiceFactory.cs" />
+    <Compile Include="CryptoService\X509Certificate2FromStoreResolver.cs" />
     <Compile Include="CryptoService\IX509Certificate2Resolver.cs" />
     <Compile Include="CryptoService\ICryptoService.cs" />
     <Compile Include="CryptoService\UserRelated\CredentialsCryptoService.cs" />

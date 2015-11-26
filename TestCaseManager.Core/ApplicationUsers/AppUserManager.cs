@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
+using TestCaseManager.Core.CryptoService;
 using TestCaseManager.DB;
 using TestCaseManager.Utilities;
 
@@ -57,7 +58,12 @@ namespace TestCaseManager.Core.ApplicationUsers
             using (var db = new TestcaseManagerDB())
             {
                 user.Username = username;
-                user.Password = password;
+
+                // TODO: Add app config manager for getting the thumbprint
+                X509Certificate2FromStoreResolver certificateResolver = new X509Certificate2FromStoreResolver("34E4DA20A1E34265D5CEE33210E6D2F3C0BF5C6A");
+                X509Certificate2CryptoService cryptoService = new X509Certificate2CryptoService(certificateResolver);
+                string encryptedValue = cryptoService.Encrypt(password);
+                user.Password = encryptedValue;
 
                 if(isReadOnly)
                     user.IsReadOnly = true;
