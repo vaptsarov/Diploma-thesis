@@ -66,9 +66,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\PasswordHelper\PasswordHelper.cs" />
-    <Compile Include="Views\PasswordViewModel.cs" />
-    <Compile Include="Views\TextboxViewModel.cs" />
+    <Compile Include="Utilities\BaseNavigator.cs" />
+    <Compile Include="Utilities\Navigator.cs" />
+    <Compile Include="Views\MainWindowProjectAndTestCases.xaml.cs">
+      <DependentUpon>MainWindowProjectAndTestCases.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PasswordHelper\PasswordHelper.cs" />
+    <Compile Include="Models\PasswordViewModel.cs" />
+    <Compile Include="Models\TextboxViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -77,33 +82,37 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Pages\Settings\About.xaml">
+    <Page Include="Views\MainWindowProjectAndTestCases.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Compile Include="Pages\Settings\About.xaml.cs">
+    <Page Include="Views\Settings\About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="Views\Settings\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
-    <Page Include="Pages\Settings\Appearance.xaml">
+    <Page Include="Views\Settings\Appearance.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Compile Include="Pages\Settings\Appearance.xaml.cs">
+    <Compile Include="Views\Settings\Appearance.xaml.cs">
       <DependentUpon>Appearance.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Settings\AppearanceViewModel.cs" />
-    <Page Include="Pages\AuthorizationHome.xaml">
+    <Compile Include="Views\Settings\AppearanceViewModel.cs" />
+    <Page Include="Views\AuthorizationHome.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\SettingsPage.xaml">
+    <Page Include="Views\SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Compile Include="Pages\AuthorizationHome.xaml.cs">
+    <Compile Include="Views\AuthorizationHome.xaml.cs">
       <DependentUpon>AuthorizationHome.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\SettingsPage.xaml.cs">
+    <Compile Include="Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

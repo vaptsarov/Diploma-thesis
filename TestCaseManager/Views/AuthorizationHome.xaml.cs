@@ -7,6 +7,7 @@ using System.Windows.Media;
 using TestCaseManager.Core;
 using TestCaseManager.Core.ApplicationUsers;
 using TestCaseManager.DB;
+using TestCaseManager.Utilities;
 using TestCaseManager.Views;
 
 namespace TestCaseManager.Pages
@@ -40,6 +41,7 @@ namespace TestCaseManager.Pages
                 {
                     AuthenticationManager.Instance().RegisterUserForAuthentication(this.Username.Text, this.Password.SecurePassword);
                     this.Visibility = Visibility.Hidden;
+                    Navigator.Instance.NavigateMainWindowProjectAndTestCases(this);
                 }
             }
         }
