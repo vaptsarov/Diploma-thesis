@@ -33,5 +33,11 @@ namespace TestCaseManager.Utilities
             string url = "/Views/MainWindowProjectAndTestCases.xaml";
             this.Navigate(source, url);
         }
+
+        public void NavigateAuthorization(FrameworkElement source)
+        {
+            string url = "/Views/AuthorizationHome.xaml";
+            this.Navigate(source, url);
+        }
     }
 }

@@ -39,8 +39,9 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="FirstFloor.ModernUI">
+    <Reference Include="FirstFloor.ModernUI, Version=1.0.6.0, Culture=neutral, PublicKeyToken=2d21ec3cd074c59a, processorArchitecture=MSIL">
       <HintPath>..\packages\ModernUI.WPF.1.0.6\lib\net45\FirstFloor.ModernUI.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -68,6 +69,8 @@
     </Compile>
     <Compile Include="Utilities\BaseNavigator.cs" />
     <Compile Include="Utilities\Navigator.cs" />
+    <Compile Include="Views\EmployeeType.cs" />
+    <Compile Include="Views\Employee.cs" />
     <Compile Include="Views\MainWindowProjectAndTestCases.xaml.cs">
       <DependentUpon>MainWindowProjectAndTestCases.xaml</DependentUpon>
     </Compile>

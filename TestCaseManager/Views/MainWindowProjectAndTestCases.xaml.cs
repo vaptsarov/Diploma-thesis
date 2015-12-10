@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TestCaseManager.Utilities;
 
 namespace TestCaseManager.Pages
 {
@@ -22,7 +23,25 @@ namespace TestCaseManager.Pages
     {
         public MainWindowProjectAndTestCases()
         {
-            InitializeComponent();
+            InitializeComponent();   
+        }
+        
+        private void tvEmps_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            object current;
+
+            current = tvEmps.SelectedItem;
+            switch (current.GetType().Name.ToLower())
+            {
+                case "employee":
+                    break;
+                case "employeetype":
+                    break;
+                case "subemployee":
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

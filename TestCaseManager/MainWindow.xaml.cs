@@ -1,7 +1,9 @@
 ﻿using FirstFloor.ModernUI.Windows.Controls;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using TestCaseManager.Core;
+using TestCaseManager.Utilities;
 
 namespace TestCaseManager
 {
@@ -28,17 +30,15 @@ namespace TestCaseManager
 
         private void Link_MouseClicked(object sender, MouseButtonEventArgs e)
         {
-            //FrameworkElement link = e.OriginalSource as FrameworkElement;
-            //if (link != null)
-            //{
-            //    if (link.Name == "BreedLink")
-            //    {
-
-            //    }
-            //    else if (link.Name == "SpecieLink")
-            //    {
-            //    }
-            //}
+            FrameworkElement link = e.OriginalSource as FrameworkElement;
+            if (link != null)
+            {
+                if (link.ToolTip != null && link.ToolTip.ToString().Equals("back"))
+                {
+                    
+                    //Navigator.Instance.NavigateMainWindowProjectAndTestCases(e.OriginalSource as FrameworkElement);
+                }
+            }
         }
     }
 }

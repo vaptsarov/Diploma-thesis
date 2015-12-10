@@ -27,23 +27,23 @@ namespace TestCaseManager.Pages
 
         private void AuthorizeCredentials_Button(object sender, RoutedEventArgs e)
         {
-            this.RegisterUsernameValidation();
-            this.SetVisibilityForInvalidCredentialsLabel(false);
+            //this.RegisterUsernameValidation();
+            //this.SetVisibilityForInvalidCredentialsLabel(false);
 
-            // Verification if both of the properties are null or empty
-            if((string.IsNullOrEmpty(this.Username.Text) && this.Password.SecurePassword != null) == false)
-            {
-                // Check whether the credentials are correct or not
-                var isUserCorrect = this.IsUserCredentialsCorrect(this.Username.Text, this.Password.SecurePassword);
-                if (isUserCorrect == false)
-                    this.SetVisibilityForInvalidCredentialsLabel();
-                else
-                {
-                    AuthenticationManager.Instance().RegisterUserForAuthentication(this.Username.Text, this.Password.SecurePassword);
+            //// Verification if both of the properties are null or empty
+            //if((string.IsNullOrEmpty(this.Username.Text) && this.Password.SecurePassword != null) == false)
+            //{
+            //    // Check whether the credentials are correct or not
+            //    var isUserCorrect = this.IsUserCredentialsCorrect(this.Username.Text, this.Password.SecurePassword);
+            //    if (isUserCorrect == false)
+            //        this.SetVisibilityForInvalidCredentialsLabel();
+            //    else
+            //    {
+            //        AuthenticationManager.Instance().RegisterUserForAuthentication(this.Username.Text, this.Password.SecurePassword);
                     this.Visibility = Visibility.Hidden;
                     Navigator.Instance.NavigateMainWindowProjectAndTestCases(this);
-                }
-            }
+            //    }
+            //}
         }
 
         private void RegisterUsernameValidation()
