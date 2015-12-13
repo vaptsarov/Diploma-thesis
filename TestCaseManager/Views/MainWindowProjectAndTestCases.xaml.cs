@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FirstFloor.ModernUI.Presentation;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using TestCaseManager.Utilities;
 
 namespace TestCaseManager.Pages
 {
@@ -23,7 +13,10 @@ namespace TestCaseManager.Pages
     {
         public MainWindowProjectAndTestCases()
         {
-            InitializeComponent();   
+            InitializeComponent();
+            this.SetCurrentAccentColor();
+
+            AppearanceManager.Current.PropertyChanged += OnAppearanceManagerPropertyChanged;
         }
         
         private void tvEmps_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -42,6 +35,20 @@ namespace TestCaseManager.Pages
                 default:
                     break;
             }
+        }
+
+        private void OnAppearanceManagerPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "ThemeSource" || e.PropertyName == "AccentColor")
+            {
+                this.SetCurrentAccentColor();
+            }
+        }
+
+        private void SetCurrentAccentColor()
+        {
+            this.ProjectsBorder.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+            this.TestCasePanelBorder.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
         }
     }
 }
