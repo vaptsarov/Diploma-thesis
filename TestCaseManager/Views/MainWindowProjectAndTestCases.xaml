@@ -40,9 +40,37 @@
 
         <Grid Name="ProjectGrid1">
 
-            <TextBlock Text="Projects > Areas > Test Cases" Margin="0,0,0,36" />
+            <TextBlock Text="Projects > Areas > Test Cases" Margin="0,0,-493,36" HorizontalAlignment="Left" Width="548" />
             <Border Name="TestCasePanelBorder" BorderBrush="Black" BorderThickness="1" Width="auto" Margin="5,20,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
-            
+                <Grid Name="TestCaseEditView" >
+                    <Border Name="TestCaseEditViewBorder" BorderBrush="Black" BorderThickness="1" Width="auto" Margin="-1,200,-1,-1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+
+                        <ListBox Width="auto" Name="listBoxStations" FontSize="14" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Width="auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="0.50*"/>
+                                            <ColumnDefinition Width="0.50*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Step}"/>
+                                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding ExpectedResult}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListBoxItem}">
+                                    <Setter Property="Focusable" Value="False"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                        </ListBox>
+
+                    </Border>
+                </Grid>
             </Border>
         </Grid>
     </DockPanel>
