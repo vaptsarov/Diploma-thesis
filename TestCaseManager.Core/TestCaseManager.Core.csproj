@@ -62,6 +62,11 @@
     <Compile Include="CryptoService\ICryptoService.cs" />
     <Compile Include="CryptoService\UserRelated\CredentialsCryptoService.cs" />
     <Compile Include="CryptoService\CertificateRelated\NoEncryptionCryptoService.cs" />
+    <Compile Include="Models\Area.cs" />
+    <Compile Include="Models\StepDefinition.cs" />
+    <Compile Include="Models\ProjectList.cs" />
+    <Compile Include="Models\Project.cs" />
+    <Compile Include="Models\TestCase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -78,6 +83,7 @@
       <Name>TestCaseManager.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

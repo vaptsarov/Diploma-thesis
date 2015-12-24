@@ -69,8 +69,6 @@
     </Compile>
     <Compile Include="Utilities\BaseNavigator.cs" />
     <Compile Include="Utilities\Navigator.cs" />
-    <Compile Include="Views\EmployeeType.cs" />
-    <Compile Include="Views\Employee.cs" />
     <Compile Include="Views\MainWindowProjectAndTestCases.xaml.cs">
       <DependentUpon>MainWindowProjectAndTestCases.xaml</DependentUpon>
     </Compile>

@@ -3,25 +3,29 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TestCaseManager.Views"
+             xmlns:local="clr-namespace:TestCaseManager.Core.Models;assembly=TestCaseManager.Core"
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              mc:Ignorable="d" 
              d:DesignHeight="1024" d:DesignWidth="300">
     <UserControl.Resources>
-        <local:EmployeeTypes x:Key="empTypes" />
-        <DataTemplate x:Key="managedEmployeeTemplate">
+        <local:ProjectList x:Key="projList" />
+        
+        <DataTemplate x:Key="testCasesListTemplate">
             <TextBlock Text="{Binding Path=Name}" />
         </DataTemplate>
-        <HierarchicalDataTemplate x:Key="employeeTemplate"
-                              ItemsSource="{Binding ManagedEmployees}"
-                              ItemTemplate="{StaticResource managedEmployeeTemplate}">
+
+        <HierarchicalDataTemplate x:Key="areasTemplate"
+                              ItemsSource="{Binding TestCasesList}"
+                              ItemTemplate="{StaticResource testCasesListTemplate}">
             <TextBlock Text="{Binding Path=Name}" />
         </HierarchicalDataTemplate>
-        <HierarchicalDataTemplate x:Key="employeeTypeTemplate"
-                              ItemsSource="{Binding Employees}"
-                              ItemTemplate="{StaticResource employeeTemplate}">
-            <TextBlock Text="{Binding Path=EmpType}" />
+        
+        <HierarchicalDataTemplate x:Key="projectTypesTemplate"
+                              ItemsSource="{Binding Areas}"
+                              ItemTemplate="{StaticResource areasTemplate}">
+            <TextBlock Text="{Binding Path=ProjectName}" />
         </HierarchicalDataTemplate>
+        
     </UserControl.Resources>
 
     <!-- Project/area and test cases left panel on the main screen. -->
@@ -31,10 +35,10 @@
             <TextBlock Text="Projects > Areas > Test Cases" Margin="0,0,0,36" />
             <Border Name="ProjectsBorder" BorderBrush="Black" BorderThickness="1" Width="270" Margin="-25,20,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Left" >
                 <TreeView Grid.Row="1"
-              ItemTemplate="{StaticResource employeeTypeTemplate}"
-              ItemsSource="{StaticResource empTypes}"
-              SelectedItemChanged="tvEmps_SelectedItemChanged"
-              Name="tvEmps" />
+              ItemTemplate="{DynamicResource projectTypesTemplate}"
+              ItemsSource="{DynamicResource projList}"
+              SelectedItemChanged="ProjectSelected_SelectedItemChanged"
+              Name="projects" />
             </Border>
         </Grid>
 

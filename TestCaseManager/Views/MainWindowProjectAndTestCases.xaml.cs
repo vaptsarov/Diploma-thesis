@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using TestCaseManager.Core.Models;
 
 namespace TestCaseManager.Pages
 {
@@ -23,11 +24,11 @@ namespace TestCaseManager.Pages
             this.listBoxStations.ItemsSource = new StepDefinitionCollection().stepDefinitionCollection;
         }
 
-        private void tvEmps_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private void ProjectSelected_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             object current;
 
-            current = tvEmps.SelectedItem;
+            current = projects.SelectedItem;
             switch (current.GetType().Name.ToLower())
             {
                 case "employee":
@@ -54,13 +55,18 @@ namespace TestCaseManager.Pages
             this.ProjectsBorder.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
             this.TestCasePanelBorder.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
             this.TestCaseEditViewBorder.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
-        }
-    }
 
-    public sealed class StepDefinition
-    {
-        public string Step { get; set; }
-        public string ExpectedResult { get; set; }
+            // If theme set is light version, the font color should be black, if dark - should be white.
+            if (AppearanceManager.LightThemeSource != AppearanceManager.Current.ThemeSource)
+            {
+                this.listBoxStations.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+                //this.projects.ItemsSource = new Test().tt;
+            }
+            else if (AppearanceManager.DarkThemeSource != AppearanceManager.Current.ThemeSource)
+            {
+                this.listBoxStations.Foreground = new SolidColorBrush(Color.FromRgb(0, 0, 0));
+            }
+        }
     }
 
     public sealed class StepDefinitionCollection
@@ -87,6 +93,33 @@ namespace TestCaseManager.Pages
             stepDefinitionCollection.Add(new StepDefinition { Step = "One", ExpectedResult = "15" });
             stepDefinitionCollection.Add(new StepDefinition { Step = "One", ExpectedResult = "15" });
             stepDefinitionCollection.Add(new StepDefinition { Step = "One", ExpectedResult = "15" });
+        }
+    }
+
+    public sealed class Test
+    {
+        public ObservableCollection<Project> tt { get; private set; }
+        public Test()
+        {
+            tt = new ObservableCollection<Project>();
+            tt.Add(new Project("Name"));
+            tt.Add(new Project("Name"));
+            tt.Add(new Project("Name"));
+            tt.Add(new Project("Name"));
+            tt.Add(new Project("Name"));
+            tt.Add(new Project("Name"));
+            tt.Add(new Project("Name"));
+            tt.Add(new Project("Name"));
+            tt.Add(new Project("Name"));
+            tt.Add(new Project("Name"));
+            tt.Add(new Project("Name"));
+            tt.Add(new Project("Name"));
+            tt.Add(new Project("Name"));
+            tt.Add(new Project("Name"));
+            tt.Add(new Project("Name"));
+            tt.Add(new Project("Name"));
+            tt.Add(new Project("Name"));
+            tt.Add(new Project("Name"));
         }
     }
 }

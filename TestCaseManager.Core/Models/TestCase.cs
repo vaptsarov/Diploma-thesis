@@ -4,17 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TestCaseManager.Views
+namespace TestCaseManager.Core.Models
 {
-    public class Employee
+    public class TestCase
     {
-        public Employee(string name)
+        public TestCase(string name)
         {
             Name = name;
-            ManagedEmployees = new List<Employee>();
         }
 
         public string Name { get; set; }
-        public List<Employee> ManagedEmployees { get; set; }
     }
 }
