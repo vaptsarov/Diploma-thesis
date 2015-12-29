@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mui="http://firstfloorsoftware.com/ModernUI"
         Title="Test Case Manager" IsTitleVisible="True"    
-        ContentSource="/Views/AuthorizationHome.xaml" ResizeMode="CanResizeWithGrip" Width="1024" Height="764">
+        ContentSource="/Views/AuthorizationHome.xaml" ResizeMode="CanResizeWithGrip" Width="1024" Height="764"  MinWidth="1024" MinHeight="764">
 
     <mui:ModernWindow.MenuLinkGroups>
         <mui:LinkGroup DisplayName="">

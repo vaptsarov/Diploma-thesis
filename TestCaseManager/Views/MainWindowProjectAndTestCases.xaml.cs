@@ -21,7 +21,15 @@ namespace TestCaseManager.Pages
 
             AppearanceManager.Current.PropertyChanged += OnAppearanceManagerPropertyChanged;
 
+            this.projects.ItemsSource = new Test().tt;
             this.listBoxStations.ItemsSource = new StepDefinitionCollection().stepDefinitionCollection;
+
+            //Demo
+            this.TestCaseIdLabel.Content = "99999";
+            this.TestCaseNameLabel.Text = "Selected test case name Selected test case name Selected test case nameSelected test case name name na asdsadsadsa ds adsame";
+            this.TestCasePriorityLabel.Content = "Critical";
+            this.TestCaseSeverityLabel.Content = "Blocking";
+            this.TestCaseAutomatedLabel.Content = "False";
         }
 
         private void ProjectSelected_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -55,6 +63,11 @@ namespace TestCaseManager.Pages
             this.ProjectsBorder.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
             this.TestCasePanelBorder.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
             this.TestCaseEditViewBorder.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+            this.BorderTestCaseId.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+            this.BorderTestCaseName.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+            this.BorderTestCasePriority.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+            this.BorderTestCaseSeverity.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+            this.BorderTestCaseAutomated.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
 
             // If theme set is light version, the font color should be black, if dark - should be white.
             if (AppearanceManager.LightThemeSource != AppearanceManager.Current.ThemeSource)
@@ -114,6 +127,13 @@ namespace TestCaseManager.Pages
             tt.Add(new Project("Name"));
             tt.Add(new Project("Name"));
             tt.Add(new Project("Name"));
+            var proj = new Project("Priject");
+            var area = new Area("area");
+            area.TestCasesList.Add(new TestCase("Testcase1"));
+            area.TestCasesList.Add(new TestCase("Testcase2"));
+            area.TestCasesList.Add(new TestCase("Testcase3"));
+            proj.Areas.Add(area);
+            tt.Add(proj);
             tt.Add(new Project("Name"));
             tt.Add(new Project("Name"));
             tt.Add(new Project("Name"));
