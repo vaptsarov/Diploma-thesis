@@ -1,9 +1,9 @@
 ﻿using FirstFloor.ModernUI.Presentation;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Markup;
 using System.Windows.Media;
 using TestCaseManager.Core.Models;
 
@@ -88,17 +88,17 @@ namespace TestCaseManager.Pages
         public StepDefinitionCollection()
         {
             stepDefinitionCollection = new ObservableCollection<StepDefinition>();
-            stepDefinitionCollection.Add(new StepDefinition { Step = "One", ExpectedResult = "15" });
-            stepDefinitionCollection.Add(new StepDefinition { Step = "One", ExpectedResult = "15" });
-            stepDefinitionCollection.Add(new StepDefinition { Step = "One", ExpectedResult = "15" });
-            stepDefinitionCollection.Add(new StepDefinition { Step = "One", ExpectedResult = "15" });
-            stepDefinitionCollection.Add(new StepDefinition { Step = "One", ExpectedResult = "15" });
-            stepDefinitionCollection.Add(new StepDefinition { Step = "One", ExpectedResult = "15" });
-            stepDefinitionCollection.Add(new StepDefinition { Step = "One", ExpectedResult = "15" });
-            stepDefinitionCollection.Add(new StepDefinition { Step = "One", ExpectedResult = "15" });
-            stepDefinitionCollection.Add(new StepDefinition { Step = "One", ExpectedResult = "15" });
-            stepDefinitionCollection.Add(new StepDefinition { Step = "One", ExpectedResult = "15" });
-            stepDefinitionCollection.Add(new StepDefinition { Step = "One", ExpectedResult = "15" });
+            stepDefinitionCollection.Add(new StepDefinition { Step = "OneOneOneOneOneOneOneOneOneOneOneOneOneOneOneOneOneOneOneOne", ExpectedResult = "1151515151515151515151515151515151515155" });
+            stepDefinitionCollection.Add(new StepDefinition { Step = "One1", ExpectedResult = "15" });
+            stepDefinitionCollection.Add(new StepDefinition { Step = "One2", ExpectedResult = "15" });
+            stepDefinitionCollection.Add(new StepDefinition { Step = "One3", ExpectedResult = "15" });
+            stepDefinitionCollection.Add(new StepDefinition { Step = "One4", ExpectedResult = "15" });
+            stepDefinitionCollection.Add(new StepDefinition { Step = "One5", ExpectedResult = "15" });
+            stepDefinitionCollection.Add(new StepDefinition { Step = "One6", ExpectedResult = "15" });
+            stepDefinitionCollection.Add(new StepDefinition { Step = "One7", ExpectedResult = "15" });
+            stepDefinitionCollection.Add(new StepDefinition { Step = "One8", ExpectedResult = "15" });
+            stepDefinitionCollection.Add(new StepDefinition { Step = "One9", ExpectedResult = "15" });
+            stepDefinitionCollection.Add(new StepDefinition { Step = "One10", ExpectedResult = "15" });
             stepDefinitionCollection.Add(new StepDefinition { Step = "One", ExpectedResult = "15" });
             stepDefinitionCollection.Add(new StepDefinition { Step = "One", ExpectedResult = "15" });
             stepDefinitionCollection.Add(new StepDefinition { Step = "One", ExpectedResult = "15" });

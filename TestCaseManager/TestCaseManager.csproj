@@ -75,6 +75,7 @@
     <Compile Include="Models\PasswordHelper\PasswordHelper.cs" />
     <Compile Include="Models\PasswordViewModel.cs" />
     <Compile Include="Models\TextboxViewModel.cs" />
+    <Compile Include="XamlBindingConverters\PercentageConverter.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
