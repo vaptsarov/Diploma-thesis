@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Markup;
 
-namespace TestCaseManager.XamlBindingConverters
+namespace TestCaseManager.BindingConverters
 {
     public class PercentageConverter : MarkupExtension, IValueConverter
     {
@@ -13,8 +13,8 @@ namespace TestCaseManager.XamlBindingConverters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            double val = System.Convert.ToDouble(value) * System.Convert.ToDouble(parameter);
-            return val;
+            double convertedValue = double.Parse(value.ToString()) * double.Parse(parameter.ToString());
+            return convertedValue;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
