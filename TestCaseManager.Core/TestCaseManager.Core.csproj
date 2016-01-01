@@ -63,7 +63,9 @@
     <Compile Include="CryptoService\UserRelated\CredentialsCryptoService.cs" />
     <Compile Include="CryptoService\CertificateRelated\NoEncryptionCryptoService.cs" />
     <Compile Include="Models\Area.cs" />
-    <Compile Include="Models\StepDefinition.cs" />
+    <Compile Include="Models\TestDefinition\Priority.cs" />
+    <Compile Include="Models\TestDefinition\Severity.cs" />
+    <Compile Include="Models\TestDefinition\StepDefinition.cs" />
     <Compile Include="Models\ProjectList.cs" />
     <Compile Include="Models\Project.cs" />
     <Compile Include="Models\TestCase.cs" />
