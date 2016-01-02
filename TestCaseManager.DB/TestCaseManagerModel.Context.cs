@@ -26,5 +26,9 @@ namespace TestCaseManager.DB
         }
     
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<Area> Areas { get; set; }
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<StepDefinition> StepDefinitions { get; set; }
+        public DbSet<TestCas> TestCases { get; set; }
     }
 }

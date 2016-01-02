@@ -12,15 +12,18 @@ namespace TestCaseManager.DB
     using System;
     using System.Collections.Generic;
     
-    public partial class ApplicationUser
+    public partial class Project
     {
-        public int UserId { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public bool IsAdmin { get; set; }
-        public bool IsReadOnly { get; set; }
+        public Project()
+        {
+            this.Areas = new HashSet<Area>();
+        }
+    
+        public int ID { get; set; }
+        public string Title { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
-        public System.DateTime CreatedOn { get; set; }
+    
+        public virtual ICollection<Area> Areas { get; set; }
     }
 }

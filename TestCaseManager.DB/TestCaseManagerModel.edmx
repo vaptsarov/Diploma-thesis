@@ -4,26 +4,138 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="TestcaseManagerDemoModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityContainer Name="TestcaseManagerDemoModelStoreContainer">
-          <EntitySet Name="ApplicationUsers" EntityType="TestcaseManagerDemoModel.Store.ApplicationUsers" store:Type="Tables" Schema="dbo" />
-        </EntityContainer>
+    <Schema Namespace="TestcaseManagerDemoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="ApplicationUsers">
           <Key>
             <PropertyRef Name="UserId" />
           </Key>
-          <Property Name="UserId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Username" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
           <Property Name="IsAdmin" Type="bit" Nullable="false" />
           <Property Name="IsReadOnly" Type="bit" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="UpdatedBy" Type="nvarchar(max)" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="Areas">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="UpdatedBy" Type="nvarchar(max)" />
+          <Property Name="ProjectId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Projects">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="UpdatedBy" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="StepDefinitions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Step" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ExpectedResult" Type="nvarchar(max)" />
+          <Property Name="TestCaseID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TestCases">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Priority" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Severity" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="IsAutomated" Type="bit" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="UpdatedBy" Type="nvarchar(max)" />
+          <Property Name="AreaID" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Areas_Projects">
+          <End Role="Projects" Type="Self.Projects" Multiplicity="1" />
+          <End Role="Areas" Type="Self.Areas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Projects">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Areas">
+              <PropertyRef Name="ProjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StepDefinitions_TestCases">
+          <End Role="TestCases" Type="Self.TestCases" Multiplicity="1" />
+          <End Role="StepDefinitions" Type="Self.StepDefinitions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TestCases">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StepDefinitions">
+              <PropertyRef Name="TestCaseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TestCases_Areas">
+          <End Role="Areas" Type="Self.Areas" Multiplicity="1" />
+          <End Role="TestCases" Type="Self.TestCases" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Areas">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TestCases">
+              <PropertyRef Name="AreaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TestcaseManagerDemoModelStoreContainer">
+          <EntitySet Name="ApplicationUsers" EntityType="Self.ApplicationUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Areas" EntityType="Self.Areas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Projects" EntityType="Self.Projects" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StepDefinitions" EntityType="Self.StepDefinitions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TestCases" EntityType="Self.TestCases" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Areas_Projects" Association="Self.FK_Areas_Projects">
+            <End Role="Projects" EntitySet="Projects" />
+            <End Role="Areas" EntitySet="Areas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StepDefinitions_TestCases" Association="Self.FK_StepDefinitions_TestCases">
+            <End Role="TestCases" EntitySet="TestCases" />
+            <End Role="StepDefinitions" EntitySet="StepDefinitions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TestCases_Areas" Association="Self.FK_TestCases_Areas">
+            <End Role="Areas" EntitySet="Areas" />
+            <End Role="TestCases" EntitySet="TestCases" />
+          </AssociationSet>
+        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="TestcaseManagerDemoModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="TestcaseManagerDB" p1:LazyLoadingEnabled="true">
           <EntitySet Name="ApplicationUsers" EntityType="TestcaseManagerDemoModel.ApplicationUser" />
+          <EntitySet Name="Areas" EntityType="TestcaseManagerDemoModel.Area" />
+          <EntitySet Name="Projects" EntityType="TestcaseManagerDemoModel.Project" />
+          <EntitySet Name="StepDefinitions" EntityType="TestcaseManagerDemoModel.StepDefinition" />
+          <EntitySet Name="TestCases" EntityType="TestcaseManagerDemoModel.TestCas" />
+          <AssociationSet Name="FK_Areas_Projects" Association="TestcaseManagerDemoModel.FK_Areas_Projects">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="Area" EntitySet="Areas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TestCases_Areas" Association="TestcaseManagerDemoModel.FK_TestCases_Areas">
+            <End Role="Area" EntitySet="Areas" />
+            <End Role="TestCas" EntitySet="TestCases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StepDefinitions_TestCases" Association="TestcaseManagerDemoModel.FK_StepDefinitions_TestCases">
+            <End Role="TestCas" EntitySet="TestCases" />
+            <End Role="StepDefinition" EntitySet="StepDefinitions" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -34,7 +146,93 @@
           <Property Name="Password" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
           <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
           <Property Name="IsReadOnly" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
+        <EntityType Name="Area">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ProjectId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Project" Relationship="TestcaseManagerDemoModel.FK_Areas_Projects" FromRole="Area" ToRole="Project" />
+          <NavigationProperty Name="TestCases" Relationship="TestcaseManagerDemoModel.FK_TestCases_Areas" FromRole="Area" ToRole="TestCas" />
+        </EntityType>
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Areas" Relationship="TestcaseManagerDemoModel.FK_Areas_Projects" FromRole="Project" ToRole="Area" />
+        </EntityType>
+        <EntityType Name="StepDefinition">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Step" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ExpectedResult" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TestCaseID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TestCas" Relationship="TestcaseManagerDemoModel.FK_StepDefinitions_TestCases" FromRole="StepDefinition" ToRole="TestCas" />
+        </EntityType>
+        <EntityType Name="TestCas">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Priority" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Severity" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IsAutomated" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AreaID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Area" Relationship="TestcaseManagerDemoModel.FK_TestCases_Areas" FromRole="TestCas" ToRole="Area" />
+          <NavigationProperty Name="StepDefinitions" Relationship="TestcaseManagerDemoModel.FK_StepDefinitions_TestCases" FromRole="TestCas" ToRole="StepDefinition" />
+        </EntityType>
+        <Association Name="FK_Areas_Projects">
+          <End Type="TestcaseManagerDemoModel.Project" Role="Project" Multiplicity="1" />
+          <End Type="TestcaseManagerDemoModel.Area" Role="Area" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Area">
+              <PropertyRef Name="ProjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TestCases_Areas">
+          <End Type="TestcaseManagerDemoModel.Area" Role="Area" Multiplicity="1" />
+          <End Type="TestcaseManagerDemoModel.TestCas" Role="TestCas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Area">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TestCas">
+              <PropertyRef Name="AreaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StepDefinitions_TestCases">
+          <End Type="TestcaseManagerDemoModel.TestCas" Role="TestCas" Multiplicity="1" />
+          <End Type="TestcaseManagerDemoModel.StepDefinition" Role="StepDefinition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TestCas">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StepDefinition">
+              <PropertyRef Name="TestCaseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -44,11 +242,59 @@
           <EntitySetMapping Name="ApplicationUsers">
             <EntityTypeMapping TypeName="TestcaseManagerDemoModel.ApplicationUser">
               <MappingFragment StoreEntitySet="ApplicationUsers">
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
                 <ScalarProperty Name="IsReadOnly" ColumnName="IsReadOnly" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Areas">
+            <EntityTypeMapping TypeName="TestcaseManagerDemoModel.Area">
+              <MappingFragment StoreEntitySet="Areas">
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Projects">
+            <EntityTypeMapping TypeName="TestcaseManagerDemoModel.Project">
+              <MappingFragment StoreEntitySet="Projects">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StepDefinitions">
+            <EntityTypeMapping TypeName="TestcaseManagerDemoModel.StepDefinition">
+              <MappingFragment StoreEntitySet="StepDefinitions">
+                <ScalarProperty Name="TestCaseID" ColumnName="TestCaseID" />
+                <ScalarProperty Name="ExpectedResult" ColumnName="ExpectedResult" />
+                <ScalarProperty Name="Step" ColumnName="Step" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TestCases">
+            <EntityTypeMapping TypeName="TestcaseManagerDemoModel.TestCas">
+              <MappingFragment StoreEntitySet="TestCases">
+                <ScalarProperty Name="AreaID" ColumnName="AreaID" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsAutomated" ColumnName="IsAutomated" />
+                <ScalarProperty Name="Severity" ColumnName="Severity" />
+                <ScalarProperty Name="Priority" ColumnName="Priority" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -69,6 +315,7 @@
         <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->

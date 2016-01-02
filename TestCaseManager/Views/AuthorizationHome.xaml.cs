@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using TestCaseManager.Core;
-using TestCaseManager.Core.ApplicationUsers;
+using TestCaseManager.Core.Managers;
 using TestCaseManager.DB;
 using TestCaseManager.Utilities;
 using TestCaseManager.Views;

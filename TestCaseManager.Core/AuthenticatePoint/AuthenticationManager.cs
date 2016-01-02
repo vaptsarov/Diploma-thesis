@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security;
-using System.Text;
-using System.Threading.Tasks;
-using TestCaseManager.Core.ApplicationUsers;
 using TestCaseManager.Core.AuthenticatePoint;
-using TestCaseManager.DB;
+using TestCaseManager.Core.Managers;
 
 namespace TestCaseManager.Core
 {
@@ -14,26 +9,33 @@ namespace TestCaseManager.Core
     {
         private static bool IsAnAdmin;
         private static bool IsReadOnly;
-        private static AuthenticationManager instance = null;  
+        private static string CurrentUser;
+
+        private static AuthenticationManager instance = null;
         private static Object lockedObj = new Object();
 
         public event EventHandler Authenticated;
 
-        public static AuthenticationManager Instance() 
-        {  
-            if (instance == null)  
-            {  
-                lock (lockedObj) 
-                { 
-                    if (instance == null)  
+        public string GetCurrentUsername
+        {
+            get { return CurrentUser; }
+        }
+
+        public static AuthenticationManager Instance()
+        {
+            if (instance == null)
+            {
+                lock (lockedObj)
+                {
+                    if (instance == null)
                     {
-                        instance = new AuthenticationManager(); 
-                    } 
-                }  
-            } 
- 
-            return instance; 
-        } 
+                        instance = new AuthenticationManager();
+                    }
+                }
+            }
+
+            return instance;
+        }
 
         public bool IsUserReadOnly()
         {
@@ -47,6 +49,7 @@ namespace TestCaseManager.Core
 
             AuthenticationManager.IsAnAdmin = currentApplicationUser.IsAdmin;
             AuthenticationManager.IsReadOnly = currentApplicationUser.IsReadOnly;
+            AuthenticationManager.CurrentUser = currentApplicationUser.Username;
 
             if (this.Authenticated != null)
                 this.Authenticated(this, EventArgs.Empty);

@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security;
-using System.Text;
-using System.Threading.Tasks;
 using TestCaseManager.Core.CryptoService;
 using TestCaseManager.DB;
 using TestCaseManager.Utilities;
 
-namespace TestCaseManager.Core.ApplicationUsers
+namespace TestCaseManager.Core.Managers
 {
     public class UserManager
     {
@@ -19,7 +16,9 @@ namespace TestCaseManager.Core.ApplicationUsers
         {
             this.appConfigManager = new AppConfigManager();
 
-            X509Certificate2FromStoreResolver certificateResolver = new X509Certificate2FromStoreResolver(appConfigManager.GetCertificateThumbprint);
+            X509Certificate2FromStoreResolver certificateResolver = 
+                new X509Certificate2FromStoreResolver(appConfigManager.GetCertificateThumbprint);
+
             cryptoService = new X509Certificate2CryptoService(certificateResolver);
         }
 
@@ -87,6 +86,8 @@ namespace TestCaseManager.Core.ApplicationUsers
 
                 if(isAdmin)
                     user.IsAdmin = true;
+
+                user.CreatedBy = AuthenticationManager.Instance().GetCurrentUsername;
 
                 db.ApplicationUsers.Add(user);
                 db.SaveChanges();

@@ -51,7 +51,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationUsers\AppUserManager.cs" />
+    <Compile Include="Managers\CaseManager.cs" />
+    <Compile Include="Managers\UserManager.cs" />
     <Compile Include="AuthenticatePoint\AuthenticationManager.cs" />
     <Compile Include="AuthenticatePoint\IAdmin.cs" />
     <Compile Include="AuthenticatePoint\IAuthenticate.cs" />
@@ -62,13 +63,13 @@
     <Compile Include="CryptoService\ICryptoService.cs" />
     <Compile Include="CryptoService\UserRelated\CredentialsCryptoService.cs" />
     <Compile Include="CryptoService\CertificateRelated\NoEncryptionCryptoService.cs" />
-    <Compile Include="Models\Area.cs" />
-    <Compile Include="Models\TestDefinition\Priority.cs" />
-    <Compile Include="Models\TestDefinition\Severity.cs" />
-    <Compile Include="Models\TestDefinition\StepDefinition.cs" />
-    <Compile Include="Models\ProjectList.cs" />
-    <Compile Include="Models\Project.cs" />
-    <Compile Include="Models\TestCase.cs" />
+    <Compile Include="Proxy\AreaProxy.cs" />
+    <Compile Include="Proxy\ProjectList.cs" />
+    <Compile Include="Proxy\TestDefinition\Priority.cs" />
+    <Compile Include="Proxy\TestDefinition\Severity.cs" />
+    <Compile Include="Proxy\TestDefinition\StepDefinition.cs" />
+    <Compile Include="Proxy\ProjectProxy.cs" />
+    <Compile Include="Proxy\TestCaseProxy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

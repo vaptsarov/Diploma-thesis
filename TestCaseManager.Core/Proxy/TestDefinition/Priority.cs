@@ -1,4 +1,4 @@
-﻿namespace TestCaseManager.Core.Models.TestDefinition
+﻿namespace TestCaseManager.Core.Proxy.TestDefinition
 {
     public enum Priority
     {

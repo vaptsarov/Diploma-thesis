@@ -54,7 +54,19 @@
     <Compile Include="ApplicationUser.cs">
       <DependentUpon>TestCaseManagerModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Area.cs">
+      <DependentUpon>TestCaseManagerModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Project.cs">
+      <DependentUpon>TestCaseManagerModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StepDefinition.cs">
+      <DependentUpon>TestCaseManagerModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TestCas.cs">
+      <DependentUpon>TestCaseManagerModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="TestCaseManagerModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

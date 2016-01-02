@@ -1,10 +1,10 @@
-﻿using TestCaseManager.Core.Models.TestDefinition;
+﻿using TestCaseManager.Core.Proxy.TestDefinition;
 
-namespace TestCaseManager.Core.Models
+namespace TestCaseManager.Core.Proxy
 {
-    public class TestCase
+    public class TestCaseProxy
     {
-        public TestCase(string title)
+        public TestCaseProxy(string title)
         {
             Title = title;
         }

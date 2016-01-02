@@ -1,11 +1,13 @@
 ﻿using FirstFloor.ModernUI.Presentation;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using TestCaseManager.Core.Models;
-using TestCaseManager.Core.Models.TestDefinition;
+using TestCaseManager.Core.Managers;
+using TestCaseManager.Core.Proxy;
+using TestCaseManager.Core.Proxy.TestDefinition;
 
 namespace TestCaseManager.Pages
 {
@@ -21,7 +23,10 @@ namespace TestCaseManager.Pages
 
             AppearanceManager.Current.PropertyChanged += OnAppearanceManagerPropertyChanged;
 
-            this.projects.ItemsSource = new Test().tt;
+            CaseManager manager = new CaseManager();
+            List<ProjectProxy> projectList = manager.GetAll();
+            this.projects.ItemsSource = projectList;
+            
             this.listBoxStations.ItemsSource = new StepDefinitionCollection().stepDefinitionCollection;
 
             //Demo
@@ -109,40 +114,6 @@ namespace TestCaseManager.Pages
             stepDefinitionCollection.Add(new StepDefinition { Step = "One", ExpectedResult = "15" });
             stepDefinitionCollection.Add(new StepDefinition { Step = "One", ExpectedResult = "15" });
             stepDefinitionCollection.Add(new StepDefinition { Step = "One", ExpectedResult = "15" });
-        }
-    }
-
-    public sealed class Test
-    {
-        public ObservableCollection<Project> tt { get; private set; }
-        public Test()
-        {
-            tt = new ObservableCollection<Project>();
-            tt.Add(new Project("Name"));
-            tt.Add(new Project("Name"));
-            tt.Add(new Project("Name"));
-            tt.Add(new Project("Name"));
-            tt.Add(new Project("Name"));
-            tt.Add(new Project("Name"));
-            tt.Add(new Project("Name"));
-            tt.Add(new Project("Name"));
-            tt.Add(new Project("Name"));
-            tt.Add(new Project("Name"));
-            tt.Add(new Project("Name"));
-            tt.Add(new Project("Name"));
-            var proj = new Project("Priject");
-            var area = new Area("area");
-            area.TestCasesList.Add(new TestCase("Testcase1"));
-            area.TestCasesList.Add(new TestCase("Testcase2"));
-            area.TestCasesList.Add(new TestCase("Testcase3"));
-            proj.Areas.Add(area);
-            tt.Add(proj);
-            tt.Add(new Project("Name"));
-            tt.Add(new Project("Name"));
-            tt.Add(new Project("Name"));
-            tt.Add(new Project("Name"));
-            tt.Add(new Project("Name"));
-            tt.Add(new Project("Name"));
         }
     }
 }
