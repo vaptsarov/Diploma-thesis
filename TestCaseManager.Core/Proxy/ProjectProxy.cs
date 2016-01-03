@@ -4,13 +4,16 @@ namespace TestCaseManager.Core.Proxy
 {
     public class ProjectProxy
     {
-        public ProjectProxy(string projectName)
+        public ProjectProxy(string title)
         {
-            ProjectName = projectName;
+            Title = title;
             Areas = new List<AreaProxy>();
         }
 
-        public string ProjectName { get; set; }
+        public int ID { get; set; }
+        public string Title { get; set; }
         public List<AreaProxy> Areas { get; set; }
+        public string CreatedBy { get; set; }
+        public string UpdatedBy { get; set; }
     }
 }

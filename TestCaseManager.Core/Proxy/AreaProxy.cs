@@ -9,8 +9,10 @@ namespace TestCaseManager.Core.Proxy
             TestCasesList = new List<TestCaseProxy>();
         }
 
-        public string Name { get; set; }
-
+        public int ID { get; set; }
+        public string Title { get; set; }
         public List<TestCaseProxy> TestCasesList { get; set; }
+        public string CreatedBy { get; set; }
+        public string UpdatedBy { get; set; }\
     }
 }

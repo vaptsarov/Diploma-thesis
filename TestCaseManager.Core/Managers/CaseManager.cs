@@ -13,7 +13,7 @@ namespace TestCaseManager.Core.Managers
 
             using (TestcaseManagerDB context = new TestcaseManagerDB())
             {
-                configurations = ProjectModelToProxy(context);
+                configurations = this.ProjectModelToProxy(context);
             }
 
             return configurations;
@@ -25,6 +25,9 @@ namespace TestCaseManager.Core.Managers
             foreach (Project project in context.Projects)
             {
                 ProjectProxy proxyObject = new ProjectProxy(project.Title);
+                proxyObject.ID = project.ID;
+                proxyObject.CreatedBy = project.CreatedBy;
+                proxyObject.UpdatedBy = project.UpdatedBy;
                 proxyObject.Areas = AreaModelToProxy(project.Areas.ToList());
 
                 proxyProjectList.Add(proxyObject);
@@ -38,10 +41,11 @@ namespace TestCaseManager.Core.Managers
             List<AreaProxy> proxyAreaList = new List<AreaProxy>();
             foreach (Area area in areaList)
             {
-                AreaProxy proxyObject = new AreaProxy()
-                {
-                    Name = area.Title
-                };
+                AreaProxy proxyObject = new AreaProxy();
+                proxyObject.ID = area.ID;
+                proxyObject.Title = area.Title;
+                proxyObject.CreatedBy = area.CreatedBy;
+                proxyObject.UpdatedBy = area.UpdatedBy;
 
                 proxyAreaList.Add(proxyObject);
             }
