@@ -13,6 +13,6 @@ namespace TestCaseManager.Core.Proxy
         public string Title { get; set; }
         public List<TestCaseProxy> TestCasesList { get; set; }
         public string CreatedBy { get; set; }
-        public string UpdatedBy { get; set; }\
+        public string UpdatedBy { get; set; }
     }
 }

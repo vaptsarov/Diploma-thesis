@@ -8,6 +8,9 @@ using System.Windows.Media;
 using TestCaseManager.Core.Managers;
 using TestCaseManager.Core.Proxy;
 using TestCaseManager.Core.Proxy.TestDefinition;
+using System;
+using System.Threading.Tasks;
+using TestCaseManager.Views.CustomControls;
 
 namespace TestCaseManager.Pages
 {
@@ -19,39 +22,60 @@ namespace TestCaseManager.Pages
         public MainWindowProjectAndTestCases()
         {
             InitializeComponent();
-            this.SetCurrentAccentColor();
-
             AppearanceManager.Current.PropertyChanged += OnAppearanceManagerPropertyChanged;
+        }
 
-            CaseManager manager = new CaseManager();
-            List<ProjectProxy> projectList = manager.GetAll();
-            this.projects.ItemsSource = projectList;
-            
-            this.listBoxStations.ItemsSource = new StepDefinitionCollection().stepDefinitionCollection;
+        private void MainWindowProjectAndTestCases_Loaded(object sender, RoutedEventArgs e)
+        {
+            List<ProjectProxy> projectList = null;
+            Task task = Task.Factory.StartNew(() =>
+            {
+                CaseManager manager = new CaseManager();
+                projectList = manager.GetAll();
+  
+            });
+            task.ContinueWith(next =>
+            {
+                // Update the main Thread as it is the owner of the UI elements
+                this.Dispatcher.Invoke((Action)(() =>
+                {
+                    this.SetCurrentAccentColor();
+                    this.projects.ItemsSource = projectList;
+                    this.listBoxStations.ItemsSource = new StepDefinitionCollection().stepDefinitionCollection;
 
-            //Demo
-            this.TestCaseIdLabel.Content = "99999";
-            this.TestCaseNameLabel.Text = "Selected test case name Selected test case name Selected test case nameSelected test case name name na asdsadsadsa ds adsame";
-            this.TestCasePriorityLabel.Content = "Critical";
-            this.TestCaseSeverityLabel.Content = "Blocking";
-            this.TestCaseAutomatedLabel.Content = "False";
+                    this.MainTable.Visibility = Visibility.Visible;
+                    this.progressBar.Visibility = Visibility.Hidden;
+                }));
+            });
         }
 
         private void ProjectSelected_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            object current;
-
-            current = projects.SelectedItem;
-            switch (current.GetType().Name.ToLower())
+            object currentSelectedItem = projects.SelectedItem;
+            switch (currentSelectedItem.GetType().Name.ToLower())
             {
-                case "employee":
-                    break;
-                case "employeetype":
-                    break;
-                case "subemployee":
-                    break;
+                case "testcaseproxy":
+                    {
+                        this.SetCurrentTestCase(currentSelectedItem);
+                        break;
+                    }
                 default:
                     break;
+            }
+        }
+
+        private void SetCurrentTestCase(object selectedItem)
+        {
+            TestCaseProxy testCase = selectedItem as TestCaseProxy;
+            if (testCase != null)
+            {
+                this.TestCaseIdLabel.Content = testCase.Id;
+                this.TestCaseNameLabel.Text = testCase.Title;
+                this.TestCasePriorityLabel.Content = testCase.Priority;
+                this.TestCaseSeverityLabel.Content = testCase.Severity;
+                this.TestCaseAutomatedLabel.Content = testCase.IsAutomated;
+                this.TestCaseCreatedByLabel.Content = testCase.CreatedBy;
+                this.TestCaseUpdatedByLabel.Content = testCase.UpdatedBy;
             }
         }
 
@@ -81,12 +105,16 @@ namespace TestCaseManager.Pages
             if (AppearanceManager.LightThemeSource != AppearanceManager.Current.ThemeSource)
             {
                 this.listBoxStations.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
-                //this.projects.ItemsSource = new Test().tt;
             }
             else if (AppearanceManager.DarkThemeSource != AppearanceManager.Current.ThemeSource)
             {
                 this.listBoxStations.Foreground = new SolidColorBrush(Color.FromRgb(0, 0, 0));
             }
+        }
+
+        private void AddProject(object sender, RoutedEventArgs e)
+        {
+            string repeatPassword = PromptDialog.Prompt("Create new project", "Project name");
         }
     }
 

@@ -4,9 +4,8 @@ namespace TestCaseManager.Core.Proxy
 {
     public class TestCaseProxy
     {
-        public TestCaseProxy(string title)
+        public TestCaseProxy()
         {
-            Title = title;
         }
 
         public int Id { get; set; }
