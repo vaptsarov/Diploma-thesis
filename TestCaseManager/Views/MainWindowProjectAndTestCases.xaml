@@ -51,7 +51,7 @@
                         <MenuItem Header="Add area" Command="{Binding Command}"/>
                         <Separator />
                         <MenuItem Header="Edit project" Command="{Binding Command}"/>
-                        <MenuItem Header="Delete project" Command="{Binding Command}"/>
+                        <MenuItem Header="Delete project" Click="DeleteProject"/>
                     </ContextMenu>
                 </StackPanel.ContextMenu>
                 <TextBlock Text="{Binding Path=Title}" />

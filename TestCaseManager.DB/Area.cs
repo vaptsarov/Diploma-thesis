@@ -16,7 +16,7 @@ namespace TestCaseManager.DB
     {
         public Area()
         {
-            this.TestCases = new HashSet<TestCas>();
+            this.TestCases = new HashSet<TestCase>();
         }
     
         public int ID { get; set; }
@@ -26,6 +26,6 @@ namespace TestCaseManager.DB
         public int ProjectId { get; set; }
     
         public virtual Project Project { get; set; }
-        public virtual ICollection<TestCas> TestCases { get; set; }
+        public virtual ICollection<TestCase> TestCases { get; set; }
     }
 }

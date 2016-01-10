@@ -12,9 +12,9 @@ namespace TestCaseManager.DB
     using System;
     using System.Collections.Generic;
     
-    public partial class TestCas
+    public partial class TestCase
     {
-        public TestCas()
+        public TestCase()
         {
             this.StepDefinitions = new HashSet<StepDefinition>();
         }

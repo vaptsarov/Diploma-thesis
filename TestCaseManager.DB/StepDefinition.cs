@@ -19,6 +19,6 @@ namespace TestCaseManager.DB
         public string ExpectedResult { get; set; }
         public int TestCaseID { get; set; }
     
-        public virtual TestCas TestCas { get; set; }
+        public virtual TestCase TestCas { get; set; }
     }
 }

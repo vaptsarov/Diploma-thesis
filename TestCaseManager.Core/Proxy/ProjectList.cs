@@ -1,19 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace TestCaseManager.Core.Proxy
 {
-    public class ProjectList : List<ProjectProxy>
+    public class ProjectList : ObservableCollection<ProjectProxy>
     {
         public ProjectList()
         {
-        }
-
-        public ProjectList(List<ProjectProxy> projList)
-        {
-            projList.ForEach(x =>
-            {
-                this.Add(x);
-            });
         }
     }
 }

@@ -51,7 +51,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Managers\CaseManager.cs" />
+    <Compile Include="Managers\ProjectManager.cs" />
+    <Compile Include="Managers\ProxyManager.cs" />
     <Compile Include="Managers\UserManager.cs" />
     <Compile Include="AuthenticatePoint\AuthenticationManager.cs" />
     <Compile Include="AuthenticatePoint\IAdmin.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="CryptoService\CertificateRelated\NoEncryptionCryptoService.cs" />
     <Compile Include="Proxy\AreaProxy.cs" />
     <Compile Include="Proxy\ProjectList.cs" />
+    <Compile Include="ProxyConverter.cs" />
     <Compile Include="Proxy\TestDefinition\Priority.cs" />
     <Compile Include="Proxy\TestDefinition\Severity.cs" />
     <Compile Include="Proxy\TestDefinition\StepDefinition.cs" />

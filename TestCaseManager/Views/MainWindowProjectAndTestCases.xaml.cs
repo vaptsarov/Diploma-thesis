@@ -9,8 +9,10 @@ using TestCaseManager.Core.Managers;
 using TestCaseManager.Core.Proxy;
 using TestCaseManager.Core.Proxy.TestDefinition;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using TestCaseManager.Views.CustomControls;
+using TestCaseManager.Core;
 
 namespace TestCaseManager.Pages
 {
@@ -19,6 +21,8 @@ namespace TestCaseManager.Pages
     /// </summary>
     public partial class MainWindowProjectAndTestCases : UserControl
     {
+        private ObservableCollection<ProjectProxy> projectList = new ObservableCollection<ProjectProxy>();
+
         public MainWindowProjectAndTestCases()
         {
             InitializeComponent();
@@ -27,12 +31,10 @@ namespace TestCaseManager.Pages
 
         private void MainWindowProjectAndTestCases_Loaded(object sender, RoutedEventArgs e)
         {
-            List<ProjectProxy> projectList = null;
             Task task = Task.Factory.StartNew(() =>
             {
-                CaseManager manager = new CaseManager();
+                ProxyManager manager = new ProxyManager();
                 projectList = manager.GetAll();
-  
             });
             task.ContinueWith(next =>
             {
@@ -51,7 +53,7 @@ namespace TestCaseManager.Pages
 
         private void ProjectSelected_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            object currentSelectedItem = projects.SelectedItem;
+            object currentSelectedItem = this.projects.SelectedItem;
             switch (currentSelectedItem.GetType().Name.ToLower())
             {
                 case "testcaseproxy":
@@ -114,7 +116,25 @@ namespace TestCaseManager.Pages
 
         private void AddProject(object sender, RoutedEventArgs e)
         {
-            string repeatPassword = PromptDialog.Prompt("Create new project", "Project name");
+            string projectTitle = PromptDialog.Prompt("Create new project", "Project name");
+
+            ProjectManager projManager = new ProjectManager();
+            ProjectProxy proxyProject = ProxyConverter.ProjectModelToProxy(projManager.Create(projectTitle));
+            this.projectList.Add(proxyProject);
+        }
+
+        private void DeleteProject(object sender, RoutedEventArgs e)
+        {
+            string projectTitle = PromptDialog.Prompt("Type the name of this project (to be sure you delete the right project)", "Delete project");
+            ProjectProxy proxy = ((MenuItem)sender).DataContext as ProjectProxy;
+
+            if(projectTitle.Equals(proxy.Title))
+            {
+                ProjectManager projManager = new ProjectManager();
+                projManager.DeleteById(proxy.ID);
+
+                this.projectList.Remove(proxy);
+            }
         }
     }
 

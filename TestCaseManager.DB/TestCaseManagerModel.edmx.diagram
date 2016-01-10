@@ -9,7 +9,7 @@
         <EntityTypeShape EntityType="TestcaseManagerDemoModel.Area" Width="1.5" PointX="5.625" PointY="1.25" />
         <EntityTypeShape EntityType="TestcaseManagerDemoModel.Project" Width="1.5" PointX="3.375" PointY="1.5" />
         <EntityTypeShape EntityType="TestcaseManagerDemoModel.StepDefinition" Width="1.5" PointX="10.125" PointY="1.5" />
-        <EntityTypeShape EntityType="TestcaseManagerDemoModel.TestCas" Width="1.5" PointX="7.875" PointY="1" />
+        <EntityTypeShape EntityType="TestcaseManagerDemoModel.TestCase" Width="1.5" PointX="7.875" PointY="1" />
         <AssociationConnector Association="TestcaseManagerDemoModel.FK_Areas_Projects" />
         <AssociationConnector Association="TestcaseManagerDemoModel.FK_TestCases_Areas" />
         <AssociationConnector Association="TestcaseManagerDemoModel.FK_StepDefinitions_TestCases" />

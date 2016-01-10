@@ -123,7 +123,7 @@
           <EntitySet Name="Areas" EntityType="TestcaseManagerDemoModel.Area" />
           <EntitySet Name="Projects" EntityType="TestcaseManagerDemoModel.Project" />
           <EntitySet Name="StepDefinitions" EntityType="TestcaseManagerDemoModel.StepDefinition" />
-          <EntitySet Name="TestCases" EntityType="TestcaseManagerDemoModel.TestCas" />
+          <EntitySet Name="TestCases" EntityType="TestcaseManagerDemoModel.TestCase" />
           <AssociationSet Name="FK_Areas_Projects" Association="TestcaseManagerDemoModel.FK_Areas_Projects">
             <End Role="Project" EntitySet="Projects" />
             <End Role="Area" EntitySet="Areas" />
@@ -182,7 +182,7 @@
           <Property Name="TestCaseID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="TestCas" Relationship="TestcaseManagerDemoModel.FK_StepDefinitions_TestCases" FromRole="StepDefinition" ToRole="TestCas" />
         </EntityType>
-        <EntityType Name="TestCas">
+        <EntityType Name="TestCase">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -211,7 +211,7 @@
         </Association>
         <Association Name="FK_TestCases_Areas">
           <End Type="TestcaseManagerDemoModel.Area" Role="Area" Multiplicity="1" />
-          <End Type="TestcaseManagerDemoModel.TestCas" Role="TestCas" Multiplicity="*" />
+          <End Type="TestcaseManagerDemoModel.TestCase" Role="TestCas" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Area">
               <PropertyRef Name="ID" />
@@ -222,7 +222,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_StepDefinitions_TestCases">
-          <End Type="TestcaseManagerDemoModel.TestCas" Role="TestCas" Multiplicity="1" />
+          <End Type="TestcaseManagerDemoModel.TestCase" Role="TestCas" Multiplicity="1" />
           <End Type="TestcaseManagerDemoModel.StepDefinition" Role="StepDefinition" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="TestCas">
@@ -285,7 +285,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="TestCases">
-            <EntityTypeMapping TypeName="TestcaseManagerDemoModel.TestCas">
+            <EntityTypeMapping TypeName="TestcaseManagerDemoModel.TestCase">
               <MappingFragment StoreEntitySet="TestCases">
                 <ScalarProperty Name="AreaID" ColumnName="AreaID" />
                 <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
