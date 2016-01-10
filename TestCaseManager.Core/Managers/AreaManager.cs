@@ -5,7 +5,7 @@ using TestCaseManager.DB;
 
 namespace TestCaseManager.Core.Managers
 {
-    public class AreaManager
+    public class AreaManager : ITestManager<Area>
     {
         public List<Area> GetAll()
         {

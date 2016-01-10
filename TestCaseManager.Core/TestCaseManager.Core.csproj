@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Managers\AreaManager.cs" />
+    <Compile Include="Managers\ITestManager.cs" />
     <Compile Include="Managers\ProjectManager.cs" />
     <Compile Include="Managers\ProxyManager.cs" />
     <Compile Include="Managers\UserManager.cs" />

@@ -5,7 +5,7 @@ using TestCaseManager.DB;
 
 namespace TestCaseManager.Core.Managers
 {
-    public class ProjectManager
+    public class ProjectManager : ITestManager<Project>
     {
         public List<Project> GetAll()
         {
