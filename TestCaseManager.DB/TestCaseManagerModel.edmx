@@ -60,7 +60,9 @@
           <Property Name="AreaID" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK_Areas_Projects">
-          <End Role="Projects" Type="Self.Projects" Multiplicity="1" />
+          <End Role="Projects" Type="Self.Projects" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Areas" Type="Self.Areas" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Projects">
@@ -72,7 +74,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_StepDefinitions_TestCases">
-          <End Role="TestCases" Type="Self.TestCases" Multiplicity="1" />
+          <End Role="TestCases" Type="Self.TestCases" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="StepDefinitions" Type="Self.StepDefinitions" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="TestCases">
@@ -84,7 +88,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_TestCases_Areas">
-          <End Role="Areas" Type="Self.Areas" Multiplicity="1" />
+          <End Role="Areas" Type="Self.Areas" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="TestCases" Type="Self.TestCases" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Areas">

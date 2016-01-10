@@ -48,9 +48,9 @@
             <StackPanel Orientation="Horizontal">
                 <StackPanel.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Add area" Command="{Binding Command}"/>
+                        <MenuItem Header="Add area" Click="AddArea"/>
                         <Separator />
-                        <MenuItem Header="Edit project" Command="{Binding Command}"/>
+                        <MenuItem Header="Edit project" Click="EditProject"/>
                         <MenuItem Header="Delete project" Click="DeleteProject"/>
                     </ContextMenu>
                 </StackPanel.ContextMenu>

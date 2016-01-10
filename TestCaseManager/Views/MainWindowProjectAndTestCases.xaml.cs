@@ -116,7 +116,7 @@ namespace TestCaseManager.Pages
 
         private void AddProject(object sender, RoutedEventArgs e)
         {
-            string projectTitle = PromptDialog.Prompt("Create new project", "Project name");
+            string projectTitle = PromptDialog.Prompt("Project name", "Create new project");
 
             ProjectManager projManager = new ProjectManager();
             ProjectProxy proxyProject = ProxyConverter.ProjectModelToProxy(projManager.Create(projectTitle));
@@ -135,6 +135,30 @@ namespace TestCaseManager.Pages
 
                 this.projectList.Remove(proxy);
             }
+        }
+
+        private void EditProject(object sender, RoutedEventArgs e)
+        {
+            //string projectTitle = PromptDialog.Prompt("Type the name of this project (to be sure you delete the right project)", "Delete project");
+            //ProjectProxy proxy = ((MenuItem)sender).DataContext as ProjectProxy;
+
+            //if (projectTitle.Equals(proxy.Title))
+            //{
+            //    ProjectManager projManager = new ProjectManager();
+            //    projManager.DeleteById(proxy.ID);
+
+            //    this.projectList.Remove(proxy);
+            //}
+        }
+
+        private void AddArea(object sender, RoutedEventArgs e)
+        {
+            string areaTitle = PromptDialog.Prompt("Area name", "Create new area");
+            ProjectProxy proxy = ((MenuItem)sender).DataContext as ProjectProxy;
+
+            AreaManager areaManager = new AreaManager();
+            AreaProxy areaProxy = ProxyConverter.AreaModelToProxy(areaManager.Create(areaTitle, proxy.ID));
+            proxy.Areas.Add(areaProxy);
         }
     }
 
