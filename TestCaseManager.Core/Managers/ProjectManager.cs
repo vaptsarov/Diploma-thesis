@@ -49,6 +49,20 @@ namespace TestCaseManager.Core.Managers
             return project;
         }
 
+        public void Update(int itemId, string title)
+        {
+            using (TestcaseManagerDB context = new TestcaseManagerDB())
+            {
+                Project project = context.Projects.Where(proj => proj.ID == itemId).FirstOrDefault();
+
+                if(project == null)
+                    throw new NullReferenceException();
+
+                project.Title = title;
+                context.SaveChanges();
+            }
+        }
+
         public void DeleteById(int id)
         {
             using (TestcaseManagerDB context = new TestcaseManagerDB())

@@ -1,18 +1,17 @@
 ﻿using FirstFloor.ModernUI.Presentation;
-using System.Collections.Generic;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using TestCaseManager.Core;
 using TestCaseManager.Core.Managers;
 using TestCaseManager.Core.Proxy;
 using TestCaseManager.Core.Proxy.TestDefinition;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using TestCaseManager.Views.CustomControls;
-using TestCaseManager.Core;
 
 namespace TestCaseManager.Pages
 {
@@ -22,6 +21,7 @@ namespace TestCaseManager.Pages
     public partial class MainWindowProjectAndTestCases : UserControl
     {
         private ObservableCollection<ProjectProxy> projectList = new ObservableCollection<ProjectProxy>();
+        private readonly Timer timer = new Timer();
 
         public MainWindowProjectAndTestCases()
         {
@@ -29,7 +29,43 @@ namespace TestCaseManager.Pages
             AppearanceManager.Current.PropertyChanged += OnAppearanceManagerPropertyChanged;
         }
 
-        private void MainWindowProjectAndTestCases_Loaded(object sender, RoutedEventArgs e)
+        private void ObtainDbRecords(object source, ElapsedEventArgs e)
+        {
+            ProxyManager manager = new ProxyManager();
+            this.Dispatcher.Invoke((Action)(() =>
+            {
+               bool isHardUIRefreshRequired = false;
+               var dbCollection = manager.GetAll();
+               foreach (var dbItem in dbCollection)
+               {
+                   bool doesExist = false;
+                   foreach (var uiItem in this.projectList)
+                   {                        
+                       if(uiItem.ID == dbItem.ID)
+                       {
+                           if (uiItem.Title != dbItem.Title)
+                           {
+                               uiItem.Title = dbItem.Title;
+                               isHardUIRefreshRequired = true;
+                           }
+                           uiItem.UpdatedBy = dbItem.UpdatedBy;
+
+                           doesExist = true;
+                           break;
+                       }
+                   }
+
+                   if (!doesExist)
+                       this.projectList.Add(dbItem);
+               }
+
+               if (isHardUIRefreshRequired)
+                   this.projects.Items.Refresh();
+
+            }));
+        }
+
+        private void MainWindowProjectAndTestCases_Loaded(object sensder, RoutedEventArgs e)
         {
             Task task = Task.Factory.StartNew(() =>
             {
@@ -42,11 +78,18 @@ namespace TestCaseManager.Pages
                 this.Dispatcher.Invoke((Action)(() =>
                 {
                     this.SetCurrentAccentColor();
+
                     this.projects.ItemsSource = projectList;
                     this.listBoxStations.ItemsSource = new StepDefinitionCollection().stepDefinitionCollection;
 
                     this.MainTable.Visibility = Visibility.Visible;
                     this.progressBar.Visibility = Visibility.Hidden;
+
+                    // Register timer event
+                    timer.Elapsed += new ElapsedEventHandler(this.ObtainDbRecords);
+                    // 3 minutes = 180000
+                    timer.Interval = 4000;
+                    timer.Start();
                 }));
             });
         }
@@ -128,7 +171,7 @@ namespace TestCaseManager.Pages
             string projectTitle = PromptDialog.Prompt("Type the name of this project (to be sure you delete the right project)", "Delete project");
             ProjectProxy proxy = ((MenuItem)sender).DataContext as ProjectProxy;
 
-            if(projectTitle.Equals(proxy.Title))
+            if (projectTitle.Equals(proxy.Title))
             {
                 ProjectManager projManager = new ProjectManager();
                 projManager.DeleteById(proxy.ID);

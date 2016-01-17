@@ -6,6 +6,7 @@ namespace TestCaseManager.Core.Managers
     {
         List<T> GetAll();
         T GetById(int id);
+        void Update(int itemId, string title);
         void DeleteById(int id);
     }
 }

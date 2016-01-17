@@ -50,11 +50,25 @@ namespace TestCaseManager.Core.Managers
             return area;
         }
 
+        public void Update(int itemId, string title)
+        {
+            using (TestcaseManagerDB context = new TestcaseManagerDB())
+            {
+                Area area = context.Areas.Where(x => x.ID == itemId).FirstOrDefault();
+
+                if (area == null)
+                    throw new NullReferenceException();
+
+                area.Title = title;
+                context.SaveChanges();
+            }
+        }
+
         public void DeleteById(int id)
         {
             using (TestcaseManagerDB context = new TestcaseManagerDB())
             {
-                Area project = context.Areas.Where(proj => proj.ID == id).FirstOrDefault();
+                Area project = context.Areas.Where(a => a.ID == id).FirstOrDefault();
 
                 if (project == null)
                     throw new NullReferenceException();
