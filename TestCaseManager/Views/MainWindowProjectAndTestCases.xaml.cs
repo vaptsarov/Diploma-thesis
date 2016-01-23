@@ -1,5 +1,6 @@
 ﻿using FirstFloor.ModernUI.Presentation;
 using System;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
@@ -31,46 +32,22 @@ namespace TestCaseManager.Pages
 
         private void ObtainDbRecords(object source, ElapsedEventArgs e)
         {
-            ProxyManager manager = new ProxyManager();
             this.Dispatcher.Invoke((Action)(() =>
             {
-               bool isHardUIRefreshRequired = false;
-               var dbCollection = manager.GetAll();
-               foreach (var dbItem in dbCollection)
-               {
-                   bool doesExist = false;
-                   foreach (var uiItem in this.projectList)
-                   {                        
-                       if(uiItem.ID == dbItem.ID)
-                       {
-                           if (uiItem.Title != dbItem.Title)
-                           {
-                               uiItem.Title = dbItem.Title;
-                               isHardUIRefreshRequired = true;
-                           }
-                           uiItem.UpdatedBy = dbItem.UpdatedBy;
-
-                           doesExist = true;
-                           break;
-                       }
-                   }
-
-                   if (!doesExist)
-                       this.projectList.Add(dbItem);
-               }
-
-               if (isHardUIRefreshRequired)
-                   this.projects.Items.Refresh();
-
+                // Hard UI reset is needed here
+                ProxyManager manager = new ProxyManager();
+                this.projectList = manager.GetAll();
+                this.projects.ItemsSource = this.projectList;
             }));
         }
 
         private void MainWindowProjectAndTestCases_Loaded(object sensder, RoutedEventArgs e)
         {
+            // Initial DB data retrieve
             Task task = Task.Factory.StartNew(() =>
             {
                 ProxyManager manager = new ProxyManager();
-                projectList = manager.GetAll();
+                this.projectList = manager.GetAll();
             });
             task.ContinueWith(next =>
             {
@@ -87,8 +64,8 @@ namespace TestCaseManager.Pages
 
                     // Register timer event
                     timer.Elapsed += new ElapsedEventHandler(this.ObtainDbRecords);
-                    // 3 minutes = 180000
-                    timer.Interval = 4000;
+                    // 30 minutes = 1800000
+                    timer.Interval = 1800000;
                     timer.Start();
                 }));
             });
@@ -157,6 +134,8 @@ namespace TestCaseManager.Pages
             }
         }
 
+        #region Project CRUD
+
         private void AddProject(object sender, RoutedEventArgs e)
         {
             string projectTitle = PromptDialog.Prompt("Project name", "Create new project");
@@ -182,17 +161,23 @@ namespace TestCaseManager.Pages
 
         private void EditProject(object sender, RoutedEventArgs e)
         {
-            //string projectTitle = PromptDialog.Prompt("Type the name of this project (to be sure you delete the right project)", "Delete project");
-            //ProjectProxy proxy = ((MenuItem)sender).DataContext as ProjectProxy;
+            string projectTitle = PromptDialog.Prompt("New project name", "Edit project name");
+            ProjectProxy proxy = ((MenuItem)sender).DataContext as ProjectProxy;
 
-            //if (projectTitle.Equals(proxy.Title))
-            //{
-            //    ProjectManager projManager = new ProjectManager();
-            //    projManager.DeleteById(proxy.ID);
+            if (!projectTitle.Equals(proxy.Title))
+            {
+                ProjectManager projManager = new ProjectManager();
+                projManager.Update(proxy.ID, projectTitle);
 
-            //    this.projectList.Remove(proxy);
-            //}
+                proxy.Title = projectTitle;
+                this.projectList.Remove(proxy);
+                this.projectList.Add(proxy);
+            }
         }
+
+        #endregion
+
+        #region Area CRUD
 
         private void AddArea(object sender, RoutedEventArgs e)
         {
@@ -203,6 +188,48 @@ namespace TestCaseManager.Pages
             AreaProxy areaProxy = ProxyConverter.AreaModelToProxy(areaManager.Create(areaTitle, proxy.ID));
             proxy.Areas.Add(areaProxy);
         }
+
+        private void EditArea(object sender, RoutedEventArgs e)
+        {
+            string areaTitle = PromptDialog.Prompt("New are name", "Edit area name");
+            AreaProxy areaProxy = ((MenuItem)sender).DataContext as AreaProxy;
+
+            if (!areaTitle.Equals(areaProxy.Title))
+            {
+                ProjectProxy projectProxy = this.projectList.Where(proj => proj.Areas.Any(a => a.ID == areaProxy.ID)).FirstOrDefault();
+
+                if(projectProxy!=null)
+                {
+                    AreaManager areaManager = new AreaManager();
+                    areaManager.Update(areaProxy.ID, areaTitle);
+
+                    areaProxy.Title = areaTitle;
+                    projectProxy.Areas.Remove(areaProxy);
+                    projectProxy.Areas.Add(areaProxy);
+                }
+            }
+        }
+
+        private void DeleteArea(object sender, RoutedEventArgs e)
+        {
+            string areaTitle = PromptDialog.Prompt("Type the name of this area (to be sure you delete the right area)", "Delete area");
+            AreaProxy proxy = ((MenuItem)sender).DataContext as AreaProxy;
+
+            if (areaTitle.Equals(proxy.Title))
+            {
+                ProjectProxy projectProxy = this.projectList.Where(proj => proj.Areas.Any(a => a.ID == proxy.ID)).FirstOrDefault();
+
+                if (projectProxy != null)
+                {
+                    AreaManager areaManager = new AreaManager();
+                    areaManager.DeleteById(proxy.ID);
+
+                    projectProxy.Areas.Remove(proxy);
+                }
+            }
+        }
+
+        #endregion
     }
 
     public sealed class StepDefinitionCollection

@@ -59,6 +59,7 @@ namespace TestCaseManager.Core.Managers
                     throw new NullReferenceException();
 
                 project.Title = title;
+                project.UpdatedBy = AuthenticationManager.Instance().GetCurrentUsername ?? "Borislav Vaptsarov";
                 context.SaveChanges();
             }
         }

@@ -60,6 +60,7 @@ namespace TestCaseManager.Core.Managers
                     throw new NullReferenceException();
 
                 area.Title = title;
+                area.UpdatedBy = AuthenticationManager.Instance().GetCurrentUsername ?? "Borislav Vaptsarov";
                 context.SaveChanges();
             }
         }
