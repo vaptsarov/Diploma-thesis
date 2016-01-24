@@ -138,11 +138,15 @@ namespace TestCaseManager.Pages
 
         private void AddProject(object sender, RoutedEventArgs e)
         {
-            string projectTitle = PromptDialog.Prompt("Project name", "Create new project");
+            CreateTestCaseDialog.Prompt();
+            //string projectTitle = PromptDialog.Prompt("Project name", "Create new project");
 
-            ProjectManager projManager = new ProjectManager();
-            ProjectProxy proxyProject = ProxyConverter.ProjectModelToProxy(projManager.Create(projectTitle));
-            this.projectList.Add(proxyProject);
+            //if (projectTitle != null)
+            //{
+            //    ProjectManager projManager = new ProjectManager();
+            //    ProjectProxy proxyProject = ProxyConverter.ProjectModelToProxy(projManager.Create(projectTitle));
+            //    this.projectList.Add(proxyProject);
+            //}
         }
 
         private void DeleteProject(object sender, RoutedEventArgs e)
@@ -150,7 +154,7 @@ namespace TestCaseManager.Pages
             string projectTitle = PromptDialog.Prompt("Type the name of this project (to be sure you delete the right project)", "Delete project");
             ProjectProxy proxy = ((MenuItem)sender).DataContext as ProjectProxy;
 
-            if (projectTitle.Equals(proxy.Title))
+            if (projectTitle != null && projectTitle.Equals(proxy.Title))
             {
                 ProjectManager projManager = new ProjectManager();
                 projManager.DeleteById(proxy.ID);
@@ -164,7 +168,7 @@ namespace TestCaseManager.Pages
             string projectTitle = PromptDialog.Prompt("New project name", "Edit project name");
             ProjectProxy proxy = ((MenuItem)sender).DataContext as ProjectProxy;
 
-            if (!projectTitle.Equals(proxy.Title))
+            if (projectTitle != null && !projectTitle.Equals(proxy.Title))
             {
                 ProjectManager projManager = new ProjectManager();
                 projManager.Update(proxy.ID, projectTitle);
@@ -184,9 +188,12 @@ namespace TestCaseManager.Pages
             string areaTitle = PromptDialog.Prompt("Area name", "Create new area");
             ProjectProxy proxy = ((MenuItem)sender).DataContext as ProjectProxy;
 
-            AreaManager areaManager = new AreaManager();
-            AreaProxy areaProxy = ProxyConverter.AreaModelToProxy(areaManager.Create(areaTitle, proxy.ID));
-            proxy.Areas.Add(areaProxy);
+            if (areaTitle != null && areaTitle != null)
+            {
+                AreaManager areaManager = new AreaManager();
+                AreaProxy areaProxy = ProxyConverter.AreaModelToProxy(areaManager.Create(areaTitle, proxy.ID));
+                proxy.Areas.Add(areaProxy);
+            }
         }
 
         private void EditArea(object sender, RoutedEventArgs e)
@@ -194,7 +201,7 @@ namespace TestCaseManager.Pages
             string areaTitle = PromptDialog.Prompt("New are name", "Edit area name");
             AreaProxy areaProxy = ((MenuItem)sender).DataContext as AreaProxy;
 
-            if (!areaTitle.Equals(areaProxy.Title))
+            if (areaTitle != null && !areaTitle.Equals(areaProxy.Title))
             {
                 ProjectProxy projectProxy = this.projectList.Where(proj => proj.Areas.Any(a => a.ID == areaProxy.ID)).FirstOrDefault();
 
@@ -215,7 +222,7 @@ namespace TestCaseManager.Pages
             string areaTitle = PromptDialog.Prompt("Type the name of this area (to be sure you delete the right area)", "Delete area");
             AreaProxy proxy = ((MenuItem)sender).DataContext as AreaProxy;
 
-            if (areaTitle.Equals(proxy.Title))
+            if (areaTitle != null && areaTitle.Equals(proxy.Title))
             {
                 ProjectProxy projectProxy = this.projectList.Where(proj => proj.Areas.Any(a => a.ID == proxy.ID)).FirstOrDefault();
 

@@ -9,18 +9,18 @@ namespace TestCaseManager.Views.CustomControls
     {
         public PromptDialog(string windowTitle, string title, string defaultValue = "")
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.Owner = Application.Current.MainWindow;
             this.Loaded += new RoutedEventHandler(PromptDialog_Loaded);
 
             this.windowTitle.Text = windowTitle;
             Title = title;
-            textBox.Text = defaultValue;
+            this.textBox.Text = defaultValue;
         }
 
         void PromptDialog_Loaded(object sender, RoutedEventArgs e)
         {
-            textBox.Focus();
+            this.textBox.Focus();
         }
 
         public static string Prompt(string windowTitle, string title, string defaultValue = "")
@@ -36,19 +36,19 @@ namespace TestCaseManager.Views.CustomControls
         {
             get
             {
-                return textBox.Text;
+                return this.textBox.Text;
             }
         }
 
         private void btnOk_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = true;
-            Close();
+            this.DialogResult = true;
+            this.Close();
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
-            Close();
+            this.Close();
         }
     }
 }
