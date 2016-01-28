@@ -55,6 +55,7 @@
     <Compile Include="Managers\ITestManager.cs" />
     <Compile Include="Managers\ProjectManager.cs" />
     <Compile Include="Managers\ProxyManager.cs" />
+    <Compile Include="Managers\TestManager.cs" />
     <Compile Include="Managers\UserManager.cs" />
     <Compile Include="AuthenticatePoint\AuthenticationManager.cs" />
     <Compile Include="AuthenticatePoint\IAdmin.cs" />
@@ -71,7 +72,7 @@
     <Compile Include="ProxyConverter.cs" />
     <Compile Include="Proxy\TestDefinition\Priority.cs" />
     <Compile Include="Proxy\TestDefinition\Severity.cs" />
-    <Compile Include="Proxy\TestDefinition\StepDefinition.cs" />
+    <Compile Include="Proxy\TestDefinition\StepDefinitionProxy.cs" />
     <Compile Include="Proxy\ProjectProxy.cs" />
     <Compile Include="Proxy\TestCaseProxy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

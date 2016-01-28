@@ -11,7 +11,7 @@
         </ScrollViewer>
 
         <ScrollViewer Height="30" VerticalAlignment="Center" Margin="0,10,0,130" d:IsLocked="True">
-            <TextBox Name="Username" Height="26" TextWrapping="Wrap" Width="184" VerticalAlignment="Top" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+            <TextBox Name="Username" Height="26" TextWrapping="Wrap" Width="184" VerticalAlignment="Top" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
         </ScrollViewer>
         <ScrollViewer Height="40" VerticalAlignment="Center" Margin="-28,78,240,115" HorizontalAlignment="Center" d:IsLocked="True">
             <Label Content="Password" FontWeight="Bold" VerticalAlignment="Top" Height="16"/>

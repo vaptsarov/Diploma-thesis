@@ -55,9 +55,7 @@ namespace TestCaseManager.Pages
                 this.Dispatcher.Invoke((Action)(() =>
                 {
                     this.SetCurrentAccentColor();
-
                     this.projects.ItemsSource = projectList;
-                    this.listBoxStations.ItemsSource = new StepDefinitionCollection().stepDefinitionCollection;
 
                     this.MainTable.Visibility = Visibility.Visible;
                     this.progressBar.Visibility = Visibility.Hidden;
@@ -98,6 +96,7 @@ namespace TestCaseManager.Pages
                 this.TestCaseAutomatedLabel.Content = testCase.IsAutomated;
                 this.TestCaseCreatedByLabel.Content = testCase.CreatedBy;
                 this.TestCaseUpdatedByLabel.Content = testCase.UpdatedBy;
+                this.listBoxStations.ItemsSource = testCase.StepDefinitionList;
             }
         }
 
@@ -138,15 +137,14 @@ namespace TestCaseManager.Pages
 
         private void AddProject(object sender, RoutedEventArgs e)
         {
-            CreateTestCaseDialog.Prompt();
-            //string projectTitle = PromptDialog.Prompt("Project name", "Create new project");
+            string projectTitle = PromptDialog.Prompt("Project name", "Create new project");
 
-            //if (projectTitle != null)
-            //{
-            //    ProjectManager projManager = new ProjectManager();
-            //    ProjectProxy proxyProject = ProxyConverter.ProjectModelToProxy(projManager.Create(projectTitle));
-            //    this.projectList.Add(proxyProject);
-            //}
+            if (projectTitle != null)
+            {
+                ProjectManager projManager = new ProjectManager();
+                ProjectProxy proxyProject = ProxyConverter.ProjectModelToProxy(projManager.Create(projectTitle));
+                this.projectList.Add(proxyProject);
+            }
         }
 
         private void DeleteProject(object sender, RoutedEventArgs e)
@@ -205,7 +203,7 @@ namespace TestCaseManager.Pages
             {
                 ProjectProxy projectProxy = this.projectList.Where(proj => proj.Areas.Any(a => a.ID == areaProxy.ID)).FirstOrDefault();
 
-                if(projectProxy!=null)
+                if (projectProxy != null)
                 {
                     AreaManager areaManager = new AreaManager();
                     areaManager.Update(areaProxy.ID, areaTitle);
@@ -237,32 +235,20 @@ namespace TestCaseManager.Pages
         }
 
         #endregion
-    }
 
-    public sealed class StepDefinitionCollection
-    {
-        public ObservableCollection<StepDefinition> stepDefinitionCollection { get; private set; }
-        public StepDefinitionCollection()
+        #region TestCase CRUD
+
+        public void CreateTestCase(object sender, RoutedEventArgs e)
         {
-            stepDefinitionCollection = new ObservableCollection<StepDefinition>();
-            stepDefinitionCollection.Add(new StepDefinition { Step = "OneOneOneOneOneOneOneOneOneOneOneOneOneOneOneOneOneOneOneOne", ExpectedResult = "1151515151515151515151515151515151515155" });
-            stepDefinitionCollection.Add(new StepDefinition { Step = "One1", ExpectedResult = "15" });
-            stepDefinitionCollection.Add(new StepDefinition { Step = "One2", ExpectedResult = "15" });
-            stepDefinitionCollection.Add(new StepDefinition { Step = "One3", ExpectedResult = "15" });
-            stepDefinitionCollection.Add(new StepDefinition { Step = "One4", ExpectedResult = "15" });
-            stepDefinitionCollection.Add(new StepDefinition { Step = "One5", ExpectedResult = "15" });
-            stepDefinitionCollection.Add(new StepDefinition { Step = "One6", ExpectedResult = "15" });
-            stepDefinitionCollection.Add(new StepDefinition { Step = "One7", ExpectedResult = "15" });
-            stepDefinitionCollection.Add(new StepDefinition { Step = "One8", ExpectedResult = "15" });
-            stepDefinitionCollection.Add(new StepDefinition { Step = "One9", ExpectedResult = "15" });
-            stepDefinitionCollection.Add(new StepDefinition { Step = "One10", ExpectedResult = "15" });
-            stepDefinitionCollection.Add(new StepDefinition { Step = "One", ExpectedResult = "15" });
-            stepDefinitionCollection.Add(new StepDefinition { Step = "One", ExpectedResult = "15" });
-            stepDefinitionCollection.Add(new StepDefinition { Step = "One", ExpectedResult = "15" });
-            stepDefinitionCollection.Add(new StepDefinition { Step = "One", ExpectedResult = "15" });
-            stepDefinitionCollection.Add(new StepDefinition { Step = "One", ExpectedResult = "15" });
-            stepDefinitionCollection.Add(new StepDefinition { Step = "One", ExpectedResult = "15" });
-            stepDefinitionCollection.Add(new StepDefinition { Step = "One", ExpectedResult = "15" });
+            AreaProxy areaproxy = ((MenuItem)sender).DataContext as AreaProxy;
+            TestCaseProxy createdTestCaseProxy = CreateTestCaseDialog.Prompt(areaproxy);
+
+            if (createdTestCaseProxy != null)
+            {
+                areaproxy.TestCasesList.Add(createdTestCaseProxy);
+            }
         }
+
+        #endregion
     }
 }

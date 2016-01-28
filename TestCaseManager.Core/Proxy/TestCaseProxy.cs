@@ -1,4 +1,5 @@
-﻿using TestCaseManager.Core.Proxy.TestDefinition;
+﻿using System.Collections.ObjectModel;
+using TestCaseManager.Core.Proxy.TestDefinition;
 
 namespace TestCaseManager.Core.Proxy
 {
@@ -15,5 +16,6 @@ namespace TestCaseManager.Core.Proxy
         public bool IsAutomated { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
+        public ObservableCollection<StepDefinitionProxy> StepDefinitionList { get; set; }
     }
 }

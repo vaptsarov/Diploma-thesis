@@ -69,12 +69,12 @@ namespace TestCaseManager.Core.Managers
         {
             using (TestcaseManagerDB context = new TestcaseManagerDB())
             {
-                Area project = context.Areas.Where(a => a.ID == id).FirstOrDefault();
+                Area area = context.Areas.Where(a => a.ID == id).FirstOrDefault();
 
-                if (project == null)
+                if (area == null)
                     throw new NullReferenceException();
 
-                context.Areas.Remove(project);
+                context.Areas.Remove(area);
                 context.SaveChanges();
             }
         }

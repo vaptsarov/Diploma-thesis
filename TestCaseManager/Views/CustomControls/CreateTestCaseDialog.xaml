@@ -17,14 +17,14 @@
                         <Border Name="BorderTestCaseName" BorderBrush="Black" BorderThickness="1" Margin="-1,-1,-1,0">
                             <StackPanel Orientation="Horizontal">
                                 <Label FontSize="15" FontWeight="Bold" Margin="5,5,0,5" HorizontalAlignment="Left">Test case name:</Label>
-                                <TextBox MaxLength="255" TextWrapping="Wrap" Name="TestCaseNameLabel" FontSize="14" Margin="5,5,0,5" HorizontalAlignment="Left" VerticalAlignment="Stretch" MinHeight="25" Width="{Binding Path=ActualWidth, ElementName=TestCasePanelBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.84'}"/>
+                                <TextBox Name="TestCaseTitle" MaxLength="255" TextWrapping="Wrap" FontSize="14" Margin="5,5,0,5" HorizontalAlignment="Left" VerticalAlignment="Stretch" MinHeight="25" Width="{Binding Path=ActualWidth, ElementName=TestCasePanelBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.84'}" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                             </StackPanel>
                         </Border>
                         <StackPanel Orientation="Horizontal">
                             <Border Name="BorderTestCasePriority" BorderBrush="Black" BorderThickness="0,0,0,1" Width="{Binding Path=ActualWidth, ElementName=TestCasePanelBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.353'}" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="0,1,0 ,0" >
                                 <StackPanel Orientation="Horizontal" Width="auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                                     <Label FontSize="13" FontWeight="Bold" Margin="5,5,0,5" HorizontalAlignment="Left">Test case priority:</Label>
-                                    <ComboBox Width="140" Margin="5,5,0,5" SelectedIndex="0">
+                                    <ComboBox Name="PriorityComboBox" Width="140" Margin="5,5,0,5" SelectedIndex="0">
                                         <ComboBoxItem>Critical</ComboBoxItem>
                                         <ComboBoxItem>High</ComboBoxItem>
                                         <ComboBoxItem>Medium</ComboBoxItem>
@@ -35,7 +35,7 @@
                             <Border Name="BorderTestCaseSeverity" BorderBrush="Black" BorderThickness="1,0,1,1" Width="{Binding Path=ActualWidth, ElementName=TestCasePanelBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.345'}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,0,-1, 0" >
                                 <StackPanel Orientation="Horizontal" Width="auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                                     <Label FontSize="13" FontWeight="Bold" Margin="5,8,5,8" HorizontalAlignment="Left">Test case severity:</Label>
-                                    <ComboBox Width="130" Margin="5,5,0,5" SelectedIndex="0">
+                                    <ComboBox Name="SeverityComboBox" Width="130" Margin="5,5,0,5" SelectedIndex="0">
                                         <ComboBoxItem>Blocking</ComboBoxItem>
                                         <ComboBoxItem>Critical</ComboBoxItem>
                                         <ComboBoxItem>High</ComboBoxItem>
@@ -46,8 +46,8 @@
                             </Border>
                             <Border Name="BorderTestCaseAutomated" BorderBrush="Black" BorderThickness="0.5,0,1,1" Width="{Binding Path=ActualWidth, ElementName=TestCasePanelBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.3'}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,0,-1, 0" >
                                 <StackPanel Orientation="Horizontal" Width="auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                                    <Label FontSize="13" FontWeight="Bold" Margin="5,8,5,8" HorizontalAlignment="Left">Is Automated: </Label>
-                                    <CheckBox/>
+                                    <Label FontSize="13" FontWeight="Bold" Margin="5,8,5,8" HorizontalAlignment="Left">Is Automated:</Label>
+                                    <CheckBox Name="IsAutomatedCheckBox"/>
                                 </StackPanel>
                             </Border>
                         </StackPanel>
@@ -59,6 +59,45 @@
                             <Border Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.48'}" Margin="0,-2,1 ,-1">
                                 <Label FontSize="14" FontWeight="Medium"  VerticalAlignment="Center" HorizontalAlignment="Center">Expected result</Label>
                             </Border>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel>
+                        <Border Name="TestCaseEditViewBorder" BorderBrush="Black" BorderThickness="1,1,1.6,1.6" Width="auto" Margin="-1,101,-1,-1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Height="380">
+                            <ListBox Name="TestStepList" FontSize="14" Grid.Row="1" VerticalAlignment="Stretch" Margin="0,0,0,5" >
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.48'}"/>
+                                                <ColumnDefinition Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.48'}"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Border Name="StepBorder" BorderBrush="Black" BorderThickness="0,1,0,1" Grid.Row="0" Grid.Column="0" Margin="0,-3,0,-2">
+                                                <Grid>
+                                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                                        <TextBox TextWrapping="Wrap" Text="{Binding Step}" Margin="5,5,5,5" />
+                                                    </ScrollViewer>
+                                                </Grid>
+                                            </Border>
+
+                                            <Border Name="DefinitionBorder" BorderBrush="Black" BorderThickness="1,1,0,1" Grid.Row="0" Grid.Column="1" Margin="-1,-3,0 ,-2" >
+                                                <TextBox TextWrapping="Wrap" Text="{Binding ExpectedResult}" Margin="5,5,5,5"/>
+                                            </Border>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="{x:Type ListBoxItem}">
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                            </ListBox>
+                        </Border>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Click="AddTestStep_Click" Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.498'}">Add a test step with expected result</Button>
+                            <Button Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.498'}">Delete selected step</Button>
                         </StackPanel>
                     </StackPanel>
                 </Grid>

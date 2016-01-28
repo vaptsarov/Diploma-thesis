@@ -54,6 +54,8 @@ namespace TestCaseManager.Core.Managers
             foreach (TestCase item in list)
             {
                 TestCaseProxy proxyObject = ProxyConverter.TestCaseModelToProxy(item);
+                proxyObject.StepDefinitionList = ProxyConverter.StepDefinitionModelToproxy(item.StepDefinitions);
+
                 proxyTestCaseList.Add(proxyObject);
             }
 

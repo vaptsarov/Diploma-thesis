@@ -32,7 +32,7 @@
             <StackPanel Orientation="Horizontal">
                 <StackPanel.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Add test case" Command="{Binding Command}"/>
+                        <MenuItem Header="Add test case" Click="CreateTestCase"/>
                         <Separator />
                         <MenuItem Header="Edit area" Click="EditArea"/>
                         <MenuItem Header="Delete area" Click="DeleteArea"/>

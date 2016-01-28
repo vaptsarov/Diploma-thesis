@@ -49,7 +49,7 @@ namespace TestCaseManager.Pages
         private void RegisterUsernameValidation()
         {
             this.textboxViewModel = new TextboxViewModel();
-            this.textboxViewModel.Username = this.Username.Text;
+            this.textboxViewModel.Text = this.Username.Text;
             this.DataContext = this.textboxViewModel;
         }
 

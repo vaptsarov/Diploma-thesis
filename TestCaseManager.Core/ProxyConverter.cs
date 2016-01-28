@@ -1,4 +1,7 @@
-﻿using TestCaseManager.Core.Proxy;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using TestCaseManager.Core.Proxy;
 using TestCaseManager.Core.Proxy.TestDefinition;
 using TestCaseManager.DB;
 using TestCaseManager.Utilities;
@@ -41,6 +44,23 @@ namespace TestCaseManager.Core
             proxyObject.UpdatedBy = model.UpdatedBy;
 
             return proxyObject;
+        }
+
+        public static ObservableCollection<StepDefinitionProxy> StepDefinitionModelToproxy(ICollection<StepDefinition> stepDefinitions)
+        {
+            ObservableCollection<StepDefinitionProxy> list = new ObservableCollection<StepDefinitionProxy>();
+            foreach (var item in stepDefinitions)
+            {
+                StepDefinitionProxy proxy = new StepDefinitionProxy();
+                proxy.Step = item.Step;
+                proxy.ExpectedResult = item.ExpectedResult;
+                proxy.ID = item.ID;
+                proxy.TestCaseID = item.TestCaseID;
+
+                list.Add(proxy);
+            }
+
+            return list;
         }
     }
 }

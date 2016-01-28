@@ -9,19 +9,19 @@ namespace TestCaseManager.Views
 {
     public class TextboxViewModel : INotifyPropertyChanged, IDataErrorInfo
     {
-        private static string username;
-        public string Username
+        private static string text;
+        public string Text
         {
             get
             {
-                return username;
+                return text;
             }
             set
             {
-                if (username != value)
+                if (text != value)
                 {
-                    username = value;
-                    OnPropertyChanged("Username");
+                    text = value;
+                    OnPropertyChanged("Text");
                 }
             }
         }
@@ -59,10 +59,10 @@ namespace TestCaseManager.Views
             string validationMessage = string.Empty;
             switch (properyName)
             {
-                case "Username":
+                case "Text":
                     {
-                        if(string.IsNullOrEmpty(username))
-                            validationMessage = "Username can't be null or empty.";
+                        if(string.IsNullOrEmpty(text))
+                            validationMessage = "Value can't be null or empty.";
                         break;
                     }
             }
