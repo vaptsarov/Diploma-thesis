@@ -20,6 +20,8 @@ namespace TestCaseManager.Core
             proxyObject.IsAutomated = model.IsAutomated;
             proxyObject.CreatedBy = model.CreatedBy;
             proxyObject.UpdatedBy = model.UpdatedBy;
+            proxyObject.StepDefinitionList = StepDefinitionModelToproxy(model.StepDefinitions);
+
 
             return proxyObject;
         }

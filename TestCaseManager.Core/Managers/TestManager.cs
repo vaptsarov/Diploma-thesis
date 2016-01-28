@@ -30,11 +30,14 @@ namespace TestCaseManager.Core.Managers
                 {
                     foreach (StepDefinitionProxy item in testCase.StepDefinitionList)
                     {
-                        StepDefinition definition = new StepDefinition();
-                        definition.Step = item.Step;
-                        definition.ExpectedResult = item.ExpectedResult;
-                        definition.TestCaseID = @case.ID;
-                        @case.StepDefinitions.Add(definition);
+                        if (item.Step != null)
+                        {
+                            StepDefinition definition = new StepDefinition();
+                            definition.Step = item.Step;
+                            definition.ExpectedResult = item.ExpectedResult;
+                            definition.TestCaseID = @case.ID;
+                            @case.StepDefinitions.Add(definition);
+                        }
                     }
 
                     context.SaveChanges();
