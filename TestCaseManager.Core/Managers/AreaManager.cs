@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TestCaseManager.Core.Proxy;
 using TestCaseManager.DB;
 
 namespace TestCaseManager.Core.Managers
 {
-    public class AreaManager : ITestManager<Area>
+    public class AreaManager : ITestManager<Area, AreaProxy>
     {
         public List<Area> GetAll()
         {
@@ -50,19 +51,22 @@ namespace TestCaseManager.Core.Managers
             return area;
         }
 
-        public void Update(int itemId, string title)
+        public Area Update(AreaProxy proxy)
         {
+            Area area = null;
             using (TestcaseManagerDB context = new TestcaseManagerDB())
             {
-                Area area = context.Areas.Where(x => x.ID == itemId).FirstOrDefault();
+                area = context.Areas.Where(x => x.ID == proxy.ID).FirstOrDefault();
 
                 if (area == null)
                     throw new NullReferenceException();
 
-                area.Title = title;
+                area.Title = proxy.Title;
                 area.UpdatedBy = AuthenticationManager.Instance().GetCurrentUsername ?? "Borislav Vaptsarov";
                 context.SaveChanges();
             }
+
+            return area;
         }
 
         public void DeleteById(int id)

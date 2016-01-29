@@ -5,8 +5,9 @@ namespace TestCaseManager.Core.Proxy
 {
     public class TestCaseProxy
     {
-        public TestCaseProxy()
+        public TestCaseProxy ()
         {
+            this.StepDefinitionList = new ObservableCollection<StepDefinitionProxy>();
         }
 
         public int Id { get; set; }
@@ -17,5 +18,7 @@ namespace TestCaseManager.Core.Proxy
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
         public ObservableCollection<StepDefinitionProxy> StepDefinitionList { get; set; }
+
+        public int AreaID { get; set; }
     }
 }

@@ -34,8 +34,7 @@ namespace TestCaseManager
             if (link != null)
             {
                 if (link.ToolTip != null && link.ToolTip.ToString().Equals("back"))
-                {
-                    
+                {                   
                     //Navigator.Instance.NavigateMainWindowProjectAndTestCases(e.OriginalSource as FrameworkElement);
                 }
             }

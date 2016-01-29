@@ -69,8 +69,8 @@
     </Compile>
     <Compile Include="Utilities\BaseNavigator.cs" />
     <Compile Include="Utilities\Navigator.cs" />
-    <Compile Include="Views\CustomControls\CreateTestCaseDialog.xaml.cs">
-      <DependentUpon>CreateTestCaseDialog.xaml</DependentUpon>
+    <Compile Include="Views\CustomControls\TestCaseDialog.xaml.cs">
+      <DependentUpon>TestCaseDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CustomControls\PromptDialog.xaml.cs">
       <DependentUpon>PromptDialog.xaml</DependentUpon>
@@ -90,7 +90,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\CustomControls\CreateTestCaseDialog.xaml">
+    <Page Include="Views\CustomControls\TestCaseDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

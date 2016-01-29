@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TestCaseManager.Core.Proxy;
 using TestCaseManager.DB;
 
 namespace TestCaseManager.Core.Managers
 {
-    public class ProjectManager : ITestManager<Project>
+    public class ProjectManager : ITestManager<Project, ProjectProxy>
     {
         public List<Project> GetAll()
         {
@@ -49,19 +50,22 @@ namespace TestCaseManager.Core.Managers
             return project;
         }
 
-        public void Update(int itemId, string title)
+        public Project Update(ProjectProxy proxy)
         {
+            Project project = null;
             using (TestcaseManagerDB context = new TestcaseManagerDB())
             {
-                Project project = context.Projects.Where(proj => proj.ID == itemId).FirstOrDefault();
+                project = context.Projects.Where(proj => proj.ID == proxy.ID).FirstOrDefault();
 
                 if(project == null)
                     throw new NullReferenceException();
 
-                project.Title = title;
+                project.Title = proxy.Title;
                 project.UpdatedBy = AuthenticationManager.Instance().GetCurrentUsername ?? "Borislav Vaptsarov";
                 context.SaveChanges();
             }
+
+            return project;
         }
 
         public void DeleteById(int id)

@@ -170,10 +170,11 @@ namespace TestCaseManager.Pages
 
             if (!string.IsNullOrWhiteSpace(projectTitle) && !projectTitle.Equals(proxy.Title))
             {
-                ProjectManager projManager = new ProjectManager();
-                projManager.Update(proxy.ID, projectTitle);
-
                 proxy.Title = projectTitle;
+
+                ProjectManager projManager = new ProjectManager();
+                projManager.Update(proxy);
+
                 this.projectList.Remove(proxy);
                 this.projectList.Add(proxy);
             }
@@ -207,10 +208,11 @@ namespace TestCaseManager.Pages
 
                 if (projectProxy != null)
                 {
-                    AreaManager areaManager = new AreaManager();
-                    areaManager.Update(areaProxy.ID, areaTitle);
-
                     areaProxy.Title = areaTitle;
+
+                    AreaManager areaManager = new AreaManager();
+                    areaManager.Update(areaProxy);
+
                     projectProxy.Areas.Remove(areaProxy);
                     projectProxy.Areas.Add(areaProxy);
                 }
@@ -243,11 +245,46 @@ namespace TestCaseManager.Pages
         public void CreateTestCase(object sender, RoutedEventArgs e)
         {
             AreaProxy areaproxy = ((MenuItem)sender).DataContext as AreaProxy;
-            TestCaseProxy createdTestCaseProxy = CreateTestCaseDialog.Prompt(areaproxy);
+            TestCaseProxy createdTestCaseProxy = TestCaseDialog.Prompt(areaproxy);
 
             if (createdTestCaseProxy != null)
             {
                 areaproxy.TestCasesList.Add(createdTestCaseProxy);
+            }
+        }
+
+        public void EditTestCase(object sender, RoutedEventArgs e)
+        {
+            TestCaseProxy testCase = ((MenuItem)sender).DataContext as TestCaseProxy;
+            TestCaseProxy editedTestCase = TestCaseDialog.Prompt(testCase);
+
+            if (editedTestCase != null)
+            {
+                ProjectProxy projectProxy = this.projectList.Where(proj => proj.Areas.Any(a => a.ID == testCase.AreaID)).FirstOrDefault();
+                if (projectList != null)
+                {
+                    AreaProxy areaProxy = projectProxy.Areas.Where(a => a.ID == testCase.AreaID).FirstOrDefault();
+                    if (areaProxy != null)
+                    {
+                        areaProxy.TestCasesList.Remove(testCase);
+                        areaProxy.TestCasesList.Add(editedTestCase);
+                    }
+                }
+            }
+        }
+
+        public void DeleteTestCase(object sender, RoutedEventArgs e)
+        {
+            TestCaseProxy testCaseToDelete = ((MenuItem)sender).DataContext as TestCaseProxy;
+            TestManager manager = new TestManager();
+            manager.DeleteById(testCaseToDelete.Id);
+
+            ProjectProxy projectProxy = this.projectList.Where(proj => proj.Areas.Any(a => a.ID == testCaseToDelete.AreaID)).FirstOrDefault();
+            if (projectList != null)
+            {
+                AreaProxy areaProxy = projectProxy.Areas.Where(a => a.ID == testCaseToDelete.AreaID).FirstOrDefault();
+                if(areaProxy != null)
+                    areaProxy.TestCasesList.Remove(testCaseToDelete);
             }
         }
 

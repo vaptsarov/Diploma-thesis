@@ -21,7 +21,7 @@ namespace TestCaseManager.Core
             proxyObject.CreatedBy = model.CreatedBy;
             proxyObject.UpdatedBy = model.UpdatedBy;
             proxyObject.StepDefinitionList = StepDefinitionModelToproxy(model.StepDefinitions);
-
+            proxyObject.AreaID = model.AreaID;
 
             return proxyObject;
         }

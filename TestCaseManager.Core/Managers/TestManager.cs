@@ -7,21 +7,14 @@ using TestCaseManager.DB;
 
 namespace TestCaseManager.Core.Managers
 {
-    public class TestManager : ITestManager<TestCase>
+    public class TestManager : ITestManager<TestCase, TestCaseProxy>
     {
         public TestCase Create(int areaId, TestCaseProxy testCase)
         {
             TestCase @case = null;
             using (TestcaseManagerDB context = new TestcaseManagerDB())
             {
-                @case = new TestCase();
-                @case.Title = testCase.Title;
-                @case.AreaID = areaId;
-                @case.Severity = testCase.Severity.ToString();
-                @case.Priority = testCase.Priority.ToString();
-                @case.IsAutomated = testCase.IsAutomated;
-
-                @case.CreatedBy = AuthenticationManager.Instance().GetCurrentUsername ?? "Borislav Vaptsarov";
+                @case = this.MapPrimaryPropertiesFromProxy(testCase, areaId);
 
                 context.TestCases.Add(@case);
                 context.SaveChanges();
@@ -73,9 +66,66 @@ namespace TestCaseManager.Core.Managers
             return testCase;
         }
 
-        public void Update(int id, string title)
+        public TestCase Update(TestCaseProxy testCase)
         {
-            throw new NotImplementedException();
+            TestCase @case = null;
+            using (TestcaseManagerDB context = new TestcaseManagerDB())
+            {
+                @case = context.TestCases.Where(tc => tc.ID == testCase.Id).FirstOrDefault();
+                @case.Title = testCase.Title;
+                @case.Severity = testCase.Severity.ToString();
+                @case.Priority = testCase.Priority.ToString();
+                @case.IsAutomated = testCase.IsAutomated;
+                @case.UpdatedBy = AuthenticationManager.Instance().GetCurrentUsername ?? "Borislav Vaptsarov";
+                
+                if (testCase.StepDefinitionList != null)
+                {
+                    List<StepDefinition> expectedStepDefinitions = new List<StepDefinition>();
+                    foreach (StepDefinitionProxy item in testCase.StepDefinitionList)
+                    {
+                        if (item.Step != null)
+                        {
+                            StepDefinition definition = context.StepDefinitions.Where(sd => sd.ID == item.ID && sd.TestCaseID == @case.ID).FirstOrDefault();
+                            if (definition != null)
+                            {
+                                definition.Step = item.Step;
+                                definition.ExpectedResult = item.ExpectedResult;
+                            }
+                            else
+                            {
+                                definition = new StepDefinition();
+                                definition.Step = item.Step;
+                                definition.ExpectedResult = item.ExpectedResult;
+                                definition.TestCaseID = @case.ID;
+                                @case.StepDefinitions.Add(definition);
+                            }
+
+                            context.SaveChanges();
+                            expectedStepDefinitions.Add(definition);
+                        }
+                    }
+
+                    // Register steps definitions for delete
+                    List<StepDefinition> stepsDefinitionsToDelete = new List<StepDefinition>();
+                    foreach (StepDefinition item in @case.StepDefinitions)
+                    {
+                        StepDefinition stepDefinition = expectedStepDefinitions.Where(x => x.ID == item.ID).FirstOrDefault();
+
+                        if (stepDefinition == null)
+                            stepsDefinitionsToDelete.Add(item);
+                    }
+
+                    // Delete orphans
+                    foreach (StepDefinition orphan in stepsDefinitionsToDelete)
+                    {
+                        context.StepDefinitions.Remove(orphan);
+                    }
+                }
+
+                context.SaveChanges();
+            }
+
+            return @case;
         }
 
         public void DeleteById(int id)
@@ -90,6 +140,19 @@ namespace TestCaseManager.Core.Managers
                 context.TestCases.Remove(testCase);
                 context.SaveChanges();
             }
+        }
+
+        private TestCase MapPrimaryPropertiesFromProxy(TestCaseProxy proxy, int areaId)
+        {
+            TestCase testCase = new TestCase();
+            testCase.Title = proxy.Title;
+            testCase.AreaID = areaId;
+            testCase.Severity = proxy.Severity.ToString();
+            testCase.Priority = proxy.Priority.ToString();
+            testCase.IsAutomated = proxy.IsAutomated;
+            testCase.CreatedBy = AuthenticationManager.Instance().GetCurrentUsername ?? "Borislav Vaptsarov";
+
+            return testCase;
         }
     }
 }

@@ -5,8 +5,5 @@ namespace TestCaseManager.Core.Proxy
 {
     public class ProjectList : ObservableCollection<ProjectProxy>
     {
-        public ProjectList()
-        {
-        }
     }
 }

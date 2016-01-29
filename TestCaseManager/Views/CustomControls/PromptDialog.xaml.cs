@@ -29,6 +29,7 @@ namespace TestCaseManager.Views.CustomControls
             inst.ShowDialog();
             if (inst.DialogResult == true)
                 return inst.ResponseText;
+
             return null;
         }
 

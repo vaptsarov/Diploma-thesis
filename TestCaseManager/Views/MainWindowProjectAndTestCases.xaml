@@ -18,8 +18,8 @@
             <StackPanel Orientation="Horizontal">
                 <StackPanel.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Edit case" Command="{Binding Command}"/>
-                        <MenuItem Header="Delete case" Command="{Binding Command}"/>
+                        <MenuItem Header="Edit case" Click="EditTestCase"/>
+                        <MenuItem Header="Delete case" Click="DeleteTestCase"/>
                     </ContextMenu>
                 </StackPanel.ContextMenu>
                 <TextBlock Text="{Binding Path=Title}" />
