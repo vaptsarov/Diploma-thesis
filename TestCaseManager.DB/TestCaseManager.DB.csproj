@@ -82,6 +82,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TestCaseManagerModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="TestComposite.cs">
+      <DependentUpon>TestCaseManagerModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TestRun.cs">
+      <DependentUpon>TestCaseManagerModel.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -15,6 +15,7 @@ namespace TestCaseManager.Utilities
                 ms.Position = 0;
                 objResult = (T)bf.Deserialize(ms);
             }
+
             return objResult;
         }
     }

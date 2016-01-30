@@ -12,25 +12,18 @@ namespace TestCaseManager.DB
     using System;
     using System.Collections.Generic;
     
-    public partial class TestCase
+    public partial class TestRun
     {
-        public TestCase()
+        public TestRun()
         {
-            this.StepDefinitions = new HashSet<StepDefinition>();
             this.TestComposites = new HashSet<TestComposite>();
         }
     
         public int ID { get; set; }
-        public string Title { get; set; }
-        public string Priority { get; set; }
-        public string Severity { get; set; }
-        public bool IsAutomated { get; set; }
+        public string Name { get; set; }
+        public System.DateTime CreatedOn { get; set; }
         public string CreatedBy { get; set; }
-        public string UpdatedBy { get; set; }
-        public int AreaID { get; set; }
     
-        public virtual Area Area { get; set; }
-        public virtual ICollection<StepDefinition> StepDefinitions { get; set; }
         public virtual ICollection<TestComposite> TestComposites { get; set; }
     }
 }

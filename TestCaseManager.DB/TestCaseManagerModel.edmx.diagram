@@ -8,11 +8,15 @@
         <EntityTypeShape EntityType="TestcaseManagerDemoModel.ApplicationUser" Width="2.125" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="TestcaseManagerDemoModel.Area" Width="1.5" PointX="5.625" PointY="1.25" />
         <EntityTypeShape EntityType="TestcaseManagerDemoModel.Project" Width="1.5" PointX="3.375" PointY="1.5" />
-        <EntityTypeShape EntityType="TestcaseManagerDemoModel.StepDefinition" Width="1.5" PointX="10.125" PointY="1.5" />
+        <EntityTypeShape EntityType="TestcaseManagerDemoModel.StepDefinition" Width="1.5" PointX="7.875" PointY="5.375" />
         <EntityTypeShape EntityType="TestcaseManagerDemoModel.TestCase" Width="1.5" PointX="7.875" PointY="1" />
         <AssociationConnector Association="TestcaseManagerDemoModel.FK_Areas_Projects" />
         <AssociationConnector Association="TestcaseManagerDemoModel.FK_TestCases_Areas" />
         <AssociationConnector Association="TestcaseManagerDemoModel.FK_StepDefinitions_TestCases" />
+        <EntityTypeShape EntityType="TestcaseManagerDemoModel.TestComposite" Width="1.5" PointX="10.625" PointY="1.75" />
+        <EntityTypeShape EntityType="TestcaseManagerDemoModel.TestRun" Width="1.5" PointX="10.875" PointY="5.125" />
+        <AssociationConnector Association="TestcaseManagerDemoModel.FK_TestComposite_TestCases" />
+        <AssociationConnector Association="TestcaseManagerDemoModel.FK_TestComposite_TestRuns" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

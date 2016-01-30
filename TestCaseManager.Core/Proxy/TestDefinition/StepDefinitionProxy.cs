@@ -9,7 +9,5 @@ namespace TestCaseManager.Core.Proxy.TestDefinition
         public string Step { get; set; }
         public string ExpectedResult { get; set; }
         public int TestCaseID { get; set; }
-
-        public Guid StepIdentifier { get; set; }
     }
 }

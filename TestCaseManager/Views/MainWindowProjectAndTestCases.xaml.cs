@@ -11,8 +11,8 @@ using System.Windows.Media;
 using TestCaseManager.Core;
 using TestCaseManager.Core.Managers;
 using TestCaseManager.Core.Proxy;
-using TestCaseManager.Core.Proxy.TestDefinition;
 using TestCaseManager.Views.CustomControls;
+using System.Windows.Input;
 
 namespace TestCaseManager.Pages
 {
@@ -21,24 +21,13 @@ namespace TestCaseManager.Pages
     /// </summary>
     public partial class MainWindowProjectAndTestCases : UserControl
     {
-        private ObservableCollection<ProjectProxy> projectList = new ObservableCollection<ProjectProxy>();
-        private readonly Timer timer = new Timer();
+        private ObservableCollection<ProjectProxy> UIProjectProxyList = new ObservableCollection<ProjectProxy>();
+        private readonly Timer dbCallback = new Timer();
 
         public MainWindowProjectAndTestCases()
         {
             InitializeComponent();
             AppearanceManager.Current.PropertyChanged += OnAppearanceManagerPropertyChanged;
-        }
-
-        private void ObtainDbRecords(object source, ElapsedEventArgs e)
-        {
-            this.Dispatcher.Invoke((Action)(() =>
-            {
-                // Hard UI reset is needed here
-                ProxyManager manager = new ProxyManager();
-                this.projectList = manager.GetAll();
-                this.projects.ItemsSource = this.projectList;
-            }));
         }
 
         private void MainWindowProjectAndTestCases_Loaded(object sensder, RoutedEventArgs e)
@@ -47,7 +36,7 @@ namespace TestCaseManager.Pages
             Task task = Task.Factory.StartNew(() =>
             {
                 ProxyManager manager = new ProxyManager();
-                this.projectList = manager.GetAll();
+                this.UIProjectProxyList = manager.GetAll();
             });
             task.ContinueWith(next =>
             {
@@ -55,20 +44,31 @@ namespace TestCaseManager.Pages
                 this.Dispatcher.Invoke((Action)(() =>
                 {
                     this.SetCurrentAccentColor();
-                    this.projects.ItemsSource = projectList;
+                    this.projects.ItemsSource = UIProjectProxyList;
 
                     this.MainTable.Visibility = Visibility.Visible;
                     this.progressBar.Visibility = Visibility.Hidden;
 
                     // Register timer event
-                    timer.Elapsed += new ElapsedEventHandler(this.ObtainDbRecords);
+                    dbCallback.Elapsed += new ElapsedEventHandler(this.ObtainDbRecords);
                     // 30 minutes = 1800000
-                    timer.Interval = 1800000;
-                    timer.Start();
+                    dbCallback.Interval = 1800000;
+                    dbCallback.Start();
                 }));
             });
         }
 
+        private void ObtainDbRecords(object source, ElapsedEventArgs e)
+        {
+            this.Dispatcher.Invoke((Action)(() =>
+            {
+                // Hard UI reset is needed here
+                ProxyManager manager = new ProxyManager();
+                this.UIProjectProxyList = manager.GetAll();
+                this.projects.ItemsSource = this.UIProjectProxyList;
+            }));
+        }
+      
         private void ProjectSelected_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             object currentSelectedItem = this.projects.SelectedItem;
@@ -140,34 +140,33 @@ namespace TestCaseManager.Pages
         private void AddProject(object sender, RoutedEventArgs e)
         {
             string projectTitle = PromptDialog.Prompt("Project name", "Create new project");
-
             if (!string.IsNullOrWhiteSpace(projectTitle))
             {
                 ProjectManager projManager = new ProjectManager();
                 ProjectProxy proxyProject = ProxyConverter.ProjectModelToProxy(projManager.Create(projectTitle));
-                this.projectList.Add(proxyProject);
+                this.UIProjectProxyList.Add(proxyProject);
             }
         }
 
         private void DeleteProject(object sender, RoutedEventArgs e)
         {
-            string projectTitle = PromptDialog.Prompt("Type the name of this project (to be sure you delete the right project)", "Delete project");
             ProjectProxy proxy = ((MenuItem)sender).DataContext as ProjectProxy;
 
+            string projectTitle = PromptDialog.Prompt("Type the name of this project (to be sure you delete the right project)", "Delete project");
             if (!string.IsNullOrWhiteSpace(projectTitle) && projectTitle.Equals(proxy.Title))
             {
                 ProjectManager projManager = new ProjectManager();
                 projManager.DeleteById(proxy.ID);
 
-                this.projectList.Remove(proxy);
+                this.UIProjectProxyList.Remove(proxy);
             }
         }
 
         private void EditProject(object sender, RoutedEventArgs e)
         {
-            string projectTitle = PromptDialog.Prompt("New project name", "Edit project name");
             ProjectProxy proxy = ((MenuItem)sender).DataContext as ProjectProxy;
 
+            string projectTitle = PromptDialog.Prompt("New project name", "Edit project name");
             if (!string.IsNullOrWhiteSpace(projectTitle) && !projectTitle.Equals(proxy.Title))
             {
                 proxy.Title = projectTitle;
@@ -175,8 +174,8 @@ namespace TestCaseManager.Pages
                 ProjectManager projManager = new ProjectManager();
                 projManager.Update(proxy);
 
-                this.projectList.Remove(proxy);
-                this.projectList.Add(proxy);
+                this.UIProjectProxyList.Remove(proxy);
+                this.UIProjectProxyList.Add(proxy);
             }
         }
 
@@ -199,12 +198,12 @@ namespace TestCaseManager.Pages
 
         private void EditArea(object sender, RoutedEventArgs e)
         {
-            string areaTitle = PromptDialog.Prompt("New are name", "Edit area name");
             AreaProxy areaProxy = ((MenuItem)sender).DataContext as AreaProxy;
 
+            string areaTitle = PromptDialog.Prompt("New area name", "Edit area name");
             if (!string.IsNullOrWhiteSpace(areaTitle) && !areaTitle.Equals(areaProxy.Title))
             {
-                ProjectProxy projectProxy = this.projectList.Where(proj => proj.Areas.Any(a => a.ID == areaProxy.ID)).FirstOrDefault();
+                ProjectProxy projectProxy = this.UIProjectProxyList.Where(proj => proj.Areas.Any(a => a.ID == areaProxy.ID)).FirstOrDefault();
 
                 if (projectProxy != null)
                 {
@@ -226,7 +225,7 @@ namespace TestCaseManager.Pages
 
             if (!string.IsNullOrWhiteSpace(areaTitle) && areaTitle.Equals(proxy.Title))
             {
-                ProjectProxy projectProxy = this.projectList.Where(proj => proj.Areas.Any(a => a.ID == proxy.ID)).FirstOrDefault();
+                ProjectProxy projectProxy = this.UIProjectProxyList.Where(proj => proj.Areas.Any(a => a.ID == proxy.ID)).FirstOrDefault();
 
                 if (projectProxy != null)
                 {
@@ -242,7 +241,7 @@ namespace TestCaseManager.Pages
 
         #region TestCase CRUD
 
-        public void CreateTestCase(object sender, RoutedEventArgs e)
+        private void CreateTestCase(object sender, RoutedEventArgs e)
         {
             AreaProxy areaproxy = ((MenuItem)sender).DataContext as AreaProxy;
             TestCaseProxy createdTestCaseProxy = TestCaseDialog.Prompt(areaproxy);
@@ -253,15 +252,29 @@ namespace TestCaseManager.Pages
             }
         }
 
-        public void EditTestCase(object sender, RoutedEventArgs e)
+        private void EditTestCase(object sender, RoutedEventArgs e)
         {
             TestCaseProxy testCase = ((MenuItem)sender).DataContext as TestCaseProxy;
+            this.EditTestCaseFromProxy(testCase);
+        }
+
+        private void EditTestCase_Click(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed && e.ClickCount == 2)
+            {
+                TestCaseProxy testCase = ((TextBlock)sender).DataContext as TestCaseProxy;
+                this.EditTestCaseFromProxy(testCase);
+            }
+        }
+
+        private void EditTestCaseFromProxy(TestCaseProxy testCase)
+        {
             TestCaseProxy editedTestCase = TestCaseDialog.Prompt(testCase);
 
             if (editedTestCase != null)
             {
-                ProjectProxy projectProxy = this.projectList.Where(proj => proj.Areas.Any(a => a.ID == testCase.AreaID)).FirstOrDefault();
-                if (projectList != null)
+                ProjectProxy projectProxy = this.UIProjectProxyList.Where(proj => proj.Areas.Any(a => a.ID == testCase.AreaID)).FirstOrDefault();
+                if (UIProjectProxyList != null)
                 {
                     AreaProxy areaProxy = projectProxy.Areas.Where(a => a.ID == testCase.AreaID).FirstOrDefault();
                     if (areaProxy != null)
@@ -273,14 +286,14 @@ namespace TestCaseManager.Pages
             }
         }
 
-        public void DeleteTestCase(object sender, RoutedEventArgs e)
+        private void DeleteTestCase(object sender, RoutedEventArgs e)
         {
             TestCaseProxy testCaseToDelete = ((MenuItem)sender).DataContext as TestCaseProxy;
             TestManager manager = new TestManager();
             manager.DeleteById(testCaseToDelete.Id);
 
-            ProjectProxy projectProxy = this.projectList.Where(proj => proj.Areas.Any(a => a.ID == testCaseToDelete.AreaID)).FirstOrDefault();
-            if (projectList != null)
+            ProjectProxy projectProxy = this.UIProjectProxyList.Where(proj => proj.Areas.Any(a => a.ID == testCaseToDelete.AreaID)).FirstOrDefault();
+            if (UIProjectProxyList != null)
             {
                 AreaProxy areaProxy = projectProxy.Areas.Where(a => a.ID == testCaseToDelete.AreaID).FirstOrDefault();
                 if(areaProxy != null)

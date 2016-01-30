@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
-using TestCaseManager.Utilities;
 
 namespace TestCaseManager.Core.CryptoService
 {

@@ -30,5 +30,7 @@ namespace TestCaseManager.DB
         public DbSet<Project> Projects { get; set; }
         public DbSet<StepDefinition> StepDefinitions { get; set; }
         public DbSet<TestCase> TestCases { get; set; }
+        public DbSet<TestComposite> TestComposites { get; set; }
+        public DbSet<TestRun> TestRuns { get; set; }
     }
 }

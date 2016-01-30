@@ -16,6 +16,7 @@
     </mui:ModernWindow.MenuLinkGroups>
     <mui:ModernWindow.TitleLinks>
         <mui:Link DisplayName="Test Cases" Source="/Views/MainWindowProjectAndTestCases.xaml" />
+        <mui:Link DisplayName="Test Runs" Source="/Views/MainWindowTestRuns.xaml" />
         <mui:Link DisplayName="Settings" Source="/Views/SettingsPage.xaml" />
         <mui:Link DisplayName="GitHub Project Location" Source="https://github.com/vaptsarov/Diploma-thesis" />
         <mui:Link x:Name="LoginLink" DisplayName="Login" Source="/Views/AuthorizationHome.xaml" />

@@ -17,12 +17,12 @@ namespace TestCaseManager.Views.CustomControls
     public partial class TestCaseDialog : Window
     {
         private TextboxViewModel textboxViewModel;
-        private AreaProxy RelatedArea;
-        private bool IsEditingExistingTestCase;
-        private int TestCaseId;
+        private AreaProxy relatedArea;
+        private bool isEditingExistingTestCase;
+        private int testCaseId;
 
-        private readonly ObservableCollection<StepDefinitionProxy> observableStepList = new ObservableCollection<StepDefinitionProxy>();
-        private static TestCaseProxy createdTestCase;
+        private readonly ObservableCollection<StepDefinitionProxy> stepDefinitionList = new ObservableCollection<StepDefinitionProxy>();
+        private static TestCaseProxy testCase;
 
         public TestCaseDialog()
         {
@@ -33,8 +33,8 @@ namespace TestCaseManager.Views.CustomControls
 
         public TestCaseDialog(AreaProxy area) : this()
         {
-            this.RelatedArea = area;
-            this.TestStepList.ItemsSource = this.observableStepList;
+            this.relatedArea = area;
+            this.TestStepList.ItemsSource = this.stepDefinitionList;
         }
 
         public TestCaseDialog(TestCaseProxy editTestCase) : this()
@@ -42,15 +42,16 @@ namespace TestCaseManager.Views.CustomControls
             this.CreateOrEditTestCase.Content = "Save Test Case";
 
             this.TestCaseTitleValidation(editTestCase.Title);
-            this.TestCaseId = editTestCase.Id;
+            this.testCaseId = editTestCase.Id;
             this.PriorityComboBox.SelectedIndex = (int)editTestCase.Priority;
             this.SeverityComboBox.SelectedIndex = (int)editTestCase.Severity;
             this.IsAutomatedCheckBox.IsChecked = editTestCase.IsAutomated;
 
-            this.observableStepList = DeepCloneUtility.DeepClone(editTestCase.StepDefinitionList);
-            this.TestStepList.ItemsSource = this.observableStepList;
+            // Deep clone is needed in case of step definitions changes, which are not saved in the db.
+            this.stepDefinitionList = DeepCloneUtility.DeepClone(editTestCase.StepDefinitionList);
+            this.TestStepList.ItemsSource = this.stepDefinitionList;
 
-            this.IsEditingExistingTestCase = true;
+            this.isEditingExistingTestCase = true;
         }
 
         public static TestCaseProxy Prompt(AreaProxy relatedArea)
@@ -58,7 +59,7 @@ namespace TestCaseManager.Views.CustomControls
             TestCaseDialog inst = new TestCaseDialog(relatedArea);
             inst.ShowDialog();
 
-            return createdTestCase;
+            return testCase;
         }
 
         public static TestCaseProxy Prompt(TestCaseProxy editTestCase)
@@ -66,7 +67,7 @@ namespace TestCaseManager.Views.CustomControls
             TestCaseDialog inst = new TestCaseDialog(editTestCase);
             inst.ShowDialog();
 
-            return createdTestCase;
+            return testCase;
         }
 
         private void CreateTestCase(object sender, RoutedEventArgs e)
@@ -76,7 +77,7 @@ namespace TestCaseManager.Views.CustomControls
             if (!string.IsNullOrWhiteSpace(this.TestCaseTitle.Text))
             {
                 TestCaseProxy testCase = new TestCaseProxy();
-                testCase.Id = this.TestCaseId;
+                testCase.Id = this.testCaseId;
                 testCase.Title = this.TestCaseTitle.Text;
                 testCase.Priority = EnumUtil.ParseEnum<Priority>((this.PriorityComboBox.SelectedItem as ComboBoxItem).Content.ToString());
                 testCase.Severity = EnumUtil.ParseEnum<Severity>((this.SeverityComboBox.SelectedItem as ComboBoxItem).Content.ToString());
@@ -95,13 +96,13 @@ namespace TestCaseManager.Views.CustomControls
 
                 TestManager manager = new TestManager();
 
-                if (!this.IsEditingExistingTestCase)
+                if (!this.isEditingExistingTestCase)
                 {
-                    createdTestCase = ProxyConverter.TestCaseModelToProxy(manager.Create(RelatedArea.ID, testCase));
+                    TestCaseDialog.testCase = ProxyConverter.TestCaseModelToProxy(manager.Create(relatedArea.ID, testCase));
                 }
                 else
                 {
-                    createdTestCase = ProxyConverter.TestCaseModelToProxy(manager.Update(testCase));
+                    TestCaseDialog.testCase = ProxyConverter.TestCaseModelToProxy(manager.Update(testCase));
                 }
 
                 this.CancelDialog();
@@ -117,10 +118,7 @@ namespace TestCaseManager.Views.CustomControls
 
         private void AddTestStep(object sender, RoutedEventArgs e)
         {
-            StepDefinitionProxy dummyStep = new StepDefinitionProxy();
-            dummyStep.StepIdentifier = Guid.NewGuid();
-
-            this.observableStepList.Add(dummyStep);
+            this.stepDefinitionList.Add(new StepDefinitionProxy());
         }
 
         private void DeleteTestStep(object sender, RoutedEventArgs e)
@@ -128,7 +126,7 @@ namespace TestCaseManager.Views.CustomControls
             StepDefinitionProxy stepDefinitionToDelete = this.TestStepList.SelectedItem as StepDefinitionProxy;
             if (stepDefinitionToDelete != null)
             {
-                this.observableStepList.Remove(stepDefinitionToDelete);
+                this.stepDefinitionList.Remove(stepDefinitionToDelete);
             }
         }
 
