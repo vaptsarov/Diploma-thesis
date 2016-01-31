@@ -7,27 +7,25 @@
              mc:Ignorable="d" 
              d:DesignHeight="1024" d:DesignWidth="300" Loaded="MainWindowTestRuns_Loaded">
 
-    <DockPanel Height="Auto" Name="MainTable" Width="Auto" LastChildFill="True" Visibility="Visible">
-        <Grid Name="TestRunGrid">
+    <Grid>
+        <ProgressBar Name="progressBar" Minimum="0" Maximum="1" Height="16" IsIndeterminate="True" Margin="0,0,0,16" />
+        <DockPanel Height="Auto" Name="MainTable" Width="Auto" LastChildFill="True" Visibility="Hidden">
+            <Grid Name="TestRunGrid">
 
-            <TextBlock Text="Projects > Areas > Test Cases" Margin="0,0,0,36" />
-            <Border Name="TestRunBorder" BorderBrush="Black" BorderThickness="1.6" Width="270" Margin="-25,20,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Left" >
-                <ListBox Name="TestRunListBox" FontSize="14" Grid.Row="1" VerticalAlignment="Stretch" Margin="0,0,0,5" >
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Border Name="TestRunItemBorder" BorderBrush="Black" BorderThickness="0,1,0,1" Grid.Row="0" Grid.Column="0" Margin="0,-3,0,-2">
-                                    <Grid>
-                                        <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                            <TextBlock TextWrapping="Wrap" Text="{Binding RunName}" Margin="5,5,5,5" />
-                                        </ScrollViewer>
-                                    </Grid>
-                                </Border>
-                            </Grid>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </Border>
-        </Grid>
-    </DockPanel>
+                <TextBlock Text="Test Runs" Margin="0,0,0,36" />
+                <Border Name="TestRunBorder" BorderBrush="Black" BorderThickness="1.6" Width="270" Margin="-25,20,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Left" >
+                    <ListBox Name="TestRunListBox" FontSize="13" Grid.Row="1" VerticalAlignment="Stretch" Margin="0,0,0,5" >
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <TextBlock TextWrapping="Wrap" Text="{Binding Name}" Margin="5,5,5,5" PreviewMouseDown="OnSelected"/>
+                                    </ScrollViewer>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Border>
+                <Button Name="CreateTestRunButton" Width="270" Height="30" HorizontalAlignment="Left" VerticalAlignment="Bottom" BorderBrush="Black" BorderThickness="1.6" Margin="-25,20,0,0" Click="AddTestRun">Create Test Run</Button>
+            </Grid>
+        </DockPanel>
+    </Grid>
 </UserControl>

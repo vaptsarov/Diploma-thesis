@@ -73,16 +73,17 @@
                         SelectedItemChanged="ProjectSelected_SelectedItemChanged"
                         Name="projects" />
 
-                    <Border.ContextMenu>
+                        <Border.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="Add project" Click="AddProject"/>
                         </ContextMenu>
                     </Border.ContextMenu>
                 </Border>
+                <Button Name="CreateProjectButton" Height="30" VerticalAlignment="Bottom" BorderBrush="Black" BorderThickness="1.6" Margin="-25,0,0,0" Click="AddProject">Create Project</Button>
             </Grid>
 
             <Grid Name="ProjectGrid1">
-                <TextBlock Text="Projects > Areas > Test Cases" Margin="0,0,-493,36" HorizontalAlignment="Left" Width="548" />
+                <TextBlock Text="Test Case" Margin="10,0,10,36" HorizontalAlignment="Left" Width="548" />
                 <Border Name="TestCasePanelBorder" BorderBrush="Black" BorderThickness="1.6" Width="auto" Margin="5,20,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
                     <Grid Name="TestCaseEditView" >
                         <StackPanel Width="auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">

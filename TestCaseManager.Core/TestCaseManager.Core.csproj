@@ -54,7 +54,9 @@
     <Compile Include="Managers\AreaManager.cs" />
     <Compile Include="Managers\ITestManager.cs" />
     <Compile Include="Managers\ProjectManager.cs" />
-    <Compile Include="Managers\ProxyManager.cs" />
+    <Compile Include="Managers\ProxyManagers\IProxyManager.cs" />
+    <Compile Include="Managers\ProxyManagers\ProjectProxyManager.cs" />
+    <Compile Include="Managers\ProxyManagers\TestRunProxyManager.cs" />
     <Compile Include="Managers\RunManager.cs" />
     <Compile Include="Managers\TestManager.cs" />
     <Compile Include="Managers\UserManager.cs" />

@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using TestCaseManager.Core.Managers.ProxyManagers;
 using TestCaseManager.Core.Proxy;
 using TestCaseManager.DB;
 
 namespace TestCaseManager.Core.Managers
 {
-    public class ProxyManager
+    public class ProjectProxyManager : IProxyManager<ProjectProxy>
     {
         public ObservableCollection<ProjectProxy> GetAll()
         {
             ObservableCollection<ProjectProxy> configurations = new ObservableCollection<ProjectProxy>();
-
             using (TestcaseManagerDB context = new TestcaseManagerDB())
             {
                 configurations = this.ProjectModelListToProxy(context);
@@ -54,7 +54,7 @@ namespace TestCaseManager.Core.Managers
             foreach (TestCase item in list)
             {
                 TestCaseProxy proxyObject = ProxyConverter.TestCaseModelToProxy(item);
-                proxyObject.StepDefinitionList = ProxyConverter.StepDefinitionModelToproxy(item.StepDefinitions);
+                proxyObject.StepDefinitionList = ProxyConverter.StepDefinitionModelToProxy(item.StepDefinitions);
 
                 proxyTestCaseList.Add(proxyObject);
             }

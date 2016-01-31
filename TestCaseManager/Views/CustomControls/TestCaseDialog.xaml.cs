@@ -160,5 +160,10 @@ namespace TestCaseManager.Views.CustomControls
         {
             this.TestCaseTitle.Focus();
         }
+
+        private void OnSelected(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+
+        }
     }
 }

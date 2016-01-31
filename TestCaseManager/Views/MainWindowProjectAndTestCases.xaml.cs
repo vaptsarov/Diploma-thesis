@@ -26,7 +26,7 @@ namespace TestCaseManager.Pages
 
         public MainWindowProjectAndTestCases()
         {
-            InitializeComponent();
+            this.InitializeComponent();
             AppearanceManager.Current.PropertyChanged += OnAppearanceManagerPropertyChanged;
         }
 
@@ -35,7 +35,7 @@ namespace TestCaseManager.Pages
             // Initial DB data retrieve
             Task task = Task.Factory.StartNew(() =>
             {
-                ProxyManager manager = new ProxyManager();
+                ProjectProxyManager manager = new ProjectProxyManager();
                 this.UIProjectProxyList = manager.GetAll();
             });
             task.ContinueWith(next =>
@@ -63,7 +63,7 @@ namespace TestCaseManager.Pages
             this.Dispatcher.Invoke((Action)(() =>
             {
                 // Hard UI reset is needed here
-                ProxyManager manager = new ProxyManager();
+                ProjectProxyManager manager = new ProjectProxyManager();
                 this.UIProjectProxyList = manager.GetAll();
                 this.projects.ItemsSource = this.UIProjectProxyList;
             }));
@@ -123,6 +123,7 @@ namespace TestCaseManager.Pages
             this.BorderTestCaseCreatedBy.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
             this.BorderTestCaseUpdatedBy.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
             this.BorderTestCaseStatusRun.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+            this.CreateProjectButton.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
 
             // If theme set is light version, the font color should be black, if dark - should be white.
             if (AppearanceManager.LightThemeSource != AppearanceManager.Current.ThemeSource)

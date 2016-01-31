@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using TestCaseManager.Core.Proxy;
 using TestCaseManager.Core.Proxy.TestDefinition;
+using TestCaseManager.Core.Proxy.TestRun;
 using TestCaseManager.DB;
 using TestCaseManager.Utilities;
 
@@ -20,7 +21,6 @@ namespace TestCaseManager.Core
             proxyObject.IsAutomated = model.IsAutomated;
             proxyObject.CreatedBy = model.CreatedBy;
             proxyObject.UpdatedBy = model.UpdatedBy;
-            proxyObject.StepDefinitionList = StepDefinitionModelToproxy(model.StepDefinitions);
             proxyObject.AreaID = model.AreaID;
 
             return proxyObject;
@@ -48,7 +48,18 @@ namespace TestCaseManager.Core
             return proxyObject;
         }
 
-        public static ObservableCollection<StepDefinitionProxy> StepDefinitionModelToproxy(ICollection<StepDefinition> stepDefinitions)
+        public static TestRunProxy TestRunModelToProxy(TestRun run)
+        {
+            TestRunProxy proxy = new TestRunProxy();
+            proxy.ID = run.ID;
+            proxy.Name = run.Name;
+            proxy.CreatedBy = run.CreatedBy;
+            proxy.CreatedOn = run.CreatedOn;
+
+            return proxy;
+        }
+
+        public static ObservableCollection<StepDefinitionProxy> StepDefinitionModelToProxy(ICollection<StepDefinition> stepDefinitions)
         {
             ObservableCollection<StepDefinitionProxy> list = new ObservableCollection<StepDefinitionProxy>();
             foreach (var item in stepDefinitions)

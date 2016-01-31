@@ -12,7 +12,29 @@ namespace TestCaseManager.Core.Managers
     {
         public List<TestRun> GetAll()
         {
-            throw new NotImplementedException();
+            List<TestRun> testRun = null;
+            using (TestcaseManagerDB context = new TestcaseManagerDB())
+            {
+                testRun = context.TestRuns.ToList();
+            }
+
+            return testRun;
+        }
+
+        public TestRun Create(string name)
+        {
+            TestRun testRun = new TestRun();
+            using (TestcaseManagerDB context = new TestcaseManagerDB())
+            {
+                testRun.Name = name;
+                testRun.CreatedBy = AuthenticationManager.Instance().GetCurrentUsername ?? "Borislav Vaptsarov";
+                testRun.CreatedOn = DateTime.Now.ToUniversalTime();
+
+                context.TestRuns.Add(testRun);
+                context.SaveChanges();
+            }
+
+            return testRun;
         }
 
         public TestRun GetById(int id)
