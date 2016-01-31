@@ -7,7 +7,7 @@ namespace TestCaseManager.Core.Proxy.TestRun
     {
         public TestRunProxy()
         {
-            this.TestCasesList = new ObservableCollection<TestCaseProxy>();
+            this.TestCasesList = new ObservableCollection<ExtendedTestCaseProxy>();
         }
 
         public int ID { get; set; }
@@ -15,6 +15,6 @@ namespace TestCaseManager.Core.Proxy.TestRun
         public DateTime CreatedOn { get; set; }
         public string CreatedBy { get; set; }
 
-        public ObservableCollection<TestCaseProxy> TestCasesList { get; set; }
+        public ObservableCollection<ExtendedTestCaseProxy> TestCasesList { get; set; }
     }
 }

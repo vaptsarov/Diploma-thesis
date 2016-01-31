@@ -11,17 +11,18 @@ namespace TestCaseManager.Core.Managers
         public ObservableCollection<TestRunProxy> GetAll()
         {
             ObservableCollection<TestRunProxy> configurations = new ObservableCollection<TestRunProxy>();
-
-            RunManager manager = new RunManager();
-            configurations = this.RunModelListToProxy(manager.GetAll());
+            using (TestcaseManagerDB context = new TestcaseManagerDB())
+            {
+                configurations = this.RunModelListToProxy(context);
+            }
 
             return configurations;
         }
 
-        private ObservableCollection<TestRunProxy> RunModelListToProxy(List<TestRun> list)
+        private ObservableCollection<TestRunProxy> RunModelListToProxy(TestcaseManagerDB context)
         {
             ObservableCollection<TestRunProxy> proxyList = new ObservableCollection<TestRunProxy>();
-            foreach (TestRun item in list)
+            foreach (TestRun item in context.TestRuns)
             {
                 proxyList.Add(ProxyConverter.TestRunModelToProxy(item));
             }

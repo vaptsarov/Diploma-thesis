@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using TestCaseManager.Core.Proxy;
@@ -6,6 +6,7 @@ using TestCaseManager.Core.Proxy.TestDefinition;
 using TestCaseManager.Core.Proxy.TestRun;
 using TestCaseManager.DB;
 using TestCaseManager.Utilities;
+using TestCaseManager.Core.Proxy.TestStatus;
 
 namespace TestCaseManager.Core
 {
@@ -50,13 +51,32 @@ namespace TestCaseManager.Core
 
         public static TestRunProxy TestRunModelToProxy(TestRun run)
         {
-            TestRunProxy proxy = new TestRunProxy();
-            proxy.ID = run.ID;
-            proxy.Name = run.Name;
-            proxy.CreatedBy = run.CreatedBy;
-            proxy.CreatedOn = run.CreatedOn;
+            TestRunProxy runProxy = new TestRunProxy();
+            runProxy.ID = run.ID;
+            runProxy.Name = run.Name;
+            runProxy.CreatedBy = run.CreatedBy;
+            runProxy.CreatedOn = run.CreatedOn;
 
-            return proxy;
+            IEnumerable<TestComposite> compositeModel = run.TestComposites.Where(comp => comp.TestRunID == run.ID);
+            foreach (TestComposite comp in compositeModel)
+            {
+                ExtendedTestCaseProxy extendedTestCaseProxy = new ExtendedTestCaseProxy();
+                extendedTestCaseProxy.Status = EnumUtil.ParseEnum<Status>(comp.TestCaseStatus);
+
+                TestCase testCase = comp.TestCas;
+                extendedTestCaseProxy.Id = testCase.ID;
+                extendedTestCaseProxy.Title = testCase.Title;
+                extendedTestCaseProxy.Priority = EnumUtil.ParseEnum<Priority>(testCase.Priority);
+                extendedTestCaseProxy.Severity = EnumUtil.ParseEnum<Severity>(testCase.Severity);
+                extendedTestCaseProxy.IsAutomated = testCase.IsAutomated;
+                extendedTestCaseProxy.CreatedBy = testCase.CreatedBy;
+                extendedTestCaseProxy.UpdatedBy = testCase.UpdatedBy;
+                extendedTestCaseProxy.AreaID = testCase.AreaID;
+
+                runProxy.TestCasesList.Add(extendedTestCaseProxy);
+            }
+
+            return runProxy;
         }
 
         public static ObservableCollection<StepDefinitionProxy> StepDefinitionModelToProxy(ICollection<StepDefinition> stepDefinitions)

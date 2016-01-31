@@ -1,5 +1,6 @@
 ﻿using FirstFloor.ModernUI.Presentation;
 using System;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
@@ -42,8 +43,10 @@ namespace TestCaseManager.Views
                 this.Dispatcher.Invoke((Action)(() =>
                 {
                     this.SetCurrentAccentColor();
-                    this.TestRunListBox.ItemsSource = UITestRunList;
 
+                    this.TestCasesList.ItemsSource = this.UITestRunList.First().TestCasesList;
+
+                    this.TestRunListBox.ItemsSource = this.UITestRunList;
                     this.MainTable.Visibility = Visibility.Visible;
                     this.progressBar.Visibility = Visibility.Hidden;
 
@@ -68,16 +71,24 @@ namespace TestCaseManager.Views
         {
             this.TestRunBorder.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
             this.CreateTestRunButton.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+            this.TestCasesBorder.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+            this.BorderTestCaseTotal.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+            this.BorderTestCasePassed.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+            this.BorderTestCaseFailed.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+            this.BorderTestCaseNotRan.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+            this.BorderTestCaseCreatedBy.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+            this.BorderTestCaseCreatedOn.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+            this.TestCasesListBorder.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
 
-            //// If theme set is light version, the font color should be black, if dark - should be white.
-            //if (AppearanceManager.LightThemeSource != AppearanceManager.Current.ThemeSource)
-            //{
-            //    this.listBoxStations.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
-            //}
-            //else if (AppearanceManager.DarkThemeSource != AppearanceManager.Current.ThemeSource)
-            //{
-            //    this.listBoxStations.Foreground = new SolidColorBrush(Color.FromRgb(0, 0, 0));
-            //}
+            // If theme set is light version, the font color should be black, if dark - should be white.
+            if (AppearanceManager.LightThemeSource != AppearanceManager.Current.ThemeSource)
+            {
+                this.TestCasesList.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+            }
+            else if (AppearanceManager.DarkThemeSource != AppearanceManager.Current.ThemeSource)
+            {
+                this.TestCasesList.Foreground = new SolidColorBrush(Color.FromRgb(0, 0, 0));
+            }
         }
 
         private void AddTestRun(object sender, RoutedEventArgs e)
