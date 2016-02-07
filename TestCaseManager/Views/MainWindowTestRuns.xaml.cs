@@ -78,16 +78,27 @@ namespace TestCaseManager.Views
             this.BorderTestCaseNotRan.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
             this.BorderTestCaseCreatedBy.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
             this.BorderTestCaseCreatedOn.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+
             this.TestCasesListBorder.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+            this.AddTestsButton.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+            this.RunButton.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+
+            this.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
 
             // If theme set is light version, the font color should be black, if dark - should be white.
+            Color white = Color.FromRgb(255, 255, 255);
+            Color semiDark = Color.FromRgb(51, 51, 51);
             if (AppearanceManager.LightThemeSource != AppearanceManager.Current.ThemeSource)
             {
-                this.TestCasesList.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+                this.TestCasesList.Foreground = new SolidColorBrush(white);
+                this.TestRunBorder.Background = new SolidColorBrush(semiDark);
+                this.TestCasesBorder.Background = new SolidColorBrush(semiDark);
             }
             else if (AppearanceManager.DarkThemeSource != AppearanceManager.Current.ThemeSource)
             {
                 this.TestCasesList.Foreground = new SolidColorBrush(Color.FromRgb(0, 0, 0));
+                this.TestRunBorder.Background = new SolidColorBrush(white);
+                this.TestCasesBorder.Background = new SolidColorBrush(white);
             }
         }
 

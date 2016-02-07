@@ -13,21 +13,21 @@
         <DockPanel Height="Auto" Name="MainTable" Width="Auto" LastChildFill="True" Visibility="Hidden">
             <Grid Name="TestRunGrid">
                 <TextBlock Text="Test Runs" Margin="0,0,0,36" />
-                <Border Name="TestRunBorder" BorderBrush="Black" BorderThickness="1.6" Width="270" Margin="-25,20,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Left" >
+                <Border Name="TestRunBorder" BorderBrush="Black" BorderThickness="1.6" Width="270" Margin="-25,20,0,35" VerticalAlignment="Stretch" HorizontalAlignment="Left" >
                     <ListBox Name="TestRunListBox" FontSize="13" Grid.Row="1" VerticalAlignment="Stretch" Margin="0,0,0,5" >
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                        <TextBlock TextWrapping="Wrap" Text="{Binding Name}" Margin="3,3,3,3" PreviewMouseDown="OnSelected"/>
-                                    </ScrollViewer>
+                                    <TextBlock TextWrapping="Wrap" Text="{Binding Name}" Margin="3,3,3,3" PreviewMouseDown="OnSelected"/>
+                                </ScrollViewer>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </Border>
                 <Button Name="CreateTestRunButton" Width="270" Height="30" HorizontalAlignment="Left" VerticalAlignment="Bottom" BorderBrush="Black" BorderThickness="1.6" Margin="-25,20,0,0" Click="AddTestRun">Create Test Run</Button>
             </Grid>
-            <Grid>
-                <Border Name="TestCasesBorder" BorderBrush="Black" BorderThickness="1.6" Width="auto" Margin="5,20,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
+            <Grid Name="BorderGrid">
+                <Border Name="TestCasesBorder" BorderBrush="Black" BorderThickness="1.6" Width="auto" Margin="5,20,0,35" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
                     <Grid>
                         <StackPanel Width="auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                             <StackPanel  Orientation="Horizontal">
@@ -45,7 +45,7 @@
                                 </Border>
                                 <Border Name="BorderTestCaseFailed" BorderBrush="Black" BorderThickness="1" Width="{Binding Path=ActualWidth, ElementName=TestCasesBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.25'}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,-1,-1, 0" >
                                     <Grid Width="auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                                        <Label FontSize="13" FontWeight="Bold" Margin="5,8,5,8" HorizontalAlignment="Left">Failed: </Label>
+                                        <Label FontSize="13" FontWeight="Bold" Margin="5,8,5,8" HorizontalAlignment="Left">Failed:</Label>
                                         <Label FontSize="13" Name ="FailedLabel" Margin="100,8,5,8" HorizontalAlignment="Left" />
                                     </Grid>
                                 </Border>
@@ -117,6 +117,10 @@
                         </Border>
                     </Grid>
                 </Border>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+                    <Button Name="AddTestsButton" Width="180" Height="30" BorderBrush="Black" BorderThickness="1.6" VerticalAlignment="Bottom" Margin="0,0,5,0">Add tests to the run</Button>
+                    <Button Name="RunButton" Width="120" Height="30" BorderBrush="Black" BorderThickness="1.6" VerticalAlignment="Bottom">Run</Button>
+                </StackPanel>
             </Grid>
         </DockPanel>
     </Grid>

@@ -64,9 +64,8 @@
         <!-- Project/area and test cases left panel on the main screen. -->
         <DockPanel Height="Auto" Name="MainTable" Width="Auto" LastChildFill="True" Visibility="Hidden">
             <Grid Name="ProjectGrid">
-
                 <TextBlock Text="Projects > Areas > Test Cases" Margin="0,0,0,36" />
-                <Border Name="ProjectsBorder" BorderBrush="Black" BorderThickness="1.6" Width="270" Margin="-25,20,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Left" >
+                <Border Name="ProjectsBorder" BorderBrush="Black" BorderThickness="1.6" Width="270" Margin="-25,20,0,35" VerticalAlignment="Stretch" HorizontalAlignment="Left" >
                     <TreeView Grid.Row="1"
                         ItemTemplate="{DynamicResource projectTypesTemplate}"
                         ItemsSource="{DynamicResource projList}"
@@ -152,7 +151,7 @@
                             <ListBox Name="listBoxStations" FontSize="14" Grid.Row="1" VerticalAlignment="Stretch" Margin="0,0,0,5" >
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid>
+                                        <Grid Name="Test">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto"/>
                                             </Grid.RowDefinitions>

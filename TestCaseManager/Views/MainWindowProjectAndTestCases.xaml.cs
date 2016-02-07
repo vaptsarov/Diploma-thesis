@@ -125,14 +125,23 @@ namespace TestCaseManager.Pages
             this.BorderTestCaseStatusRun.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
             this.CreateProjectButton.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
 
+            this.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+
             // If theme set is light version, the font color should be black, if dark - should be white.
+            Color white = Color.FromRgb(255, 255, 255);
+            Color semiDark = Color.FromRgb(51, 51, 51);
             if (AppearanceManager.LightThemeSource != AppearanceManager.Current.ThemeSource)
             {
-                this.listBoxStations.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+                this.listBoxStations.Foreground = new SolidColorBrush(white);
+
+                this.ProjectsBorder.Background = new SolidColorBrush(semiDark);
+                this.TestCasePanelBorder.Background = new SolidColorBrush(semiDark);
             }
             else if (AppearanceManager.DarkThemeSource != AppearanceManager.Current.ThemeSource)
             {
                 this.listBoxStations.Foreground = new SolidColorBrush(Color.FromRgb(0, 0, 0));
+                this.ProjectsBorder.Background = new SolidColorBrush(white);
+                this.TestCasePanelBorder.Background = new SolidColorBrush(white);
             }
         }
 

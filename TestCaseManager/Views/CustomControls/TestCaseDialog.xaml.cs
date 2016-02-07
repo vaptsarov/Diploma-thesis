@@ -1,7 +1,10 @@
-﻿using System;
+﻿using FirstFloor.ModernUI.Presentation;
+using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using TestCaseManager.Core;
 using TestCaseManager.Core.Managers;
@@ -28,7 +31,47 @@ namespace TestCaseManager.Views.CustomControls
         {
             this.InitializeComponent();
             this.Owner = Application.Current.MainWindow;
-            this.Loaded += new RoutedEventHandler(PromptDialog_Loaded);
+            this.Loaded += new RoutedEventHandler(this.PromptDialog_Loaded);
+            AppearanceManager.Current.PropertyChanged += this.OnAppearanceManagerPropertyChanged;
+
+            this.DragWindow.MouseLeftButtonDown += new MouseButtonEventHandler(this.AttachDragDropEvent);
+        }
+
+        private void AttachDragDropEvent(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
+        }
+
+        private void OnAppearanceManagerPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "ThemeSource" || e.PropertyName == "AccentColor")
+            {
+                this.SetCurrentAccentColor();
+            }
+        }
+
+        private void SetCurrentAccentColor()
+        {
+            this.TestCasePanelBorder.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+            this.TestCaseEditViewBorder.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+            this.BorderTestCaseName.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+            this.BorderTestCasePriority.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+            this.BorderTestCaseSeverity.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+            this.BorderTestCaseAutomated.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+
+            this.BorderBrush = new SolidColorBrush(Color.FromRgb(0, 0, 0));
+
+            // If theme set is light version, the font color should be black, if dark - should be white.
+            if (AppearanceManager.LightThemeSource != AppearanceManager.Current.ThemeSource)
+            {
+                this.TestStepList.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+                this.Background = new SolidColorBrush(Color.FromRgb(37,37,38));
+            }
+            else if (AppearanceManager.DarkThemeSource != AppearanceManager.Current.ThemeSource)
+            {
+                this.TestStepList.Foreground = new SolidColorBrush(Color.FromRgb(0, 0, 0));
+                this.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+            }
         }
 
         public TestCaseDialog(AreaProxy area) : this()
@@ -158,6 +201,7 @@ namespace TestCaseManager.Views.CustomControls
 
         private void PromptDialog_Loaded(object sender, RoutedEventArgs e)
         {
+            this.SetCurrentAccentColor();
             this.TestCaseTitle.Focus();
         }
 

@@ -5,26 +5,27 @@
     SizeToContent="WidthAndHeight"
     WindowStartupLocation="CenterOwner"
     MinWidth="800"
-    MinHeight="640"
-    WindowStyle="SingleBorderWindow"
-    ResizeMode="NoResize">
+    MinHeight="585"
+    WindowStyle="None"
+    ResizeMode="CanResizeWithGrip"
+    AllowsTransparency="True" BorderThickness="1" Name="DragWindow">
 
     <StackPanel Margin="5">
         <Grid Name="ProjectGrid1">
-            <Border Name="TestCasePanelBorder" BorderBrush="Black" BorderThickness="1.6" Width="auto" Margin="5,20,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
+            <Border Name="TestCasePanelBorder" BorderBrush="Black" BorderThickness="1" Width="auto" Margin="5,20,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
                 <Grid Name="TestCaseEditView" >
                     <StackPanel Width="auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                         <Border Name="BorderTestCaseName" BorderBrush="Black" BorderThickness="1" Margin="-1,-1,-1,0">
                             <StackPanel Orientation="Horizontal">
                                 <Label FontSize="15" FontWeight="Bold" Margin="5,5,0,5" HorizontalAlignment="Left">Test case name:</Label>
-                                <TextBox Name="TestCaseTitle" MaxLength="255" TextWrapping="Wrap" FontSize="14" Margin="5,5,0,5" HorizontalAlignment="Left" VerticalAlignment="Stretch" MinHeight="25" Width="{Binding Path=ActualWidth, ElementName=TestCasePanelBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.84'}" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                                <TextBox Name="TestCaseTitle" MaxLength="255" TextWrapping="Wrap" FontSize="13" Margin="5,5,0,5" HorizontalAlignment="Left" VerticalAlignment="Stretch" MinHeight="25" Width="{Binding Path=ActualWidth, ElementName=TestCasePanelBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.84'}" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                             </StackPanel>
                         </Border>
                         <StackPanel Orientation="Horizontal">
-                            <Border Name="BorderTestCasePriority" BorderBrush="Black" BorderThickness="0,0,0,1" Width="{Binding Path=ActualWidth, ElementName=TestCasePanelBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.353'}" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="0,1,0 ,0" >
+                            <Border Name="BorderTestCasePriority" BorderBrush="Black" BorderThickness="0,0,0,0.9" Width="{Binding Path=ActualWidth, ElementName=TestCasePanelBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.353'}" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="0,0,0 ,0" >
                                 <StackPanel Orientation="Horizontal" Width="auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                                    <Label FontSize="13" FontWeight="Bold" Margin="5,5,0,5" HorizontalAlignment="Left">Test case priority:</Label>
-                                    <ComboBox Name="PriorityComboBox" Width="140" Margin="5,5,0,5" SelectedIndex="0">
+                                    <Label FontSize="13" FontWeight="Bold" Margin="5,8,5,5" HorizontalAlignment="Left">Test case priority:</Label>
+                                    <ComboBox Name="PriorityComboBox" Width="140" Margin="5,5,5,5" SelectedIndex="0">
                                         <ComboBoxItem>Critical</ComboBoxItem>
                                         <ComboBoxItem>High</ComboBoxItem>
                                         <ComboBoxItem>Medium</ComboBoxItem>
@@ -32,10 +33,10 @@
                                     </ComboBox>
                                 </StackPanel>
                             </Border>
-                            <Border Name="BorderTestCaseSeverity" BorderBrush="Black" BorderThickness="1,0,1,1" Width="{Binding Path=ActualWidth, ElementName=TestCasePanelBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.345'}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,0,-1, 0" >
+                            <Border Name="BorderTestCaseSeverity" BorderBrush="Black" BorderThickness="0,0,0,0.9" Width="{Binding Path=ActualWidth, ElementName=TestCasePanelBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.345'}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,0,0, 0" >
                                 <StackPanel Orientation="Horizontal" Width="auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                                    <Label FontSize="13" FontWeight="Bold" Margin="5,8,5,8" HorizontalAlignment="Left">Test case severity:</Label>
-                                    <ComboBox Name="SeverityComboBox" Width="130" Margin="5,5,0,5" SelectedIndex="0">
+                                    <Label FontSize="13" FontWeight="Bold" Margin="5,8,5,5" HorizontalAlignment="Left">Test case severity:</Label>
+                                    <ComboBox Name="SeverityComboBox" Width="130" Margin="5,5,5,5" SelectedIndex="0">
                                         <ComboBoxItem>Blocking</ComboBoxItem>
                                         <ComboBoxItem>Critical</ComboBoxItem>
                                         <ComboBoxItem>High</ComboBoxItem>
@@ -44,25 +45,25 @@
                                     </ComboBox>
                                 </StackPanel>
                             </Border>
-                            <Border Name="BorderTestCaseAutomated" BorderBrush="Black" BorderThickness="0.5,0,1,1" Width="{Binding Path=ActualWidth, ElementName=TestCasePanelBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.3'}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,0,-1, 0" >
+                            <Border Name="BorderTestCaseAutomated" BorderBrush="Black" BorderThickness="0,0,0,0.7" Width="{Binding Path=ActualWidth, ElementName=TestCasePanelBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.28'}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,0,-3, 0" >
                                 <StackPanel Orientation="Horizontal" Width="auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                                    <Label FontSize="13" FontWeight="Bold" Margin="5,8,5,8" HorizontalAlignment="Left">Is Automated:</Label>
-                                    <CheckBox Name="IsAutomatedCheckBox"/>
+                                    <Label FontSize="13" FontWeight="Bold" Margin="5,8,10,7" HorizontalAlignment="Left">Is Automated:</Label>
+                                    <CheckBox Name="IsAutomatedCheckBox" Margin="5,5,10,5"/>
                                 </StackPanel>
                             </Border>
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" Height="35">
-                            <Border Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.48'}" Margin="1,-2,1,-1">
+                            <Border Width="{Binding Path=ActualWidth, ElementName=TestCasePanelBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.49'}" Margin="1,-2,1,-1">
                                 <Label FontSize="14" FontWeight="Medium" VerticalAlignment="Center" HorizontalAlignment="Center">Step definition</Label>
                             </Border>
-                            <Border Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.48'}" Margin="0,-2,1 ,-1">
+                            <Border Width="{Binding Path=ActualWidth, ElementName=TestCasePanelBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.49'}" Margin="0,-2,1 ,-1">
                                 <Label FontSize="14" FontWeight="Medium"  VerticalAlignment="Center" HorizontalAlignment="Center">Expected result</Label>
                             </Border>
                         </StackPanel>
                     </StackPanel>
                     <StackPanel>
-                        <Border Name="TestCaseEditViewBorder" BorderBrush="Black" BorderThickness="1,1,1.6,1.6" Width="auto" Margin="-1,101,-1,-1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Height="380">
+                        <Border Name="TestCaseEditViewBorder" BorderBrush="Black" BorderThickness="1" Width="auto" Margin="-1,101,-1,-1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Height="380">
                             <ListBox Name="TestStepList" FontSize="14" Grid.Row="1" VerticalAlignment="Stretch" Margin="0,0,0,5">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
@@ -71,8 +72,8 @@
                                                 <RowDefinition Height="Auto"/>
                                             </Grid.RowDefinitions>
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.48'}"/>
-                                                <ColumnDefinition Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.48'}"/>
+                                                <ColumnDefinition Width="{Binding Path=ActualWidth, ElementName=TestCasePanelBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.49'}"/>
+                                                <ColumnDefinition Width="{Binding Path=ActualWidth, ElementName=TestCasePanelBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.49'}"/>
                                             </Grid.ColumnDefinitions>
                                             <Border Name="StepBorder" BorderBrush="Black" BorderThickness="0,1,0,1" Grid.Row="0" Grid.Column="0" Margin="0,-3,0,-2">
                                                 <Grid>
