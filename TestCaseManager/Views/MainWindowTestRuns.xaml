@@ -118,7 +118,7 @@
                     </Grid>
                 </Border>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
-                    <Button Name="AddTestsButton" Width="180" Height="30" BorderBrush="Black" BorderThickness="1.6" VerticalAlignment="Bottom" Margin="0,0,5,0">Add tests to the run</Button>
+                    <Button Name="AddTestsButton" Width="180" Height="30" BorderBrush="Black" BorderThickness="1.6" VerticalAlignment="Bottom" Margin="0,0,5,0" Click="AddTests">Add tests to the run</Button>
                     <Button Name="RunButton" Width="120" Height="30" BorderBrush="Black" BorderThickness="1.6" VerticalAlignment="Bottom">Run</Button>
                 </StackPanel>
             </Grid>

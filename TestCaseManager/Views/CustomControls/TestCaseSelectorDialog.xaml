@@ -1,0 +1,68 @@
+﻿<Window x:Class="TestCaseManager.Views.CustomControls.TestCaseSelectorDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:converters="clr-namespace:TestCaseManager.BindingConverters"
+    xmlns:local="clr-namespace:TestCaseManager.Core.Proxy;assembly=TestCaseManager.Core"
+    SizeToContent="WidthAndHeight"
+    WindowStartupLocation="CenterOwner"
+    MinWidth="800"
+    MinHeight="585"
+    WindowStyle="None"
+    ResizeMode="NoResize"
+    AllowsTransparency="True" BorderThickness="1" Name="DragWindow">
+
+    <Window.Resources>
+
+        <local:ProjectList x:Key="projList" />
+        <DataTemplate x:Key="testCasesListTemplate">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Path=Title}"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <HierarchicalDataTemplate x:Key="areasTemplate"
+                              ItemsSource="{Binding TestCasesList}"
+                              ItemTemplate="{StaticResource testCasesListTemplate}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Path=Title}" />
+            </StackPanel>
+        </HierarchicalDataTemplate>
+
+        <HierarchicalDataTemplate x:Key="projectTypesTemplate"
+                              ItemsSource="{Binding Areas}"
+                              ItemTemplate="{StaticResource areasTemplate}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Path=Title}" />
+            </StackPanel>
+        </HierarchicalDataTemplate>
+    </Window.Resources>
+    <DockPanel >
+        <Grid Name="TestRunList">
+            <Border Name="TestRunListBorder" BorderBrush="Black" BorderThickness="1.6" Width="300" Margin="15,20,0,50" VerticalAlignment="Stretch" HorizontalAlignment="Left" >
+                <Grid>
+                    <TreeView Grid.Row="1"
+                        ItemTemplate="{DynamicResource projectTypesTemplate}"
+                        ItemsSource="{DynamicResource projList}"
+                        SelectedItemChanged="ProjectSelected_SelectedItemChanged"
+                        Name="projects" />
+                    
+                </Grid>
+            </Border>
+
+            <StackPanel HorizontalAlignment="Center" Orientation="Vertical" VerticalAlignment="Center">
+                <Button Width="80" Height="40" FontSize="18" Margin="10,10,10,10">&gt;&gt;</Button>
+                <Button Width="80" Height="40" FontSize="18" Margin="10,10,10,10">&lt;&lt;</Button>
+            </StackPanel>
+            
+
+            <Border Name="Test" BorderBrush="Black" BorderThickness="1.6" Width="300" Margin="15,20,15,50" VerticalAlignment="Stretch" HorizontalAlignment="right" >
+                <Grid>
+                    <ListBox>
+                        <ListItem></ListItem>
+                    </ListBox>
+                </Grid>
+            </Border>
+            <Button HorizontalAlignment="right" VerticalAlignment="Bottom" Width="100" Height="35" Margin="0,0,15,10" Click="Cancel">Cancel</Button>
+        </Grid>
+    </DockPanel>
+</Window>

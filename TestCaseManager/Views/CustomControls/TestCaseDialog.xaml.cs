@@ -183,7 +183,13 @@ namespace TestCaseManager.Views.CustomControls
             this.Close();
         }
 
-        private void OnSelected(object sender, RoutedEventArgs e)
+        private void PromptDialog_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.SetCurrentAccentColor();
+            this.TestCaseTitle.Focus();
+        }
+
+        private void OnSelected(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             var initialSelectedItem = sender as DependencyObject;
             while (initialSelectedItem != null)
@@ -197,17 +203,6 @@ namespace TestCaseManager.Views.CustomControls
 
                 initialSelectedItem = VisualTreeHelper.GetParent(initialSelectedItem);
             }
-        }
-
-        private void PromptDialog_Loaded(object sender, RoutedEventArgs e)
-        {
-            this.SetCurrentAccentColor();
-            this.TestCaseTitle.Focus();
-        }
-
-        private void OnSelected(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-
         }
     }
 }

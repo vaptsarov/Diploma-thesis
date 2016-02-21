@@ -113,6 +113,11 @@ namespace TestCaseManager.Views
             }
         }
 
+        private void AddTests(object sender, RoutedEventArgs e)
+        {
+            TestCaseSelectorDialog.Prompt();
+        }
+
         private void OnSelected(object sender, RoutedEventArgs e)
         {
             var initialSelectedItem = sender as DependencyObject;
