@@ -2,6 +2,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,6 +11,7 @@ using TestCaseManager.Core;
 using TestCaseManager.Core.Managers;
 using TestCaseManager.Core.Proxy;
 using TestCaseManager.Core.Proxy.TestDefinition;
+using TestCaseManager.Core.Proxy.TestRun;
 using TestCaseManager.Utilities;
 
 namespace TestCaseManager.Views.CustomControls
@@ -19,15 +21,16 @@ namespace TestCaseManager.Views.CustomControls
     /// </summary>
     public partial class TestCaseSelectorDialog : Window
     {
-        private readonly ObservableCollection<StepDefinitionProxy> stepDefinitionList = new ObservableCollection<StepDefinitionProxy>();
+        private static int RunId { get; set; }
+        private TestRunProxy proxy { get; set; }
 
         public TestCaseSelectorDialog()
         {
             this.InitializeComponent();
             this.Owner = Application.Current.MainWindow;
             this.Loaded += new RoutedEventHandler(this.PromptDialog_Loaded);
-            AppearanceManager.Current.PropertyChanged += this.OnAppearanceManagerPropertyChanged;
 
+            AppearanceManager.Current.PropertyChanged += this.OnAppearanceManagerPropertyChanged;
             this.DragWindow.MouseLeftButtonDown += new MouseButtonEventHandler(this.AttachDragDropEvent);
         }
 
@@ -59,9 +62,11 @@ namespace TestCaseManager.Views.CustomControls
             }
         }
 
-        public static void Prompt()
+        public static void Prompt(int testRunId)
         {
             TestCaseSelectorDialog inst = new TestCaseSelectorDialog();
+            RunId = testRunId;
+
             inst.ShowDialog();
         }
 
@@ -77,7 +82,29 @@ namespace TestCaseManager.Views.CustomControls
 
         private void PromptDialog_Loaded(object sender, RoutedEventArgs e)
         {
-            this.SetCurrentAccentColor();
+            // Initial DB data retrieve
+            Task task = Task.Factory.StartNew(() =>
+            {
+                TestRunProxyManager manager = new TestRunProxyManager();
+                this.proxy = manager.GetById(RunId);
+            });
+            task.ContinueWith(next =>
+            {
+                // Update the main Thread as it is the owner of the UI elements
+                this.Dispatcher.Invoke((Action)(() =>
+                {
+                    this.SetCurrentAccentColor();
+
+                    //this.MainTable.Visibility = Visibility.Visible;
+                    this.progressBar.Visibility = Visibility.Hidden;
+
+                    //// Register timer event
+                    //dbCallback.Elapsed += new ElapsedEventHandler(this.ObtainDbRecords);
+                    //// 30 minutes = 1800000
+                    //dbCallback.Interval = 1800000;
+                    //dbCallback.Start();
+                }));
+            });
         }
 
         private void SetCurrentAccentColor()

@@ -2,11 +2,11 @@
 
 namespace TestCaseManager.Core.Managers
 {
-    interface ITestManager<T, P>
+    interface ITestManager<T>
     {
         List<T> GetAll();
         T GetById(int id);
-        T Update(P proxy);
+        T Update(T proxy);
         void DeleteById(int id);
     }
 }

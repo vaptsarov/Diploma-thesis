@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using TestCaseManager.Core.Managers.ProxyManagers;
 using TestCaseManager.Core.Proxy.TestRun;
+using System.Linq;
 using TestCaseManager.DB;
 
 namespace TestCaseManager.Core.Managers
@@ -28,6 +30,14 @@ namespace TestCaseManager.Core.Managers
             }
 
             return proxyList;
+        }
+
+        public TestRunProxy GetById(int runId)
+        {
+            TestRun testRunModel = new TestRunManager().GetById(runId);
+            TestRunProxy proxy = ProxyConverter.TestRunModelToProxy(testRunModel);
+
+            return proxy;
         }
     }
 }

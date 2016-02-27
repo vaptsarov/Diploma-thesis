@@ -7,11 +7,33 @@ using TestCaseManager.Core.Proxy.TestRun;
 using TestCaseManager.DB;
 using TestCaseManager.Utilities;
 using TestCaseManager.Core.Proxy.TestStatus;
+using TestCaseManager.Core.Managers;
 
 namespace TestCaseManager.Core
 {
     public static class ProxyConverter
     {
+        public static ProjectProxy ProjectModelToProxy(Project model)
+        {
+            ProjectProxy proxyObject = new ProjectProxy();
+            proxyObject.Title = model.Title;
+            proxyObject.ID = model.ID;
+            proxyObject.CreatedBy = model.CreatedBy;
+            proxyObject.UpdatedBy = model.UpdatedBy;
+
+            return proxyObject;
+        }
+        public static AreaProxy AreaModelToProxy(Area model)
+        {
+            AreaProxy proxyObject = new AreaProxy();
+            proxyObject.ID = model.ID;
+            proxyObject.Title = model.Title;
+            proxyObject.CreatedBy = model.CreatedBy;
+            proxyObject.UpdatedBy = model.UpdatedBy;
+
+            return proxyObject;
+        }
+
         public static TestCaseProxy TestCaseModelToProxy(TestCase model)
         {
             TestCaseProxy proxyObject = new TestCaseProxy();
@@ -24,27 +46,16 @@ namespace TestCaseManager.Core
             proxyObject.UpdatedBy = model.UpdatedBy;
             proxyObject.AreaID = model.AreaID;
 
-            return proxyObject;
-        }
+            foreach (var item in new TestManager().GetStepDefinitionsById(model.ID))
+            {
+                StepDefinitionProxy proxy = new StepDefinitionProxy();
+                proxy.Step = item.Step;
+                proxy.ExpectedResult = item.ExpectedResult;
+                proxy.ID = item.ID;
+                proxy.TestCaseID = item.TestCaseID;
 
-        public static AreaProxy AreaModelToProxy(Area model)
-        {
-            AreaProxy proxyObject = new AreaProxy();
-            proxyObject.ID = model.ID;
-            proxyObject.Title = model.Title;
-            proxyObject.CreatedBy = model.CreatedBy;
-            proxyObject.UpdatedBy = model.UpdatedBy;
-
-            return proxyObject;
-        }
-
-        public static ProjectProxy ProjectModelToProxy(Project model)
-        {
-            ProjectProxy proxyObject = new ProjectProxy();
-            proxyObject.Title = model.Title;
-            proxyObject.ID = model.ID;
-            proxyObject.CreatedBy = model.CreatedBy;
-            proxyObject.UpdatedBy = model.UpdatedBy;
+                proxyObject.StepDefinitionList.Add(proxy);
+            }
 
             return proxyObject;
         }
@@ -77,23 +88,6 @@ namespace TestCaseManager.Core
             }
 
             return runProxy;
-        }
-
-        public static ObservableCollection<StepDefinitionProxy> StepDefinitionModelToProxy(ICollection<StepDefinition> stepDefinitions)
-        {
-            ObservableCollection<StepDefinitionProxy> list = new ObservableCollection<StepDefinitionProxy>();
-            foreach (var item in stepDefinitions)
-            {
-                StepDefinitionProxy proxy = new StepDefinitionProxy();
-                proxy.Step = item.Step;
-                proxy.ExpectedResult = item.ExpectedResult;
-                proxy.ID = item.ID;
-                proxy.TestCaseID = item.TestCaseID;
-
-                list.Add(proxy);
-            }
-
-            return list;
         }
     }
 }

@@ -51,13 +51,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\ModelConverter.cs" />
     <Compile Include="Managers\AreaManager.cs" />
     <Compile Include="Managers\ITestManager.cs" />
     <Compile Include="Managers\ProjectManager.cs" />
     <Compile Include="Managers\ProxyManagers\IProxyManager.cs" />
     <Compile Include="Managers\ProxyManagers\ProjectProxyManager.cs" />
     <Compile Include="Managers\ProxyManagers\TestRunProxyManager.cs" />
-    <Compile Include="Managers\RunManager.cs" />
+    <Compile Include="Managers\TestRunManager.cs" />
     <Compile Include="Managers\TestManager.cs" />
     <Compile Include="Managers\UserManager.cs" />
     <Compile Include="AuthenticatePoint\AuthenticationManager.cs" />
@@ -72,7 +73,7 @@
     <Compile Include="CryptoService\CertificateRelated\NoEncryptionCryptoService.cs" />
     <Compile Include="Proxy\AreaProxy.cs" />
     <Compile Include="Proxy\ProjectList.cs" />
-    <Compile Include="ProxyConverter.cs" />
+    <Compile Include="Converters\ProxyConverter.cs" />
     <Compile Include="Proxy\TestDefinition\Priority.cs" />
     <Compile Include="Proxy\TestDefinition\Severity.cs" />
     <Compile Include="Proxy\TestDefinition\StepDefinitionProxy.cs" />

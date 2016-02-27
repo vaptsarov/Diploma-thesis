@@ -72,8 +72,8 @@
                                                 <RowDefinition Height="Auto"/>
                                             </Grid.RowDefinitions>
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="{Binding Path=ActualWidth, ElementName=TestCasePanelBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.49'}"/>
-                                                <ColumnDefinition Width="{Binding Path=ActualWidth, ElementName=TestCasePanelBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.49'}"/>
+                                                <ColumnDefinition Width="{Binding Path=ActualWidth, ElementName=TestCasePanelBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.48'}"/>
+                                                <ColumnDefinition Width="{Binding Path=ActualWidth, ElementName=TestCasePanelBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.48'}"/>
                                             </Grid.ColumnDefinitions>
                                             <Border Name="StepBorder" BorderBrush="Black" BorderThickness="0,1,0,1" Grid.Row="0" Grid.Column="0" Margin="0,-3,0,-2">
                                                 <Grid>

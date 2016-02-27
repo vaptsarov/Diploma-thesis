@@ -8,7 +8,7 @@ using TestCaseManager.DB;
 
 namespace TestCaseManager.Core.Managers
 {
-    public class RunManager : ITestManager<TestRun, TestRunProxy>
+    public class TestRunManager : ITestManager<TestRun>
     {
         public List<TestRun> GetAll()
         {
@@ -42,7 +42,7 @@ namespace TestCaseManager.Core.Managers
             throw new NotImplementedException();
         }
 
-        public TestRun Update(TestRunProxy proxy)
+        public TestRun Update(TestRun proxy)
         {
             throw new NotImplementedException();
         }

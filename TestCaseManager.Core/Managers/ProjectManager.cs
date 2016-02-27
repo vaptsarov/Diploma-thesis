@@ -6,7 +6,7 @@ using TestCaseManager.DB;
 
 namespace TestCaseManager.Core.Managers
 {
-    public class ProjectManager : ITestManager<Project, ProjectProxy>
+    public class ProjectManager : ITestManager<Project>
     {
         public List<Project> GetAll()
         {
@@ -50,22 +50,21 @@ namespace TestCaseManager.Core.Managers
             return project;
         }
 
-        public Project Update(ProjectProxy proxy)
+        public Project Update(Project project)
         {
-            Project project = null;
+            Project projectToUpdate = null;
             using (TestcaseManagerDB context = new TestcaseManagerDB())
             {
-                project = context.Projects.Where(proj => proj.ID == proxy.ID).FirstOrDefault();
-
-                if(project == null)
+                projectToUpdate = context.Projects.Where(proj => proj.ID == project.ID).FirstOrDefault();
+                if(projectToUpdate == null)
                     throw new NullReferenceException();
 
-                project.Title = proxy.Title;
-                project.UpdatedBy = AuthenticationManager.Instance().GetCurrentUsername ?? "Borislav Vaptsarov";
+                projectToUpdate.Title = project.Title;
+                projectToUpdate.UpdatedBy = AuthenticationManager.Instance().GetCurrentUsername ?? "Borislav Vaptsarov";
                 context.SaveChanges();
             }
 
-            return project;
+            return projectToUpdate;
         }
 
         public void DeleteById(int id)

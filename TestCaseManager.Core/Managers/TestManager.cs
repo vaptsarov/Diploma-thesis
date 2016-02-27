@@ -1,27 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using TestCaseManager.Core.Proxy;
-using TestCaseManager.Core.Proxy.TestDefinition;
 using TestCaseManager.DB;
 
 namespace TestCaseManager.Core.Managers
 {
-    public class TestManager : ITestManager<TestCase, TestCaseProxy>
+    public class TestManager : ITestManager<TestCase>
     {
-        public TestCase Create(int areaId, TestCaseProxy testCase)
+        public TestCase Create(int areaId, TestCase testCase)
         {
             TestCase @case = null;
             using (TestcaseManagerDB context = new TestcaseManagerDB())
             {
-                @case = this.MapPrimaryPropertiesFromProxy(testCase, areaId);
+                @case = this.MapPrimaryProperties(testCase);
+                @case.AreaID = areaId;
+                @case.CreatedBy = AuthenticationManager.Instance().GetCurrentUsername ?? "Borislav Vaptsarov";
 
-                context.TestCases.Add(@case);
+                context.TestCases.Add(@case);        
                 context.SaveChanges();
 
-                if (testCase.StepDefinitionList != null)
+                if (testCase.StepDefinitions != null)
                 {
-                    foreach (StepDefinitionProxy item in testCase.StepDefinitionList)
+                    foreach (StepDefinition item in testCase.StepDefinitions)
                     {
                         if (item.Step != null)
                         {
@@ -66,22 +67,37 @@ namespace TestCaseManager.Core.Managers
             return testCase;
         }
 
-        public TestCase Update(TestCaseProxy testCase)
+        public ICollection<StepDefinition> GetStepDefinitionsById(int id)
+        {
+            ICollection<StepDefinition> stepDefinitions = new Collection<StepDefinition>();
+            using (TestcaseManagerDB context = new TestcaseManagerDB())
+            {
+                var @case = context.TestCases.Where(x => x.ID == id).FirstOrDefault();
+
+                if (@case.StepDefinitions != null && @case.StepDefinitions.Count() > 0)
+                    stepDefinitions = @case.StepDefinitions;
+            }
+
+            return stepDefinitions;
+        }
+
+        public TestCase Update(TestCase testCase)
         {
             TestCase @case = null;
             using (TestcaseManagerDB context = new TestcaseManagerDB())
             {
-                @case = context.TestCases.Where(tc => tc.ID == testCase.Id).FirstOrDefault();
+                @case = context.TestCases.Where(tc => tc.ID == testCase.ID).FirstOrDefault();
+
                 @case.Title = testCase.Title;
-                @case.Severity = testCase.Severity.ToString();
-                @case.Priority = testCase.Priority.ToString();
+                @case.Severity = testCase.Severity;
+                @case.Priority = testCase.Priority;
                 @case.IsAutomated = testCase.IsAutomated;
                 @case.UpdatedBy = AuthenticationManager.Instance().GetCurrentUsername ?? "Borislav Vaptsarov";
                 
-                if (testCase.StepDefinitionList != null)
+                if (testCase.StepDefinitions != null)
                 {
                     List<StepDefinition> expectedStepDefinitions = new List<StepDefinition>();
-                    foreach (StepDefinitionProxy item in testCase.StepDefinitionList)
+                    foreach (StepDefinition item in testCase.StepDefinitions)
                     {
                         if (item.Step != null)
                         {
@@ -142,15 +158,13 @@ namespace TestCaseManager.Core.Managers
             }
         }
 
-        private TestCase MapPrimaryPropertiesFromProxy(TestCaseProxy proxy, int areaId)
+        private TestCase MapPrimaryProperties(TestCase item)
         {
             TestCase testCase = new TestCase();
-            testCase.Title = proxy.Title;
-            testCase.AreaID = areaId;
-            testCase.Severity = proxy.Severity.ToString();
-            testCase.Priority = proxy.Priority.ToString();
-            testCase.IsAutomated = proxy.IsAutomated;
-            testCase.CreatedBy = AuthenticationManager.Instance().GetCurrentUsername ?? "Borislav Vaptsarov";
+            testCase.Title = item.Title;
+            testCase.Severity = item.Severity;
+            testCase.Priority = item.Priority;
+            testCase.IsAutomated = item.IsAutomated;
 
             return testCase;
         }

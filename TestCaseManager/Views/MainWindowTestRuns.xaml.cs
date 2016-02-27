@@ -107,7 +107,7 @@ namespace TestCaseManager.Views
             string projectTitle = PromptDialog.Prompt("Test Run name", "Create new test run");
             if (!string.IsNullOrWhiteSpace(projectTitle))
             {
-                RunManager runManager = new RunManager();
+                TestRunManager runManager = new TestRunManager();
                 TestRunProxy proxyProject = ProxyConverter.TestRunModelToProxy(runManager.Create(projectTitle));
                 this.UITestRunList.Add(proxyProject);
             }
@@ -115,7 +115,8 @@ namespace TestCaseManager.Views
 
         private void AddTests(object sender, RoutedEventArgs e)
         {
-            TestCaseSelectorDialog.Prompt();
+            var selectedTestRun = this.TestRunListBox.SelectedItem as TestRunProxy;
+            TestCaseSelectorDialog.Prompt(selectedTestRun.ID);
         }
 
         private void OnSelected(object sender, RoutedEventArgs e)

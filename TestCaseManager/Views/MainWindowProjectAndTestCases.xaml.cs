@@ -182,7 +182,7 @@ namespace TestCaseManager.Pages
                 proxy.Title = projectTitle;
 
                 ProjectManager projManager = new ProjectManager();
-                projManager.Update(proxy);
+                projManager.Update(ModelConverter.ProjectProxyToModel(proxy));
 
                 this.UIProjectProxyList.Remove(proxy);
                 this.UIProjectProxyList.Add(proxy);
@@ -220,7 +220,7 @@ namespace TestCaseManager.Pages
                     areaProxy.Title = areaTitle;
 
                     AreaManager areaManager = new AreaManager();
-                    areaManager.Update(areaProxy);
+                    areaManager.Update(ModelConverter.AreaProxyToModel(areaProxy));
 
                     projectProxy.Areas.Remove(areaProxy);
                     projectProxy.Areas.Add(areaProxy);

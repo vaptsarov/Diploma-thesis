@@ -133,6 +133,7 @@ namespace TestCaseManager.Views.CustomControls
                     stepDefinition.ID = (item as StepDefinitionProxy).ID;
                     stepDefinition.Step = (item as StepDefinitionProxy).Step;
                     stepDefinition.ExpectedResult = (item as StepDefinitionProxy).ExpectedResult;
+                    stepDefinition.TestCaseID = testCase.Id;
 
                     testCase.StepDefinitionList.Add(stepDefinition);
                 }
@@ -141,11 +142,11 @@ namespace TestCaseManager.Views.CustomControls
 
                 if (!this.isEditingExistingTestCase)
                 {
-                    TestCaseDialog.testCase = ProxyConverter.TestCaseModelToProxy(manager.Create(relatedArea.ID, testCase));
+                    TestCaseDialog.testCase = ProxyConverter.TestCaseModelToProxy(manager.Create(relatedArea.ID, ModelConverter.TestCaseProxyToModel(testCase)));
                 }
                 else
                 {
-                    TestCaseDialog.testCase = ProxyConverter.TestCaseModelToProxy(manager.Update(testCase));
+                    TestCaseDialog.testCase = ProxyConverter.TestCaseModelToProxy(manager.Update(ModelConverter.TestCaseProxyToModel(testCase)));
                 }
 
                 this.CancelDialog();

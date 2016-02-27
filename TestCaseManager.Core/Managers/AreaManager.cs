@@ -6,7 +6,7 @@ using TestCaseManager.DB;
 
 namespace TestCaseManager.Core.Managers
 {
-    public class AreaManager : ITestManager<Area, AreaProxy>
+    public class AreaManager : ITestManager<Area>
     {
         public List<Area> GetAll()
         {
@@ -51,22 +51,21 @@ namespace TestCaseManager.Core.Managers
             return area;
         }
 
-        public Area Update(AreaProxy proxy)
+        public Area Update(Area area)
         {
-            Area area = null;
+            Area areaToUpdate = null;
             using (TestcaseManagerDB context = new TestcaseManagerDB())
             {
-                area = context.Areas.Where(x => x.ID == proxy.ID).FirstOrDefault();
-
-                if (area == null)
+                areaToUpdate = context.Areas.Where(x => x.ID == area.ID).FirstOrDefault();
+                if (areaToUpdate == null)
                     throw new NullReferenceException();
 
-                area.Title = proxy.Title;
-                area.UpdatedBy = AuthenticationManager.Instance().GetCurrentUsername ?? "Borislav Vaptsarov";
+                areaToUpdate.Title = area.Title;
+                areaToUpdate.UpdatedBy = AuthenticationManager.Instance().GetCurrentUsername ?? "Borislav Vaptsarov";
                 context.SaveChanges();
             }
 
-            return area;
+            return areaToUpdate;
         }
 
         public void DeleteById(int id)
