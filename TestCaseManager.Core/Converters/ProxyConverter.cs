@@ -68,13 +68,13 @@ namespace TestCaseManager.Core
             runProxy.CreatedBy = run.CreatedBy;
             runProxy.CreatedOn = run.CreatedOn;
 
-            IEnumerable<TestComposite> compositeModel = run.TestComposites.Where(comp => comp.TestRunID == run.ID);
+            IEnumerable<TestComposite> compositeModel = new TestRunManager().GetCompositeByRunId(runProxy.ID);
             foreach (TestComposite comp in compositeModel)
             {
                 ExtendedTestCaseProxy extendedTestCaseProxy = new ExtendedTestCaseProxy();
                 extendedTestCaseProxy.Status = EnumUtil.ParseEnum<Status>(comp.TestCaseStatus);
 
-                TestCase testCase = comp.TestCas;
+                TestCase testCase = new TestManager().GetById(comp.TestCaseID);
                 extendedTestCaseProxy.Id = testCase.ID;
                 extendedTestCaseProxy.Title = testCase.Title;
                 extendedTestCaseProxy.Priority = EnumUtil.ParseEnum<Priority>(testCase.Priority);

@@ -7,6 +7,8 @@
     WindowStartupLocation="CenterOwner"
     MinWidth="800"
     MinHeight="585"
+    MaxWidth="800"
+    MaxHeight="585"
     WindowStyle="None"
     ResizeMode="NoResize"
     AllowsTransparency="True" BorderThickness="1" Name="DragWindow">
@@ -36,16 +38,16 @@
             </StackPanel>
         </HierarchicalDataTemplate>
     </Window.Resources>
-    <DockPanel >
+    <Grid >
         <ProgressBar Name="progressBar" Minimum="0" Maximum="1" Height="16" IsIndeterminate="True" Margin="0,0,0,16" />
-        <Grid Name="TestRunList">
-            <Border Name="TestRunListBorder" BorderBrush="Black" BorderThickness="1.6" Width="300" Margin="15,20,0,50" VerticalAlignment="Stretch" HorizontalAlignment="Left" >
+        <Grid Name="TestRunList" Visibility="Hidden">
+            <Border Name="TestRunListBorder" BorderBrush="Black" BorderThickness="1.6" Width="300" Margin="15,20,0,50" VerticalAlignment="Center" HorizontalAlignment="Left">
                 <Grid>
                     <TreeView Grid.Row="1"
                         ItemTemplate="{DynamicResource projectTypesTemplate}"
                         ItemsSource="{DynamicResource projList}"
                         SelectedItemChanged="ProjectSelected_SelectedItemChanged"
-                        Name="projects" />
+                        Name="projects" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
                     
                 </Grid>
             </Border>
@@ -58,11 +60,16 @@
 
             <Border Name="Test" BorderBrush="Black" BorderThickness="1.6" Width="300" Margin="15,20,15,50" VerticalAlignment="Stretch" HorizontalAlignment="right" >
                 <Grid>
-                    <ListBox>
+                    <ListBox Name="SelectedTestCasesList">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Label Content="{Binding Path=Title}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
                     </ListBox>
                 </Grid>
             </Border>
             <Button HorizontalAlignment="right" VerticalAlignment="Bottom" Width="100" Height="35" Margin="0,0,15,10" Click="Cancel">Cancel</Button>
         </Grid>
-    </DockPanel>
+    </Grid>
 </Window>

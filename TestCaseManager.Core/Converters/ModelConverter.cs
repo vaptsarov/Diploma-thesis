@@ -1,12 +1,8 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using TestCaseManager.Core.Proxy;
 using TestCaseManager.Core.Proxy.TestDefinition;
-using TestCaseManager.Core.Proxy.TestRun;
 using TestCaseManager.DB;
-using TestCaseManager.Utilities;
-using TestCaseManager.Core.Proxy.TestStatus;
 
 namespace TestCaseManager.Core
 {

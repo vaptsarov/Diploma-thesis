@@ -23,6 +23,7 @@ namespace TestCaseManager.Views.CustomControls
     {
         private static int RunId { get; set; }
         private TestRunProxy proxy { get; set; }
+        private ObservableCollection<ProjectProxy> UIProjectProxyList = new ObservableCollection<ProjectProxy>();
 
         public TestCaseSelectorDialog()
         {
@@ -37,29 +38,6 @@ namespace TestCaseManager.Views.CustomControls
         private void AttachDragDropEvent(object sender, MouseButtonEventArgs e)
         {
             this.DragMove();
-        }
-
-        private void OnAppearanceManagerPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "ThemeSource" || e.PropertyName == "AccentColor")
-            {
-                this.SetCurrentAccentColor();
-            }
-        }
-
-        private void ProjectSelected_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            object currentSelectedItem = this.projects.SelectedItem;
-            switch (currentSelectedItem.GetType().Name.ToLower())
-            {
-                case "testcaseproxy":
-                    {
-                        //this.SetCurrentTestCase(currentSelectedItem);
-                        break;
-                    }
-                default:
-                    break;
-            }
         }
 
         public static void Prompt(int testRunId)
@@ -85,8 +63,11 @@ namespace TestCaseManager.Views.CustomControls
             // Initial DB data retrieve
             Task task = Task.Factory.StartNew(() =>
             {
-                TestRunProxyManager manager = new TestRunProxyManager();
-                this.proxy = manager.GetById(RunId);
+                TestRunProxyManager testRunManager = new TestRunProxyManager();
+                this.proxy = testRunManager.GetById(RunId);
+
+                ProjectProxyManager proxyManager = new ProjectProxyManager();
+                this.UIProjectProxyList = proxyManager.GetAll();
             });
             task.ContinueWith(next =>
             {
@@ -95,16 +76,37 @@ namespace TestCaseManager.Views.CustomControls
                 {
                     this.SetCurrentAccentColor();
 
-                    //this.MainTable.Visibility = Visibility.Visible;
+                    this.projects.ItemsSource = UIProjectProxyList;
+                    this.SelectedTestCasesList.ItemsSource = this.proxy.TestCasesList;
+
+                    this.TestRunList.Visibility = Visibility.Visible;
                     this.progressBar.Visibility = Visibility.Hidden;
 
-                    //// Register timer event
-                    //dbCallback.Elapsed += new ElapsedEventHandler(this.ObtainDbRecords);
-                    //// 30 minutes = 1800000
-                    //dbCallback.Interval = 1800000;
-                    //dbCallback.Start();
                 }));
             });
+        }
+
+        private void OnAppearanceManagerPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "ThemeSource" || e.PropertyName == "AccentColor")
+            {
+                this.SetCurrentAccentColor();
+            }
+        }
+
+        private void ProjectSelected_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            object currentSelectedItem = this.projects.SelectedItem;
+            switch (currentSelectedItem.GetType().Name.ToLower())
+            {
+                case "testcaseproxy":
+                    {
+                        //this.SetCurrentTestCase(currentSelectedItem);
+                        break;
+                    }
+                default:
+                    break;
+            }
         }
 
         private void SetCurrentAccentColor()

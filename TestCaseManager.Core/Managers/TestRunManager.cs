@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TestCaseManager.Core.Proxy.TestRun;
 using TestCaseManager.DB;
 
 namespace TestCaseManager.Core.Managers
@@ -39,7 +37,13 @@ namespace TestCaseManager.Core.Managers
 
         public TestRun GetById(int id)
         {
-            throw new NotImplementedException();
+            TestRun testRun = new TestRun();
+            using (TestcaseManagerDB context = new TestcaseManagerDB())
+            {
+                testRun = context.TestRuns.Where(run => run.ID == id).FirstOrDefault();
+            }
+
+            return testRun;
         }
 
         public TestRun Update(TestRun proxy)
@@ -50,6 +54,20 @@ namespace TestCaseManager.Core.Managers
         public void DeleteById(int id)
         {
             throw new NotImplementedException();
+        }
+
+        public ICollection<TestComposite> GetCompositeByRunId(int id)
+        {
+            ICollection<TestComposite> collection = new Collection<TestComposite>();
+            using (TestcaseManagerDB context = new TestcaseManagerDB())
+            {
+                var testRun = context.TestRuns.Where(run => run.ID == id).FirstOrDefault();
+
+                if (testRun != null)
+                    collection = testRun.TestComposites;
+            }
+
+            return collection;
         }
     }
 }

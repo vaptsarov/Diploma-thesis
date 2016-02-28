@@ -1,18 +1,18 @@
 ﻿using FirstFloor.ModernUI.Presentation;
 using System;
-using System.Linq;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using TestCaseManager.Core;
 using TestCaseManager.Core.Managers;
 using TestCaseManager.Core.Proxy;
 using TestCaseManager.Views.CustomControls;
-using System.Windows.Input;
 
 namespace TestCaseManager.Pages
 {
