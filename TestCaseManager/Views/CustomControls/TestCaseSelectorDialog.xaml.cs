@@ -1,18 +1,16 @@
 ﻿using FirstFloor.ModernUI.Presentation;
 using System;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using TestCaseManager.Core;
 using TestCaseManager.Core.Managers;
 using TestCaseManager.Core.Proxy;
-using TestCaseManager.Core.Proxy.TestDefinition;
 using TestCaseManager.Core.Proxy.TestRun;
-using TestCaseManager.Utilities;
+using TestCaseManager.Core.Proxy.TestStatus;
 
 namespace TestCaseManager.Views.CustomControls
 {
@@ -22,8 +20,9 @@ namespace TestCaseManager.Views.CustomControls
     public partial class TestCaseSelectorDialog : Window
     {
         private static int RunId { get; set; }
-        private TestRunProxy proxy { get; set; }
-        private ObservableCollection<ProjectProxy> UIProjectProxyList = new ObservableCollection<ProjectProxy>();
+        private TestRunProxy TestRunProxy { get; set; }
+        private ObservableCollection<ProjectProxy> ProjectProxyList { get; set; }
+        private ObservableCollection<ExtendedTestCaseProxy> TestCasesList { get; set; }
 
         public TestCaseSelectorDialog()
         {
@@ -64,10 +63,10 @@ namespace TestCaseManager.Views.CustomControls
             Task task = Task.Factory.StartNew(() =>
             {
                 TestRunProxyManager testRunManager = new TestRunProxyManager();
-                this.proxy = testRunManager.GetById(RunId);
+                this.TestRunProxy = testRunManager.GetById(RunId);
 
                 ProjectProxyManager proxyManager = new ProjectProxyManager();
-                this.UIProjectProxyList = proxyManager.GetAll();
+                this.ProjectProxyList = proxyManager.GetAll();
             });
             task.ContinueWith(next =>
             {
@@ -75,9 +74,10 @@ namespace TestCaseManager.Views.CustomControls
                 this.Dispatcher.Invoke((Action)(() =>
                 {
                     this.SetCurrentAccentColor();
+                    this.ProjectTreeView.ItemsSource = this.ProjectProxyList;
 
-                    this.projects.ItemsSource = UIProjectProxyList;
-                    this.SelectedTestCasesList.ItemsSource = this.proxy.TestCasesList;
+                    this.TestCasesList = this.TestRunProxy.TestCasesList;
+                    this.SelectedTestCasesList.ItemsSource = this.TestCasesList;
 
                     this.TestRunList.Visibility = Visibility.Visible;
                     this.progressBar.Visibility = Visibility.Hidden;
@@ -94,21 +94,6 @@ namespace TestCaseManager.Views.CustomControls
             }
         }
 
-        private void ProjectSelected_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            object currentSelectedItem = this.projects.SelectedItem;
-            switch (currentSelectedItem.GetType().Name.ToLower())
-            {
-                case "testcaseproxy":
-                    {
-                        //this.SetCurrentTestCase(currentSelectedItem);
-                        break;
-                    }
-                default:
-                    break;
-            }
-        }
-
         private void SetCurrentAccentColor()
         {
             this.BorderBrush = new SolidColorBrush(Color.FromRgb(0, 0, 0));
@@ -121,6 +106,24 @@ namespace TestCaseManager.Views.CustomControls
             else if (AppearanceManager.DarkThemeSource != AppearanceManager.Current.ThemeSource)
             {
                 this.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+            }
+        }
+
+        private void AddToTestList(object sender, RoutedEventArgs e)
+        {
+            if (this.ProjectTreeView.SelectedItem is TestCaseProxy)
+            {
+                ExtendedTestCaseProxy testCase = new ExtendedTestCaseProxy(this.ProjectTreeView.SelectedItem as TestCaseProxy, Status.Unknown);
+                ProjectProxy projectProxy = this.ProjectProxyList.Where(proj => proj.Areas.Any(a => a.ID == testCase.AreaID)).FirstOrDefault();
+                if (projectProxy != null)
+                {
+                    AreaProxy areaProxy = projectProxy.Areas.Where(a => a.ID == testCase.AreaID).FirstOrDefault();
+                    if (areaProxy != null)
+                        areaProxy.TestCasesList.Remove(this.ProjectTreeView.SelectedItem as TestCaseProxy);
+                }
+
+                if (this.TestCasesList.Any(x=>x.Id == testCase.Id) == false)
+                    this.TestCasesList.Add(testCase);
             }
         }
     }

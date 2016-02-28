@@ -46,14 +46,13 @@
                     <TreeView Grid.Row="1"
                         ItemTemplate="{DynamicResource projectTypesTemplate}"
                         ItemsSource="{DynamicResource projList}"
-                        SelectedItemChanged="ProjectSelected_SelectedItemChanged"
-                        Name="projects" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                        Name="ProjectTreeView" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
                     
                 </Grid>
             </Border>
 
             <StackPanel HorizontalAlignment="Center" Orientation="Vertical" VerticalAlignment="Center">
-                <Button Width="80" Height="40" FontSize="18" Margin="10,10,10,10" FontWeight="Bold">&gt;&gt;</Button>
+                <Button Width="80" Height="40" FontSize="18" Margin="10,10,10,10" FontWeight="Bold" Click="AddToTestList">&gt;&gt;</Button>
                 <Button Width="80" Height="40" FontSize="18" Margin="10,10,10,10" FontWeight="Bold">&lt;&lt;</Button>
             </StackPanel>
             

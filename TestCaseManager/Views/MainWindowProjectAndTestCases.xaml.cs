@@ -303,7 +303,7 @@ namespace TestCaseManager.Pages
             manager.DeleteById(testCaseToDelete.Id);
 
             ProjectProxy projectProxy = this.UIProjectProxyList.Where(proj => proj.Areas.Any(a => a.ID == testCaseToDelete.AreaID)).FirstOrDefault();
-            if (UIProjectProxyList != null)
+            if (projectProxy != null)
             {
                 AreaProxy areaProxy = projectProxy.Areas.Where(a => a.ID == testCaseToDelete.AreaID).FirstOrDefault();
                 if(areaProxy != null)
