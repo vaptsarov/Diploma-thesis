@@ -11,6 +11,9 @@ using TestCaseManager.Core.Managers;
 using TestCaseManager.Core.Proxy;
 using TestCaseManager.Core.Proxy.TestRun;
 using TestCaseManager.Core.Proxy.TestStatus;
+using System.Collections.Generic;
+using TestCaseManager.DB;
+using TestCaseManager.Core;
 
 namespace TestCaseManager.Views.CustomControls
 {
@@ -116,7 +119,16 @@ namespace TestCaseManager.Views.CustomControls
 
         private void SaveRun(object sender, RoutedEventArgs e)
         {
+            ICollection<TestCase> testCasesModelList = new Collection<TestCase>();
+            this.TestCasesList.ToList().ForEach(x =>
+            {
+                testCasesModelList.Add(ModelConverter.TestCaseProxyToModel(x));
+            });
 
+            TestRunManager manager = new TestRunManager();
+            manager.RelateTestCaseToTestRun(this.TestRunProxy.ID, testCasesModelList);
+
+            this.CancelDialog();
         }
 
         private void Cancel(object sender, RoutedEventArgs e)
@@ -142,21 +154,21 @@ namespace TestCaseManager.Views.CustomControls
                         areaProxy.TestCasesList.Remove(this.ProjectTreeView.SelectedItem as TestCaseProxy);
                 }
 
-                if (this.TestCasesList.Any(x=>x.Id == testCase.Id) == false)
+                if (this.TestCasesList.Any(x => x.Id == testCase.Id) == false)
                     this.TestCasesList.Add(testCase);
             }
         }
 
         private void RemoveFromTestList(object sender, RoutedEventArgs e)
         {
-            if(this.SelectedTestCasesList.SelectedItem != null)
+            if (this.SelectedTestCasesList.SelectedItem != null)
             {
                 TestCaseProxy testCase = this.SelectedTestCasesList.SelectedItem as ExtendedTestCaseProxy;
                 ProjectProxy projectProxy = this.ProjectProxyList.Where(proj => proj.Areas.Any(a => a.ID == testCase.AreaID)).FirstOrDefault();
                 if (projectProxy != null)
                 {
                     AreaProxy areaProxy = projectProxy.Areas.Where(a => a.ID == testCase.AreaID).FirstOrDefault();
-                    if(areaProxy != null)
+                    if (areaProxy != null)
                     {
                         areaProxy.TestCasesList.Add(testCase);
                     }

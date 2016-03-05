@@ -26,7 +26,7 @@ namespace TestCaseManager.Views
         public MainWindowTestRuns()
         {
             this.InitializeComponent();
-            AppearanceManager.Current.PropertyChanged += OnAppearanceManagerPropertyChanged;
+            AppearanceManager.Current.PropertyChanged += this.OnAppearanceManagerPropertyChanged;
         }
 
         private void MainWindowTestRuns_Loaded(object sensder, RoutedEventArgs e)
@@ -35,7 +35,7 @@ namespace TestCaseManager.Views
             Task task = Task.Factory.StartNew(() =>
             {
                 TestRunProxyManager manager = new TestRunProxyManager();
-                this.UITestRunList = manager.GetAll();
+                this.UITestRunList = new ObservableCollection<TestRunProxy>(manager.GetAll().OrderBy(x=>x.Name));
             });
             task.ContinueWith(next =>
             {
@@ -107,9 +107,16 @@ namespace TestCaseManager.Views
 
         private void AddTests(object sender, RoutedEventArgs e)
         {
-            var selectedTestRun = this.TestRunListBox.SelectedItem as TestRunProxy;
-            if(selectedTestRun != null)
+            TestRunProxy selectedTestRun = this.TestRunListBox.SelectedItem as TestRunProxy;
+            if (selectedTestRun != null)
+            {
                 TestCaseSelectorDialog.Prompt(selectedTestRun.ID);
+                TestRunProxyManager manager = new TestRunProxyManager();
+                TestRunProxy updatedTestRun = manager.GetById(selectedTestRun.ID);
+
+                selectedTestRun.TestCasesList = updatedTestRun.TestCasesList;
+                this.OnSelectedItem(this, null);
+            }
         }
 
         private void OnSelectedItem(object sender, SelectionChangedEventArgs args)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using TestCaseManager.Core.Proxy.TestStatus;
 using TestCaseManager.DB;
 
 namespace TestCaseManager.Core.Managers
@@ -68,6 +69,38 @@ namespace TestCaseManager.Core.Managers
             }
 
             return collection;
+        }
+
+        public void RelateTestCaseToTestRun(int runId, ICollection<TestCase> testCases)
+        {
+            using (TestcaseManagerDB context = new TestcaseManagerDB())
+            {
+                TestRun runToUpdate = context.TestRuns.Where(r => r.ID == runId).FirstOrDefault();
+                ICollection<TestComposite> manyToManyRelationList = runToUpdate.TestComposites.ToList();
+
+                foreach (TestCase testCase in testCases)
+                {
+                    if(manyToManyRelationList.Any(cs => cs.TestCaseID == testCase.ID) == false)
+                    {
+                        TestComposite composite = new TestComposite();
+                        composite.TestCaseID = testCase.ID;
+                        composite.TestRunID = runId;
+                        composite.TestCaseStatus = Status.Unknown.ToString();
+
+                        runToUpdate.TestComposites.Add(composite);               
+                    }
+                }
+
+                foreach (TestComposite composite in manyToManyRelationList)
+                {
+                    if(testCases.Any(@case=>@case.ID == composite.TestCaseID) == false)
+                    {
+                        runToUpdate.TestComposites.Remove(composite);
+                    }
+                }
+
+                context.SaveChanges();
+            }
         }
     }
 }
