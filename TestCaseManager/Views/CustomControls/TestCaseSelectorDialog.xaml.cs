@@ -47,16 +47,6 @@ namespace TestCaseManager.Views.CustomControls
             inst.ShowDialog();
         }
 
-        private void Cancel(object sender, RoutedEventArgs e)
-        {
-            this.CancelDialog();
-        }
-
-        private void CancelDialog()
-        {
-            this.Close();
-        }
-
         private void PromptDialog_Loaded(object sender, RoutedEventArgs e)
         {
             // Initial DB data retrieve
@@ -73,6 +63,21 @@ namespace TestCaseManager.Views.CustomControls
                 // Update the main Thread as it is the owner of the UI elements
                 this.Dispatcher.Invoke((Action)(() =>
                 {
+                    foreach (var testCase in this.TestRunProxy.TestCasesList)
+                    {
+                        ProjectProxy projectProxy = this.ProjectProxyList.Where(proj => proj.Areas.Any(a => a.ID == testCase.AreaID)).FirstOrDefault();
+                        if (projectProxy != null)
+                        {
+                            AreaProxy areaProxy = projectProxy.Areas.Where(a => a.ID == testCase.AreaID).FirstOrDefault();
+                            if (areaProxy != null)
+                            {
+                                TestCaseProxy testCaseToRemove = areaProxy.TestCasesList.Where(tc => tc.Id == testCase.Id).FirstOrDefault();
+                                if (testCaseToRemove != null)
+                                    areaProxy.TestCasesList.Remove(testCaseToRemove);
+                            }
+                        }
+                    }
+
                     this.SetCurrentAccentColor();
                     this.ProjectTreeView.ItemsSource = this.ProjectProxyList;
 
@@ -109,6 +114,21 @@ namespace TestCaseManager.Views.CustomControls
             }
         }
 
+        private void SaveRun(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Cancel(object sender, RoutedEventArgs e)
+        {
+            this.CancelDialog();
+        }
+
+        private void CancelDialog()
+        {
+            this.Close();
+        }
+
         private void AddToTestList(object sender, RoutedEventArgs e)
         {
             if (this.ProjectTreeView.SelectedItem is TestCaseProxy)
@@ -124,6 +144,25 @@ namespace TestCaseManager.Views.CustomControls
 
                 if (this.TestCasesList.Any(x=>x.Id == testCase.Id) == false)
                     this.TestCasesList.Add(testCase);
+            }
+        }
+
+        private void RemoveFromTestList(object sender, RoutedEventArgs e)
+        {
+            if(this.SelectedTestCasesList.SelectedItem != null)
+            {
+                TestCaseProxy testCase = this.SelectedTestCasesList.SelectedItem as ExtendedTestCaseProxy;
+                ProjectProxy projectProxy = this.ProjectProxyList.Where(proj => proj.Areas.Any(a => a.ID == testCase.AreaID)).FirstOrDefault();
+                if (projectProxy != null)
+                {
+                    AreaProxy areaProxy = projectProxy.Areas.Where(a => a.ID == testCase.AreaID).FirstOrDefault();
+                    if(areaProxy != null)
+                    {
+                        areaProxy.TestCasesList.Add(testCase);
+                    }
+                }
+
+                this.TestCasesList.Remove(this.SelectedTestCasesList.SelectedItem as ExtendedTestCaseProxy);
             }
         }
     }

@@ -43,18 +43,10 @@ namespace TestCaseManager.Views
                 this.Dispatcher.Invoke((Action)(() =>
                 {
                     this.SetCurrentAccentColor();
-
-                    this.TestCasesList.ItemsSource = this.UITestRunList.First().TestCasesList;
-
                     this.TestRunListBox.ItemsSource = this.UITestRunList;
+
                     this.MainTable.Visibility = Visibility.Visible;
                     this.progressBar.Visibility = Visibility.Hidden;
-
-                    //// Register timer event
-                    //dbCallback.Elapsed += new ElapsedEventHandler(this.ObtainDbRecords);
-                    //// 30 minutes = 1800000
-                    //dbCallback.Interval = 1800000;
-                    //dbCallback.Start();
                 }));
             });
         }
@@ -116,10 +108,18 @@ namespace TestCaseManager.Views
         private void AddTests(object sender, RoutedEventArgs e)
         {
             var selectedTestRun = this.TestRunListBox.SelectedItem as TestRunProxy;
-            TestCaseSelectorDialog.Prompt(selectedTestRun.ID);
+            if(selectedTestRun != null)
+                TestCaseSelectorDialog.Prompt(selectedTestRun.ID);
         }
 
-        private void OnSelected(object sender, RoutedEventArgs e)
+        private void OnSelectedItem(object sender, SelectionChangedEventArgs args)
+        {
+            TestRunProxy currentSelectedItem = this.TestRunListBox.SelectedItem as TestRunProxy;
+            if (currentSelectedItem != null)
+                this.TestCasesList.ItemsSource = currentSelectedItem.TestCasesList;          
+        }
+
+        private void SelectWholeLine(object sender, RoutedEventArgs e)
         {
             var initialSelectedItem = sender as DependencyObject;
             while (initialSelectedItem != null)
@@ -128,6 +128,7 @@ namespace TestCaseManager.Views
                 {
                     var selectedListBoxItem = (initialSelectedItem as ListBoxItem);
                     this.TestRunListBox.SelectedItem = selectedListBoxItem.Content;
+
                     break;
                 }
 

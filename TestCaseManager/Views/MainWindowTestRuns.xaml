@@ -14,11 +14,11 @@
             <Grid Name="TestRunGrid">
                 <TextBlock Text="Test Runs" Margin="0,0,0,36" />
                 <Border Name="TestRunBorder" BorderBrush="Black" BorderThickness="1.6" Width="270" Margin="-25,20,0,35" VerticalAlignment="Stretch" HorizontalAlignment="Left" >
-                    <ListBox Name="TestRunListBox" FontSize="13" Grid.Row="1" VerticalAlignment="Stretch" Margin="0,0,0,5" >
+                    <ListBox Name="TestRunListBox" FontSize="13" Grid.Row="1" VerticalAlignment="Stretch" Margin="0,0,0,5" SelectionChanged="OnSelectedItem" >
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                    <TextBlock TextWrapping="Wrap" Text="{Binding Name}" Margin="3,3,3,3" PreviewMouseDown="OnSelected"/>
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" >
+                                    <TextBlock TextWrapping="Wrap" Text="{Binding Name}" Margin="3,3,3,3" PreviewMouseDown="SelectWholeLine"/>
                                 </ScrollViewer>
                             </DataTemplate>
                         </ListBox.ItemTemplate>

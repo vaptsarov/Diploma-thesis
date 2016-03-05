@@ -53,7 +53,7 @@
 
             <StackPanel HorizontalAlignment="Center" Orientation="Vertical" VerticalAlignment="Center">
                 <Button Width="80" Height="40" FontSize="18" Margin="10,10,10,10" FontWeight="Bold" Click="AddToTestList">&gt;&gt;</Button>
-                <Button Width="80" Height="40" FontSize="18" Margin="10,10,10,10" FontWeight="Bold">&lt;&lt;</Button>
+                <Button Width="80" Height="40" FontSize="18" Margin="10,10,10,10" FontWeight="Bold" Click="RemoveFromTestList">&lt;&lt;</Button>
             </StackPanel>
             
 
@@ -68,6 +68,7 @@
                     </ListBox>
                 </Grid>
             </Border>
+            <Button HorizontalAlignment="right" VerticalAlignment="Bottom" Width="100" Height="35" Margin="0,0,125,10" Click="SaveRun">Save</Button>
             <Button HorizontalAlignment="right" VerticalAlignment="Bottom" Width="100" Height="35" Margin="0,0,15,10" Click="Cancel">Cancel</Button>
         </Grid>
     </Grid>
