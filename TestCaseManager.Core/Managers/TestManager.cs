@@ -17,7 +17,7 @@ namespace TestCaseManager.Core.Managers
                 @case.AreaID = areaId;
                 @case.CreatedBy = AuthenticationManager.Instance().GetCurrentUsername ?? "Borislav Vaptsarov";
 
-                context.TestCases.Add(@case);        
+                context.TestCases.Add(@case);
                 context.SaveChanges();
 
                 if (testCase.StepDefinitions != null)
@@ -93,7 +93,7 @@ namespace TestCaseManager.Core.Managers
                 @case.Priority = testCase.Priority;
                 @case.IsAutomated = testCase.IsAutomated;
                 @case.UpdatedBy = AuthenticationManager.Instance().GetCurrentUsername ?? "Borislav Vaptsarov";
-                
+
                 if (testCase.StepDefinitions != null)
                 {
                     List<StepDefinition> expectedStepDefinitions = new List<StepDefinition>();
@@ -153,6 +153,10 @@ namespace TestCaseManager.Core.Managers
                 if (testCase == null)
                     throw new NullReferenceException();
 
+                TestComposite composite = context.TestComposites.Where(comp => comp.TestCaseID == id).FirstOrDefault();
+                if (composite != null)
+                    context.TestComposites.Remove(composite);
+                
                 context.TestCases.Remove(testCase);
                 context.SaveChanges();
             }

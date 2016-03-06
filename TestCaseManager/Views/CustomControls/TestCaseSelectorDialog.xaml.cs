@@ -44,10 +44,10 @@ namespace TestCaseManager.Views.CustomControls
 
         public static void Prompt(int testRunId)
         {
-            TestCaseSelectorDialog inst = new TestCaseSelectorDialog();
+            TestCaseSelectorDialog instance = new TestCaseSelectorDialog();
             RunId = testRunId;
 
-            inst.ShowDialog();
+            instance.ShowDialog();
         }
 
         private void PromptDialog_Loaded(object sender, RoutedEventArgs e)

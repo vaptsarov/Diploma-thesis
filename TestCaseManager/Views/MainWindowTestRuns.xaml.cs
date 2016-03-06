@@ -119,6 +119,15 @@ namespace TestCaseManager.Views
             }
         }
 
+        private void RunTests(object sender, RoutedEventArgs e)
+        {
+            TestRunProxy selectedTestRun = this.TestRunListBox.SelectedItem as TestRunProxy;
+            if (selectedTestRun != null)
+            {
+                TestCaseRunDialog.Prompt(selectedTestRun.ID);
+            }
+        }
+
         private void OnSelectedItem(object sender, SelectionChangedEventArgs args)
         {
             TestRunProxy currentSelectedItem = this.TestRunListBox.SelectedItem as TestRunProxy;
