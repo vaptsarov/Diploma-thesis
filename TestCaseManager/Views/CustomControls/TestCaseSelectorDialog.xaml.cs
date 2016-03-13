@@ -145,7 +145,7 @@ namespace TestCaseManager.Views.CustomControls
         {
             if (this.ProjectTreeView.SelectedItem is TestCaseProxy)
             {
-                ExtendedTestCaseProxy testCase = new ExtendedTestCaseProxy(this.ProjectTreeView.SelectedItem as TestCaseProxy, Status.Unknown);
+                ExtendedTestCaseProxy testCase = new ExtendedTestCaseProxy(this.ProjectTreeView.SelectedItem as TestCaseProxy, Status.NotExecuted);
                 ProjectProxy projectProxy = this.ProjectProxyList.Where(proj => proj.Areas.Any(a => a.ID == testCase.AreaID)).FirstOrDefault();
                 if (projectProxy != null)
                 {

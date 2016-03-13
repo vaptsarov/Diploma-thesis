@@ -34,7 +34,7 @@
                                 <Border Name="BorderTestCaseTotal" BorderBrush="Black" BorderThickness="0,1,0,1" Width="{Binding Path=ActualWidth, ElementName=TestCasesBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.25'}" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="0,-1,0 ,0" >
                                     <Grid Width="auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                                         <Label FontSize="13" FontWeight="Bold" Margin="5,8,0,8" HorizontalAlignment="Left">Total test cases:</Label>
-                                        <Label FontSize="13" Name ="TotalLabel" Margin="120,8,5,8" HorizontalAlignment="Left" />
+                                        <Label FontSize="13" Name="TotalLabel" Margin="120,8,5,8" HorizontalAlignment="Left" />
                                     </Grid>
                                 </Border>
                                 <Border Name="BorderTestCasePassed" BorderBrush="Black" BorderThickness="1" Width="{Binding Path=ActualWidth, ElementName=TestCasesBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.25'}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,-1,-1, 0" >
@@ -60,13 +60,13 @@
                                 <Border Name="BorderTestCaseCreatedBy" BorderBrush="Black" BorderThickness="0,1,0,1.6" Width="{Binding Path=ActualWidth, ElementName=TestCasesBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.499'}" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="0,-1,0 ,0">
                                     <Grid Width="auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                                         <Label FontSize="13" FontWeight="Bold" Margin="5,8,0,8" HorizontalAlignment="Left">Created by:</Label>
-                                        <Label FontSize="13" Name ="TestCaseCreatedByLabel" Margin="85,8,5,8" HorizontalAlignment="Left" />
+                                        <Label FontSize="13" Name ="CreatedBy" Margin="85,8,5,8" HorizontalAlignment="Left" />
                                     </Grid>
                                 </Border>
                                 <Border Name="BorderTestCaseCreatedOn" BorderBrush="Black" BorderThickness="1,1,1,1.6" Width="{Binding Path=ActualWidth, ElementName=TestCasesBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.50'}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,-1,-1, 0" >
                                     <Grid Width="auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                                         <Label FontSize="13" FontWeight="Bold" Margin="5,8,5,8" HorizontalAlignment="Left">Created On:</Label>
-                                        <Label FontSize="13" Name ="TestCaseUpdatedByLabel" Margin="122,8,5,8" HorizontalAlignment="Left" />
+                                        <Label FontSize="13" Name ="CreatedOn" Margin="90,8,5,8" HorizontalAlignment="Left" />
                                     </Grid>
                                 </Border>
                             </StackPanel>

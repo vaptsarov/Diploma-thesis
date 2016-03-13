@@ -85,7 +85,7 @@ namespace TestCaseManager.Core.Managers
                         TestComposite composite = new TestComposite();
                         composite.TestCaseID = testCase.ID;
                         composite.TestRunID = runId;
-                        composite.TestCaseStatus = Status.Unknown.ToString();
+                        composite.TestCaseStatus = Status.NotExecuted.ToString();
 
                         runToUpdate.TestComposites.Add(composite);               
                     }
@@ -100,6 +100,20 @@ namespace TestCaseManager.Core.Managers
                 }
 
                 context.SaveChanges();
+            }
+        }
+
+        public void UpdateTestCaseStatus(int runId, int testCaseId, Status status)
+        {
+            using (TestcaseManagerDB context = new TestcaseManagerDB())
+            {
+                TestComposite testComposite = context.TestComposites.Where(comp => comp.TestRunID == runId && comp.TestCaseID == testCaseId).FirstOrDefault();
+
+                if(testComposite != null)
+                {
+                    testComposite.TestCaseStatus = status.ToString();
+                    context.SaveChanges();
+                }
             }
         }
     }

@@ -84,6 +84,17 @@ namespace TestCaseManager.Core
                 extendedTestCaseProxy.UpdatedBy = testCase.UpdatedBy;
                 extendedTestCaseProxy.AreaID = testCase.AreaID;
 
+                foreach (var item in new TestManager().GetStepDefinitionsById(testCase.ID))
+                {
+                    StepDefinitionProxy proxy = new StepDefinitionProxy();
+                    proxy.Step = item.Step;
+                    proxy.ExpectedResult = item.ExpectedResult;
+                    proxy.ID = item.ID;
+                    proxy.TestCaseID = item.TestCaseID;
+
+                    extendedTestCaseProxy.StepDefinitionList.Add(proxy);
+                }
+
                 runProxy.TestCasesList.Add(extendedTestCaseProxy);
             }
 

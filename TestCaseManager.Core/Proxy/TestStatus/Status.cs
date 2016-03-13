@@ -2,9 +2,8 @@
 {
     public enum Status
     {
+        NotExecuted,
         Passed,
         Failed,
-        Blocking,
-        Unknown
     }
 }

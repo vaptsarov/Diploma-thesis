@@ -67,12 +67,12 @@ namespace TestCaseManager.Core.Managers
             return testCase;
         }
 
-        public ICollection<StepDefinition> GetStepDefinitionsById(int id)
+        public ICollection<StepDefinition> GetStepDefinitionsById(int testCaseId)
         {
             ICollection<StepDefinition> stepDefinitions = new Collection<StepDefinition>();
             using (TestcaseManagerDB context = new TestcaseManagerDB())
             {
-                var @case = context.TestCases.Where(x => x.ID == id).FirstOrDefault();
+                var @case = context.TestCases.Where(x => x.ID == testCaseId).FirstOrDefault();
 
                 if (@case.StepDefinitions != null && @case.StepDefinitions.Count() > 0)
                     stepDefinitions = @case.StepDefinitions;

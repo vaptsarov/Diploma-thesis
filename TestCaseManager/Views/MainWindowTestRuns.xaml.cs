@@ -11,6 +11,7 @@ using System.Windows.Media;
 using TestCaseManager.Core;
 using TestCaseManager.Core.Managers;
 using TestCaseManager.Core.Proxy.TestRun;
+using TestCaseManager.Core.Proxy.TestStatus;
 using TestCaseManager.Views.CustomControls;
 
 namespace TestCaseManager.Views
@@ -111,11 +112,7 @@ namespace TestCaseManager.Views
             if (selectedTestRun != null)
             {
                 TestCaseSelectorDialog.Prompt(selectedTestRun.ID);
-                TestRunProxyManager manager = new TestRunProxyManager();
-                TestRunProxy updatedTestRun = manager.GetById(selectedTestRun.ID);
-
-                selectedTestRun.TestCasesList = updatedTestRun.TestCasesList;
-                this.OnSelectedItem(this, null);
+                this.UpdateTestRun(selectedTestRun);
             }
         }
 
@@ -125,14 +122,33 @@ namespace TestCaseManager.Views
             if (selectedTestRun != null)
             {
                 TestCaseRunDialog.Prompt(selectedTestRun.ID);
+                this.UpdateTestRun(selectedTestRun);
             }
+        }
+
+        private void UpdateTestRun(TestRunProxy selectedTestRun)
+        {
+            TestRunProxyManager manager = new TestRunProxyManager();
+            TestRunProxy updatedTestRun = manager.GetById(selectedTestRun.ID);
+
+            selectedTestRun.TestCasesList = updatedTestRun.TestCasesList;
+            this.OnSelectedItem(this, null);
         }
 
         private void OnSelectedItem(object sender, SelectionChangedEventArgs args)
         {
             TestRunProxy currentSelectedItem = this.TestRunListBox.SelectedItem as TestRunProxy;
             if (currentSelectedItem != null)
-                this.TestCasesList.ItemsSource = currentSelectedItem.TestCasesList;          
+            {
+                this.TotalLabel.Content = currentSelectedItem.TestCasesList.Count;
+                this.PassedLabel.Content = currentSelectedItem.TestCasesList.Where(x => x.Status.Equals(Status.Passed)).Count();
+                this.FailedLabel.Content = currentSelectedItem.TestCasesList.Where(x => x.Status.Equals(Status.Failed)).Count();
+                this.NotRanLabel.Content = currentSelectedItem.TestCasesList.Where(x => x.Status.Equals(Status.NotExecuted)).Count();
+                this.CreatedBy.Content = currentSelectedItem.CreatedBy;
+                this.CreatedOn.Content = currentSelectedItem.CreatedOn;
+
+                this.TestCasesList.ItemsSource = currentSelectedItem.TestCasesList;
+            }     
         }
 
         private void SelectWholeLine(object sender, RoutedEventArgs e)

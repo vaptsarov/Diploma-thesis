@@ -1,9 +1,17 @@
 ﻿using FirstFloor.ModernUI.Presentation;
+using System;
+using System.Linq;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using TestCaseManager.Core.Managers;
 using TestCaseManager.Core.Proxy.TestRun;
+using System.Collections.Generic;
+using TestCaseManager.Core.Proxy.TestStatus;
+using System.Windows.Controls;
+using TestCaseManager.Utilities;
 
 namespace TestCaseManager.Views.CustomControls
 {
@@ -13,7 +21,13 @@ namespace TestCaseManager.Views.CustomControls
     public partial class TestCaseRunDialog : Window
     {
         private static int RunId { get; set; }
+
+        private int CurrentTestCaseIndex { get; set; }
+        private ExtendedTestCaseProxy CurrentSelectedTestCase { get; set; }
+
         private TestRunProxy TestRunProxy { get; set; }
+
+        private Dictionary<ExtendedTestCaseProxy, Status> runStatus = new Dictionary<ExtendedTestCaseProxy, Status>();
 
         public TestCaseRunDialog()
         {
@@ -39,7 +53,35 @@ namespace TestCaseManager.Views.CustomControls
 
         private void PromptDialog_Loaded(object sender, RoutedEventArgs e)
         {
-            this.SetCurrentAccentColor();
+            // Initial DB data retrieve
+            Task task = Task.Factory.StartNew(() =>
+            {
+                TestRunProxyManager testRunManager = new TestRunProxyManager();
+                this.TestRunProxy = testRunManager.GetById(RunId);
+            });
+            task.ContinueWith(next =>
+            {
+                // Update the main Thread as it is the owner of the UI elements
+                this.Dispatcher.Invoke((Action)(() =>
+                {
+                    this.SetCurrentAccentColor();
+                    this.CurrentTestCaseLabel.Content = string.Format("1/{0}", this.TestRunProxy.TestCasesList.Count());
+
+                    // Map to dictionary for easier manipulation
+                    foreach (ExtendedTestCaseProxy testCase in this.TestRunProxy.TestCasesList)
+                    {
+                        runStatus[testCase] = testCase.Status;
+                    }
+
+                    // Starting run point
+                    this.CurrentSelectedTestCase = this.TestRunProxy.TestCasesList.FirstOrDefault();
+                    this.CurrentTestCaseIndex = 0; // Index
+                    this.SetCurrentTestCase(CurrentSelectedTestCase);
+
+                    this.runStatus[CurrentSelectedTestCase] = CurrentSelectedTestCase.Status;
+                    this.StatusComboBox.SelectedIndex = (int)this.runStatus[CurrentSelectedTestCase];
+                }));
+            });
         }
 
         private void OnAppearanceManagerPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -74,6 +116,61 @@ namespace TestCaseManager.Views.CustomControls
             }
         }
 
+        private void SetCurrentTestCase(ExtendedTestCaseProxy testCaseProxy)
+        {
+            if(testCaseProxy != null)
+            {
+                this.TestCaseTitle.Text = testCaseProxy.Title;
+                this.PriorityComboBox.SelectedIndex = (int)testCaseProxy.Priority;
+                this.SeverityComboBox.SelectedIndex = (int)testCaseProxy.Severity;
+                this.IsAutomatedCheckBox.IsChecked = testCaseProxy.IsAutomated;
+
+                this.TestStepList.ItemsSource = testCaseProxy.StepDefinitionList;
+            }
+        }
+
+        private void NextTestCase_Click(object sender, RoutedEventArgs e)
+        {
+            this.SetPreviousTestCaseStatus();
+
+            int testCasesCount = this.TestRunProxy.TestCasesList.Count();
+            if (this.CurrentTestCaseIndex >= 0 && this.CurrentTestCaseIndex < testCasesCount - 1)
+            {
+                this.CurrentTestCaseIndex++;
+                if (this.CurrentTestCaseIndex < testCasesCount)
+                {
+                    this.SetCurrentSelectedTestCase(testCasesCount);
+                }
+            }
+        }
+        
+        private void PreviousTestCase_Click(object sender, RoutedEventArgs e)
+        {
+            this.SetPreviousTestCaseStatus();
+
+            int testCasesCount = this.TestRunProxy.TestCasesList.Count();
+            if (this.CurrentTestCaseIndex > 0 && this.CurrentTestCaseIndex < testCasesCount)
+            {
+                this.CurrentTestCaseIndex--;
+                if (this.CurrentTestCaseIndex >= 0)
+                {
+                    this.SetCurrentSelectedTestCase(testCasesCount);
+                }
+            }
+        }
+
+        private void SaveRunStatus_Click(object sender, RoutedEventArgs e)
+        {
+            this.SetPreviousTestCaseStatus();
+            foreach (KeyValuePair<ExtendedTestCaseProxy, Status> item in runStatus)
+            {
+                TestRunManager manager = new TestRunManager();
+                manager.UpdateTestCaseStatus(RunId, item.Key.Id, item.Value);
+            }
+
+            this.CancelDialog();
+        }
+
         private void Cancel(object sender, RoutedEventArgs e)
         {
             this.CancelDialog();
@@ -82,6 +179,27 @@ namespace TestCaseManager.Views.CustomControls
         private void CancelDialog()
         {
             this.Close();
+        }
+
+        private void SetCurrentSelectedTestCase(int testCasesCount)
+        {
+            this.CurrentSelectedTestCase = this.TestRunProxy.TestCasesList[this.CurrentTestCaseIndex];
+            this.SetCurrentTestCase(this.CurrentSelectedTestCase);
+            this.CurrentTestCaseLabel.Content = string.Format("{0}/{1}", CurrentTestCaseIndex + 1, testCasesCount);
+
+            if (this.runStatus.ContainsKey(this.CurrentSelectedTestCase) == false)
+            {
+                this.StatusComboBox.SelectedIndex = 0;
+            }
+            else
+            {
+                this.StatusComboBox.SelectedIndex = (int)this.runStatus[this.CurrentSelectedTestCase];
+            }
+        }
+
+        private void SetPreviousTestCaseStatus()
+        {
+            this.runStatus[this.CurrentSelectedTestCase] = EnumUtil.ParseEnum<Status>((this.StatusComboBox.SelectedItem as ComboBoxItem).Content.ToString().Replace(" ", string.Empty));
         }
     }
 }
