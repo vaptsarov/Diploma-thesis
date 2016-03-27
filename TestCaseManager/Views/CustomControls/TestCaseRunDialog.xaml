@@ -115,6 +115,8 @@
             </Border>
         </Grid>
         <StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Right">
+            <Button Content="_Register Issue" HorizontalAlignment="Left" Margin="5,5,490,5" />
+            
             <Button Content="_Save Run" IsDefault="True" Margin="5" Name="saveRunButton" Click="SaveRunStatus_Click" />
             <Button Content="_Cancel" IsCancel="True" Margin="5" Name="btnCancel" Click="Cancel" />
         </StackPanel>

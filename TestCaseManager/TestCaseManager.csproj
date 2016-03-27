@@ -167,6 +167,10 @@
       <Project>{c4b62331-2b02-4504-93e5-061bad462535}</Project>
       <Name>TestCaseManager.DB</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TestCaseManager.GitHub\TestCaseManager.GitHub.csproj">
+      <Project>{f6add15f-0fcb-47e3-8444-56166cbec56f}</Project>
+      <Name>TestCaseManager.GitHub</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TestCaseManager.Utilities\TestCaseManager.Utilities.csproj">
       <Project>{41434473-90ff-4dbf-98c4-dca88687e9df}</Project>
       <Name>TestCaseManager.Utilities</Name>
