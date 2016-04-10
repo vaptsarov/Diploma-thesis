@@ -21,12 +21,10 @@ namespace TestCaseManager.Views.CustomControls
     public partial class TestCaseRunDialog : Window
     {
         private static int RunId { get; set; }
-
         private int CurrentTestCaseIndex { get; set; }
         private ExtendedTestCaseProxy CurrentSelectedTestCase { get; set; }
 
         private TestRunProxy TestRunProxy { get; set; }
-
         private Dictionary<ExtendedTestCaseProxy, Status> runStatus = new Dictionary<ExtendedTestCaseProxy, Status>();
 
         public TestCaseRunDialog()
@@ -101,7 +99,7 @@ namespace TestCaseManager.Views.CustomControls
             this.BorderTestCaseSeverity.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
             this.BorderTestCaseAutomated.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
 
-            this.BorderBrush = new SolidColorBrush(Color.FromRgb(0, 0, 0));
+            this.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
 
             // If theme set is light version, the font color should be black, if dark - should be white.
             if (AppearanceManager.LightThemeSource != AppearanceManager.Current.ThemeSource)
@@ -159,6 +157,16 @@ namespace TestCaseManager.Views.CustomControls
             }
         }
 
+        private void RegisterIssue_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+            Application.Current.MainWindow.Topmost = true;
+
+            GitHubRepoSelectorDialog.Prompt(this.CurrentSelectedTestCase.Id);
+            Application.Current.MainWindow.Topmost = false;
+            this.WindowState = WindowState.Normal;
+        }
+
         private void SaveRunStatus_Click(object sender, RoutedEventArgs e)
         {
             this.SetPreviousTestCaseStatus();
@@ -184,7 +192,6 @@ namespace TestCaseManager.Views.CustomControls
         private void SetCurrentSelectedTestCase(int testCasesCount)
         {
             this.CurrentSelectedTestCase = this.TestRunProxy.TestCasesList[this.CurrentTestCaseIndex];
-            this.SetCurrentTestCase(this.CurrentSelectedTestCase);
             this.CurrentTestCaseLabel.Content = string.Format("{0}/{1}", CurrentTestCaseIndex + 1, testCasesCount);
 
             if (this.runStatus.ContainsKey(this.CurrentSelectedTestCase) == false)
@@ -195,6 +202,8 @@ namespace TestCaseManager.Views.CustomControls
             {
                 this.StatusComboBox.SelectedIndex = (int)this.runStatus[this.CurrentSelectedTestCase];
             }
+
+            this.SetCurrentTestCase(this.CurrentSelectedTestCase);
         }
 
         private void SetPreviousTestCaseStatus()

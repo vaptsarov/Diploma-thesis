@@ -69,6 +69,9 @@
     </Compile>
     <Compile Include="Utilities\BaseNavigator.cs" />
     <Compile Include="Utilities\Navigator.cs" />
+    <Compile Include="Views\CustomControls\GitHubRepoSelectorDialog.xaml.cs">
+      <DependentUpon>GitHubRepoSelectorDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CustomControls\TestCaseRunDialog.xaml.cs">
       <DependentUpon>TestCaseRunDialog.xaml</DependentUpon>
     </Compile>
@@ -96,6 +99,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\CustomControls\GitHubRepoSelectorDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\CustomControls\TestCaseRunDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

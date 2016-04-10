@@ -119,7 +119,7 @@ namespace TestCaseManager.Views
         private void RunTests(object sender, RoutedEventArgs e)
         {
             TestRunProxy selectedTestRun = this.TestRunListBox.SelectedItem as TestRunProxy;
-            if (selectedTestRun != null)
+            if (selectedTestRun != null && selectedTestRun.TestCasesList.Count > 0)
             {
                 TestCaseRunDialog.Prompt(selectedTestRun.ID);
                 this.UpdateTestRun(selectedTestRun);

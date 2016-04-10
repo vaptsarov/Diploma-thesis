@@ -61,6 +61,10 @@
       <Project>{C4B62331-2B02-4504-93E5-061BAD462535}</Project>
       <Name>TestCaseManager.DB</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TestCaseManager.Utilities\TestCaseManager.Utilities.csproj">
+      <Project>{41434473-90ff-4dbf-98c4-dca88687e9df}</Project>
+      <Name>TestCaseManager.Utilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

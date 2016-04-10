@@ -2,10 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using TestCaseManager.Core.Managers;
 using TestCaseManager.DB;
+using TestCaseManager.Utilities;
 
 namespace TestCaseManager.GitHub
 {
@@ -13,21 +15,11 @@ namespace TestCaseManager.GitHub
     {
         private static GitHubClient client;
         private static IssueManager instance = null;
-        private static object lockedObj = new object();
 
-        public static IssueManager Instance(string username, string password)
+        public static IssueManager Instance(string username, SecureString password)
         {
-            if (instance == null)
-            {
-                lock (lockedObj)
-                {
-                    if (instance == null)
-                    {
-                        instance = new IssueManager();
-                        instance.SetContextUser(username, password);
-                    }
-                }
-            }
+            instance = new IssueManager();
+            instance.SetContextUser(username, password);
 
             return instance;
         }
@@ -37,7 +29,9 @@ namespace TestCaseManager.GitHub
             Task<IReadOnlyList<Repository>> task = this.GetRepositories(client);
             var repo = task.Result;
 
-            return repo.Select(x => new Tuple<string, string>(x.Owner.Login, x.Name)).ToList<Tuple<string, string>>();
+            return repo.Where(y=>
+                (y.Permissions.Pull == true || y.Permissions.Push == true || y.Permissions.Admin == true) && y.Fork == false)
+                .Select(x => new Tuple<string, string>(x.Owner.Login, x.Name)).ToList<Tuple<string, string>>();
         }
 
         public Uri CreateIssue(string ownerName, string repositoryName, int testCaseId)
@@ -63,10 +57,10 @@ namespace TestCaseManager.GitHub
             return await client.Repository.GetAllForCurrent();
         }
 
-        private void SetContextUser(string username, string password)
+        private void SetContextUser(string username, SecureString password)
         {
             client = new GitHubClient(new ProductHeaderValue("CustomApplication"));
-            client.Credentials = new Credentials(username, password);
+            client.Credentials = new Credentials(username, password.ConvertToUnsecureString());
         }
 
         private NewIssue PopulateIssue(TestCase testCase)

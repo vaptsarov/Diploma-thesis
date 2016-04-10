@@ -59,7 +59,7 @@ namespace TestCaseManager.Views.CustomControls
             this.BorderTestCaseSeverity.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
             this.BorderTestCaseAutomated.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
 
-            this.BorderBrush = new SolidColorBrush(Color.FromRgb(0, 0, 0));
+            this.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
 
             // If theme set is light version, the font color should be black, if dark - should be white.
             if (AppearanceManager.LightThemeSource != AppearanceManager.Current.ThemeSource)
