@@ -91,6 +91,9 @@
     <Compile Include="Models\PasswordViewModel.cs" />
     <Compile Include="Models\TextboxViewModel.cs" />
     <Compile Include="BindingConverters\PercentageConverter.cs" />
+    <Compile Include="Views\UserManagementPage.xaml.cs">
+      <DependentUpon>UserManagementPage.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -160,6 +163,10 @@
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Page Include="Views\UserManagementPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

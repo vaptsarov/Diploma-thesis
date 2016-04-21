@@ -12,9 +12,10 @@ namespace TestCaseManager.Core
         private static string CurrentUser;
 
         private static AuthenticationManager instance = null;
-        private static Object lockedObj = new Object();
+        private static object lockedObj = new object();
 
-        public event EventHandler Authenticated;
+        public event EventHandler ValidAuthenticationEvent;
+        public event EventHandler LogoutEvent;
 
         public string GetCurrentUsername
         {
@@ -42,6 +43,11 @@ namespace TestCaseManager.Core
             return IsReadOnly;
         }
 
+        public bool IsUserAnAdmin()
+        {
+            return IsAnAdmin;
+        }
+
         public void RegisterUserForAuthentication(string username, SecureString password)
         {
             UserManager userManager = new UserManager();
@@ -51,13 +57,18 @@ namespace TestCaseManager.Core
             AuthenticationManager.IsReadOnly = currentApplicationUser.IsReadOnly;
             AuthenticationManager.CurrentUser = currentApplicationUser.Username;
 
-            if (this.Authenticated != null)
-                this.Authenticated(this, EventArgs.Empty);
+            if (this.ValidAuthenticationEvent != null)
+                this.ValidAuthenticationEvent(this, EventArgs.Empty);
         }
 
-        public bool IsAdmin()
+        public void RemoveAuthenticatedUser()
         {
-            throw new NotImplementedException();
+            AuthenticationManager.IsAnAdmin = false;
+            AuthenticationManager.IsReadOnly = true;
+            AuthenticationManager.CurrentUser = null;
+
+            if (this.LogoutEvent != null)
+                this.LogoutEvent(this, EventArgs.Empty);
         }
     }
 }

@@ -41,7 +41,7 @@ namespace TestCaseManager.Core.Managers
             {
                 project = new Project();
                 project.Title = title;
-                project.CreatedBy = AuthenticationManager.Instance().GetCurrentUsername ?? "Borislav Vaptsarov";
+                project.CreatedBy = AuthenticationManager.Instance().GetCurrentUsername;
 
                 context.Projects.Add(project);
                 context.SaveChanges();
@@ -60,7 +60,7 @@ namespace TestCaseManager.Core.Managers
                     throw new NullReferenceException();
 
                 projectToUpdate.Title = project.Title;
-                projectToUpdate.UpdatedBy = AuthenticationManager.Instance().GetCurrentUsername ?? "Borislav Vaptsarov";
+                projectToUpdate.UpdatedBy = AuthenticationManager.Instance().GetCurrentUsername;
                 context.SaveChanges();
             }
 

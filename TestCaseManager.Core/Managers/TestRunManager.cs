@@ -26,8 +26,8 @@ namespace TestCaseManager.Core.Managers
             using (TestcaseManagerDB context = new TestcaseManagerDB())
             {
                 testRun.Name = name;
-                testRun.CreatedBy = AuthenticationManager.Instance().GetCurrentUsername ?? "Borislav Vaptsarov";
-                testRun.CreatedOn = DateTime.Now.ToUniversalTime();
+                testRun.CreatedBy = AuthenticationManager.Instance().GetCurrentUsername;
+                testRun.CreatedOn = DateTime.UtcNow;
 
                 context.TestRuns.Add(testRun);
                 context.SaveChanges();

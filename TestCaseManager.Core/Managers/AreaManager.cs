@@ -42,7 +42,7 @@ namespace TestCaseManager.Core.Managers
                 area = new Area();
                 area.Title = title;
                 area.ProjectId = projectId;
-                area.CreatedBy = AuthenticationManager.Instance().GetCurrentUsername ?? "Borislav Vaptsarov";
+                area.CreatedBy = AuthenticationManager.Instance().GetCurrentUsername;
 
                 context.Areas.Add(area);
                 context.SaveChanges();
@@ -61,7 +61,7 @@ namespace TestCaseManager.Core.Managers
                     throw new NullReferenceException();
 
                 areaToUpdate.Title = area.Title;
-                areaToUpdate.UpdatedBy = AuthenticationManager.Instance().GetCurrentUsername ?? "Borislav Vaptsarov";
+                areaToUpdate.UpdatedBy = AuthenticationManager.Instance().GetCurrentUsername;
                 context.SaveChanges();
             }
 

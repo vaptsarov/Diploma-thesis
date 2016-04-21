@@ -88,6 +88,7 @@ namespace TestCaseManager.Core.Managers
                     user.IsAdmin = true;
 
                 user.CreatedBy = AuthenticationManager.Instance().GetCurrentUsername;
+                user.CreatedOn = DateTime.UtcNow;
 
                 db.ApplicationUsers.Add(user);
                 db.SaveChanges();

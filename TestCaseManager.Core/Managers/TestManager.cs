@@ -15,7 +15,7 @@ namespace TestCaseManager.Core.Managers
             {
                 @case = this.MapPrimaryProperties(testCase);
                 @case.AreaID = areaId;
-                @case.CreatedBy = AuthenticationManager.Instance().GetCurrentUsername ?? "Borislav Vaptsarov";
+                @case.CreatedBy = AuthenticationManager.Instance().GetCurrentUsername;
 
                 context.TestCases.Add(@case);
                 context.SaveChanges();
@@ -92,7 +92,7 @@ namespace TestCaseManager.Core.Managers
                 @case.Severity = testCase.Severity;
                 @case.Priority = testCase.Priority;
                 @case.IsAutomated = testCase.IsAutomated;
-                @case.UpdatedBy = AuthenticationManager.Instance().GetCurrentUsername ?? "Borislav Vaptsarov";
+                @case.UpdatedBy = AuthenticationManager.Instance().GetCurrentUsername;
 
                 if (testCase.StepDefinitions != null)
                 {
