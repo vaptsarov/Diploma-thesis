@@ -19,6 +19,7 @@ namespace TestCaseManager
 
         private readonly Link TestCasesLink = new Link(){DisplayName = "Test Cases",Source = new Uri(@"Views/MainWindowProjectAndTestCases.xaml", UriKind.Relative)};
         private readonly Link TestRunLink = new Link() { DisplayName = "Test Runs", Source = new Uri(@"Views/MainWindowTestRuns.xaml", UriKind.Relative) };
+        private readonly Link AdministrationLink = new Link() { DisplayName = "Administrate users", Source = new Uri(@"Views/Administration/UserManagementPage.xaml", UriKind.Relative) };
         private readonly Link EmptyLink = new Link() { DisplayName = string.Empty };
 
         public MainWindow()
@@ -37,7 +38,14 @@ namespace TestCaseManager
 
                 this.TitleLinks.Insert(0, TestCasesLink);
                 this.TitleLinks.Insert(1, TestRunLink);
-                this.TitleLinks.Insert(2, EmptyLink);
+
+                if(AuthenticationManager.Instance().IsUserAnAdmin())
+                {
+                    this.TitleLinks.Insert(2, AdministrationLink);
+                    this.TitleLinks.Insert(3, EmptyLink);
+                }
+                else
+                    this.TitleLinks.Insert(2, EmptyLink);
             };
 
             AuthenticationManager.Instance().LogoutEvent += (s, e) =>
@@ -47,6 +55,7 @@ namespace TestCaseManager
 
                 this.TitleLinks.Remove(TestCasesLink);
                 this.TitleLinks.Remove(TestRunLink);
+                this.TitleLinks.Remove(AdministrationLink);
                 this.TitleLinks.Remove(EmptyLink);
             };
         }

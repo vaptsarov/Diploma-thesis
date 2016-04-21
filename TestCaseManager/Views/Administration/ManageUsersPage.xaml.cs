@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TestCaseManager.Views
+namespace TestCaseManager.Views.Administration
 {
     /// <summary>
-    /// Interaction logic for UserManagementPage.xaml
+    /// Interaction logic for ManageUsersPage.xaml
     /// </summary>
-    public partial class UserManagementPage : UserControl
+    public partial class ManageUsersPage : UserControl
     {
-        public UserManagementPage()
+        public ManageUsersPage()
         {
             InitializeComponent();
         }
