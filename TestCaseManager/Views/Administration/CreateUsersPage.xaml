@@ -20,8 +20,9 @@
                 <PasswordBox Name="Password" Margin="8, 0 ,0 ,0" Width="184" MaxLength="20"/>
             </StackPanel>
             <StackPanel Orientation="Vertical" Margin="5">
-                <CheckBox ToolTip="This option allows the user to create, edit or delete other users, including those with 'admin' permissions." Margin="64,0,0,0">Give 'admin' permissions to the user</CheckBox>
+                <CheckBox Name="IsAdminCheckBox" ToolTip="This option allows the user to create, edit or delete other users, including those with 'admin' permissions." Margin="64,0,0,0">Give 'admin' permissions to the user</CheckBox>
                 <Button Width="95" Margin="-272, 15, 10, 10" Click="CreateUser_Click">Create user</Button>
+                <Label Name="MessageLabel" Margin="63,15,15,15"/>
             </StackPanel>
         </StackPanel>
     </StackPanel>

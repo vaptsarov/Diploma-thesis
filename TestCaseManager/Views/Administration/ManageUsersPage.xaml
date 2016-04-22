@@ -3,10 +3,45 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TestCaseManager.Views.Administration"
+             xmlns:local="clr-namespace:TestCaseManager.Views.CustomControls.MicrosoftAutoComplete"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-            
-    </Grid>
+             xmlns:converters="clr-namespace:TestCaseManager.BindingConverters"
+             d:DesignHeight="300" d:DesignWidth="300" Loaded="UserControl_Loaded">
+
+    <StackPanel>
+        <TextBlock Style="{StaticResource Heading2}">Manage application users</TextBlock>
+        <StackPanel Name="StackPanelConvertionProvider" Orientation="Vertical" Margin="15,30,15,15">
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <Label FontSize="14">Select user by providing username</Label>
+                <local:AutoCompleteTextBox Height="23" Margin="5, 0 ,0 ,0" Width="184" x:Name="AutoCompleteBox" DelayTime="10" Threshold="1"/>
+                <Button Margin="10,0,0,0" Click="SelectUser_Click">Select</Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,50,0,0">
+                <StackPanel Width="{Binding Path=ActualWidth, ElementName=StackPanelConvertionProvider, Converter={converters:PercentageConverter}, ConverterParameter='0.49'}">
+                    <TextBlock Style="{StaticResource Heading2}" HorizontalAlignment="Center">Edit</TextBlock>
+                    <Border BorderThickness="0,0,1,0" BorderBrush="Black">
+                        <StackPanel Margin="15">
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <Label>New username</Label>
+                                <TextBox Name="Username" Margin="5, 0 ,0 ,0" Width="184"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <Label>New password</Label>
+                                <PasswordBox Name="Password" Margin="5, 0 ,0 ,0" Width="184" MaxLength="20"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical" Margin="5">
+                                <CheckBox Name="IsAdminCheckBox" ToolTip="This option allows the user to create, edit or delete other users, including those with 'admin' permissions." Margin="40,15,15,15" HorizontalAlignment="Left">Give 'admin' permissions to the user</CheckBox>
+                                <Button Width="150" Margin="15,15,20,15" Click="EditUser_Click" HorizontalAlignment="Right">Save selected user</Button>
+                                <Label Name="MessageLabel" Margin="63,15,15,15"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+                <StackPanel Width="{Binding Path=ActualWidth, ElementName=StackPanelConvertionProvider, Converter={converters:PercentageConverter}, ConverterParameter='0.49'}">
+                    <TextBlock Style="{StaticResource Heading2}" HorizontalAlignment="Center">Delete</TextBlock>
+                    <Button Margin="15,20,15,15" Width="160" Click="DeleteUser_Click">Delete selected user</Button>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>
 </UserControl>

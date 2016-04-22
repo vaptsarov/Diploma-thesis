@@ -69,6 +69,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\AutoCompleteModel.cs" />
     <Compile Include="Utilities\BaseNavigator.cs" />
     <Compile Include="Utilities\Navigator.cs" />
     <Compile Include="Views\Administration\CreateUsersPage.xaml.cs">
@@ -79,6 +80,9 @@
     </Compile>
     <Compile Include="Views\CustomControls\GitHubRepoSelectorDialog.xaml.cs">
       <DependentUpon>GitHubRepoSelectorDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomControls\MicrosoftAutoComplete\AutoCompleteTextBox.xaml.cs">
+      <DependentUpon>AutoCompleteTextBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CustomControls\TestCaseRunDialog.xaml.cs">
       <DependentUpon>TestCaseRunDialog.xaml</DependentUpon>
@@ -121,6 +125,10 @@
     <Page Include="Views\CustomControls\GitHubRepoSelectorDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CustomControls\MicrosoftAutoComplete\AutoCompleteTextBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\CustomControls\TestCaseRunDialog.xaml">
       <Generator>MSBuild:Compile</Generator>

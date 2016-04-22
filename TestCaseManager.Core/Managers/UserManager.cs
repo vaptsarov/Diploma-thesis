@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Security;
 using TestCaseManager.Core.CryptoService;
@@ -40,6 +42,17 @@ namespace TestCaseManager.Core.Managers
             return user;
         }
 
+        public ICollection<ApplicationUser> GetAll()
+        {
+            ICollection<ApplicationUser> users = new Collection<ApplicationUser>();
+            using (var db = new TestcaseManagerDB())
+            {
+                users = db.ApplicationUsers.ToList();
+            }
+
+            return users;
+        }
+
         public ApplicationUser GetUser(string username, SecureString password)
         {
             string unsecuredPasswordString = password.ConvertToUnsecureString();
@@ -68,17 +81,17 @@ namespace TestCaseManager.Core.Managers
             return user;
         }
 
-        public ApplicationUser CreateUser(string username, string password, bool isAdmin = false, bool isReadOnly = false)
+        public ApplicationUser CreateUser(string username, SecureString password, bool isAdmin = false, bool isReadOnly = false)
         {
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
-                throw new ArgumentException("Username or password was empty or null.");
+            string unsecuredPasswordString = password.ConvertToUnsecureString();
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(unsecuredPasswordString))
+                return null;
 
             ApplicationUser user = new ApplicationUser();
             using (var db = new TestcaseManagerDB())
             {
                 user.Username = username;
-             
-                string encryptedValue = cryptoService.Encrypt(password);
+                string encryptedValue = cryptoService.Encrypt(unsecuredPasswordString);
                 user.Password = encryptedValue;
 
                 if(isReadOnly)
@@ -95,6 +108,60 @@ namespace TestCaseManager.Core.Managers
             }
 
             return user;
+        }
+
+        public ApplicationUser UpdateUser(int id, string username, SecureString password, bool isAdmin = false, bool isReadOnly = false)
+        {
+            if (string.IsNullOrEmpty(username))
+                return null;
+
+            ApplicationUser user;
+            using (var db = new TestcaseManagerDB())
+            {
+                user = db.ApplicationUsers.Where(u => u.UserId.Equals(id)).FirstOrDefault();
+                if (user != null)
+                {
+                    user.Username = username;
+
+                    string unsecuredPasswordString = password.ConvertToUnsecureString();
+                    if (string.IsNullOrWhiteSpace(unsecuredPasswordString) == false)
+                    {
+                        string encryptedValue = cryptoService.Encrypt(unsecuredPasswordString);
+                        user.Password = encryptedValue;
+                    }
+
+                    user.IsAdmin = isAdmin;
+                    user.UpdatedBy = AuthenticationManager.Instance().GetCurrentUsername;
+
+                    db.SaveChanges();
+                }
+            }
+
+            return user;
+        }
+
+        public void DeleteUser(int id)
+        {
+            using (var db = new TestcaseManagerDB())
+            {
+                var user = db.ApplicationUsers.Where(u => u.UserId.Equals(id)).FirstOrDefault();
+                if (user != null)
+                {
+                    db.ApplicationUsers.Remove(user);
+                    db.SaveChanges();
+                }
+            }
+        }
+
+        public bool CheckUsernameExists(string username)
+        {
+            bool userExists = false;
+            using (var db = new TestcaseManagerDB())
+            {
+                userExists = db.ApplicationUsers.Any(user => user.Username.Equals(username));
+            }
+
+            return userExists;
         }
     }
 }
