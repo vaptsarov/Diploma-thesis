@@ -153,10 +153,16 @@ namespace TestCaseManager.Core.Managers
                 if (testCase == null)
                     throw new NullReferenceException();
 
-                TestComposite composite = context.TestComposites.Where(comp => comp.TestCaseID == id).FirstOrDefault();
-                if (composite != null)
-                    context.TestComposites.Remove(composite);
-                
+                IList<TestComposite> composites = context.TestComposites.Where(comp => comp.TestCaseID == id).ToList();
+                if (composites.Count() > 0)
+                {
+                    foreach (var item in composites)
+                    {
+                        context.TestComposites.Remove(item);
+                        context.SaveChanges();
+                    }
+                }
+
                 context.TestCases.Remove(testCase);
                 context.SaveChanges();
             }

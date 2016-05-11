@@ -128,7 +128,7 @@
                                 <Border Name="BorderTestCaseUpdatedBy" BorderBrush="Black" BorderThickness="1,1,1,1.6" Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.38'}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,-1,-1, 0" >
                                     <Grid Width="auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                                         <Label FontSize="13" FontWeight="Bold" Margin="5,8,5,8" HorizontalAlignment="Left">Updated by:</Label>
-                                        <Label FontSize="13" Name ="TestCaseUpdatedByLabel" Margin="122,8,5,8" HorizontalAlignment="Left" />
+                                        <Label FontSize="13" Name ="TestCaseUpdatedByLabel" Margin="95,8,5,8" HorizontalAlignment="Left" />
                                     </Grid>
                                 </Border>
                                 <Border Name="BorderTestCaseStatusRun" BorderBrush="Black" BorderThickness="1,1,1,1.6" Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.25'}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,-1,-1, 0" >

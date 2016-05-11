@@ -291,6 +291,8 @@ namespace TestCaseManager.Pages
                     {
                         areaProxy.TestCasesList.Remove(testCase);
                         areaProxy.TestCasesList.Add(editedTestCase);
+
+                        this.SetCurrentTestCase(editedTestCase);
                     }
                 }
             }
@@ -306,8 +308,11 @@ namespace TestCaseManager.Pages
             if (projectProxy != null)
             {
                 AreaProxy areaProxy = projectProxy.Areas.Where(a => a.ID == testCaseToDelete.AreaID).FirstOrDefault();
-                if(areaProxy != null)
+                if (areaProxy != null)
+                {
                     areaProxy.TestCasesList.Remove(testCaseToDelete);
+                    this.SetCurrentTestCase(new TestCaseProxy());
+                }
             }
         }
 
