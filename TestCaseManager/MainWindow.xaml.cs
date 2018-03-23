@@ -17,7 +17,7 @@ namespace TestCaseManager
         private const string LogoutButtonContent = "Logout";
         private const string LoginButtonContent = "Login";
 
-        private readonly Link TestCasesLink = new Link(){DisplayName = "Test Cases",Source = new Uri(@"Views/MainWindowProjectAndTestCases.xaml", UriKind.Relative)};
+        private readonly Link TestCasesLink = new Link() { DisplayName = "Test Cases", Source = new Uri(@"Views/MainWindowProjectAndTestCases.xaml", UriKind.Relative) };
         private readonly Link TestRunLink = new Link() { DisplayName = "Test Runs", Source = new Uri(@"Views/MainWindowTestRuns.xaml", UriKind.Relative) };
         private readonly Link AdministrationLink = new Link() { DisplayName = "Administrate users", Source = new Uri(@"Views/Administration/UserManagementPage.xaml", UriKind.Relative) };
         private readonly Link EmptyLink = new Link() { DisplayName = string.Empty };
@@ -39,7 +39,7 @@ namespace TestCaseManager
                 this.TitleLinks.Insert(0, TestCasesLink);
                 this.TitleLinks.Insert(1, TestRunLink);
 
-                if(AuthenticationManager.Instance().IsUserAnAdmin())
+                if (AuthenticationManager.Instance().IsUserAnAdmin())
                 {
                     this.TitleLinks.Insert(2, AdministrationLink);
                     this.TitleLinks.Insert(3, EmptyLink);

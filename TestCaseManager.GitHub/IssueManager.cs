@@ -44,7 +44,7 @@ namespace TestCaseManager.GitHub
             Task<Issue> task = this.CreateGitHubIssue(client, ownerName, repositoryName, issue);
             Issue createdIssue = task.Result;
 
-            return createdIssue.HtmlUrl;
+            return new Uri(createdIssue.HtmlUrl);
         }
 
         private async Task<Issue> CreateGitHubIssue(GitHubClient client, string ownerName, string repositoryName, NewIssue issue)
