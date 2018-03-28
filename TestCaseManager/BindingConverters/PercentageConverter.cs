@@ -13,7 +13,8 @@ namespace TestCaseManager.BindingConverters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            double convertedValue = double.Parse(value.ToString()) * double.Parse(parameter.ToString());
+            double convertedValue = double.Parse(this.StripRoundCharacters(value), NumberStyles.AllowDecimalPoint, NumberFormatInfo.InvariantInfo) * 
+                double.Parse(this.StripRoundCharacters(parameter), NumberStyles.AllowDecimalPoint, NumberFormatInfo.InvariantInfo);
             return convertedValue;
         }
 
@@ -27,6 +28,11 @@ namespace TestCaseManager.BindingConverters
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
             return _instance ?? (_instance = new PercentageConverter());
+        }
+
+        private string StripRoundCharacters(object value)
+        {
+            return value.ToString().Replace("\"", string.Empty);
         }
     }
 }

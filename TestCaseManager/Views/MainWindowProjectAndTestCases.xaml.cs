@@ -68,19 +68,22 @@ namespace TestCaseManager.Pages
                 this.projects.ItemsSource = this.UIProjectProxyList;
             }));
         }
-      
+
         private void ProjectSelected_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            object currentSelectedItem = this.projects.SelectedItem;
-            switch (currentSelectedItem.GetType().Name.ToLower())
+            if (this.projects.SelectedItem != null)
             {
-                case "testcaseproxy":
-                    {
-                        this.SetCurrentTestCase(currentSelectedItem);
+                object currentSelectedItem = this.projects.SelectedItem;
+                switch (currentSelectedItem.GetType().Name.ToLower())
+                {
+                    case "testcaseproxy":
+                        {
+                            this.SetCurrentTestCase(currentSelectedItem);
+                            break;
+                        }
+                    default:
                         break;
-                    }
-                default:
-                    break;
+                }
             }
         }
 
