@@ -17,8 +17,6 @@ namespace TestCaseManager.Views.CustomControls.MicrosoftAutoComplete
         private System.Timers.Timer keypressTimer;
         private delegate void TextChangedCallback();
         private bool insertText;
-        private int delayTime;
-        private int searchThreshold;
 
         public AutoCompleteTextBox()
         {
@@ -26,7 +24,7 @@ namespace TestCaseManager.Views.CustomControls.MicrosoftAutoComplete
             InitializeComponent();
 
             autoCompletionList = new ObservableCollection<AutoCompleteModel>();
-            searchThreshold = 2;        // default threshold to 2 char
+            Threshold = 3;        // default threshold to 3 char
 
             // set up the key press timer
             keypressTimer = new System.Timers.Timer();
@@ -56,17 +54,9 @@ namespace TestCaseManager.Views.CustomControls.MicrosoftAutoComplete
             }
         }
 
-        public int DelayTime
-        {
-            get { return delayTime; }
-            set { delayTime = value; }
-        }
+        public int DelayTime { get; set; }
 
-        public int Threshold
-        {
-            get { return searchThreshold; }
-            set { searchThreshold = value; }
-        }
+        public int Threshold { get; set; }
 
         public void AddItem(AutoCompleteModel entry)
         {
@@ -102,7 +92,7 @@ namespace TestCaseManager.Views.CustomControls.MicrosoftAutoComplete
             try
             {
                 comboBox.Items.Clear();
-                if (textBox.Text.Length >= searchThreshold)
+                if (textBox.Text.Length >= Threshold)
                 {
                     foreach (AutoCompleteModel entry in autoCompletionList)
                     {
@@ -143,9 +133,9 @@ namespace TestCaseManager.Views.CustomControls.MicrosoftAutoComplete
             // if the delay time is set, delay handling of text changed
             else
             {
-                if (delayTime > 0)
+                if (DelayTime > 0)
                 {
-                    keypressTimer.Interval = delayTime;
+                    keypressTimer.Interval = DelayTime;
                     keypressTimer.Start();
                 }
                 else TextChanged();

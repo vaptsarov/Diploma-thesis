@@ -20,7 +20,7 @@
                         <MenuItem Header="Delete case" Click="DeleteTestCase"/>
                     </ContextMenu>
                 </StackPanel.ContextMenu>
-                <TextBlock Text="{Binding Path=Title}" MouseDown="EditTestCase_Click"/>
+                <TextBlock Text="{Binding Path=Title}" MouseDown="EditTestCase_Click" TextTrimming="CharacterEllipsis" Width="200" FontSize="14"/>
             </StackPanel>
         </DataTemplate>
 
@@ -36,7 +36,7 @@
                         <MenuItem Header="Delete area" Click="DeleteArea"/>
                     </ContextMenu>
                 </StackPanel.ContextMenu>
-                <TextBlock Text="{Binding Path=Title}" />
+                <TextBlock Text="{Binding Path=Title}" FontSize="14" FontWeight="Medium"/>
             </StackPanel>
         </HierarchicalDataTemplate>
 
@@ -52,7 +52,7 @@
                         <MenuItem Header="Delete project" Click="DeleteProject"/>
                     </ContextMenu>
                 </StackPanel.ContextMenu>
-                <TextBlock Text="{Binding Path=Title}" />
+                <TextBlock Text="{Binding Path=Title}" FontSize="15" FontWeight="Medium"/>
             </StackPanel>
         </HierarchicalDataTemplate>
     </UserControl.Resources>
@@ -60,15 +60,15 @@
         <ProgressBar Name="progressBar" Minimum="0" Maximum="1" Height="16" IsIndeterminate="True" Margin="0,0,0,16" />
 
         <!-- Project/area and test cases left panel on the main screen. -->
-        <DockPanel Height="Auto" Name="MainTable" Width="Auto" LastChildFill="True" Visibility="Hidden">
+        <DockPanel Height="Auto" Name="MainTable" Width="auto" LastChildFill="True" Visibility="Hidden">
             <Grid Name="ProjectGrid">
-                <TextBlock Text="Projects > Areas > Test Cases" Margin="0,0,0,36" />
+                <TextBlock Text="Projects > Areas > Test Cases" Margin="0,-10,0,0" TextTrimming="CharacterEllipsis" FontWeight="Medium" FontSize="16"/>
                 <Border Name="ProjectsBorder" BorderBrush="Black" BorderThickness="1.6" Width="270" Margin="-25,20,0,35" VerticalAlignment="Stretch" HorizontalAlignment="Left" >
                     <TreeView Grid.Row="1"
                         ItemTemplate="{DynamicResource projectTypesTemplate}"
                         ItemsSource="{DynamicResource projList}"
                         SelectedItemChanged="ProjectSelected_SelectedItemChanged"
-                        Name="projects" />
+                        Name="projects" ScrollViewer.HorizontalScrollBarVisibility="Hidden" HorizontalAlignment="Stretch"/>
 
                         <Border.ContextMenu>
                         <ContextMenu>
@@ -76,43 +76,43 @@
                         </ContextMenu>
                     </Border.ContextMenu>
                 </Border>
-                <Button Name="CreateProjectButton" Height="30" VerticalAlignment="Bottom" BorderBrush="Black" BorderThickness="1.6" Margin="-25,0,0,0" Click="AddProject">Create Project</Button>
+                <Button Name="CreateProjectButton" Height="30" VerticalAlignment="Bottom" BorderBrush="Black" BorderThickness="1.6" Margin="-25,0,0,0" Click="AddProject" FontWeight="Medium" FontSize="15">Create Project</Button>
             </Grid>
 
             <Grid Name="ProjectGrid1">
-                <TextBlock Text="Test Case" Margin="10,0,10,36" HorizontalAlignment="Left" Width="548" />
+                <TextBlock Text="Test Case" Margin="30,-10,0,0" HorizontalAlignment="Left" Width="548" FontWeight="Medium" FontSize="16"/>
                 <Border Name="TestCasePanelBorder" BorderBrush="Black" BorderThickness="1.6" Width="auto" Margin="5,20,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
                     <Grid Name="TestCaseEditView" >
                         <StackPanel Width="auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                             <Border Name="BorderTestCaseId" BorderBrush="Black" BorderThickness="1" Margin="-1,-1,-1,0">
                                 <Grid>
                                     <Label FontSize="15" FontWeight="Bold" Margin="5,8,0,8" HorizontalAlignment="Left">ID:</Label>
-                                    <Label Name="TestCaseIdLabel" FontSize="14" Margin="28,9,10,8" HorizontalAlignment="left"/>
+                                    <Label Name="TestCaseIdLabel" FontSize="14" FontWeight="Regular" Margin="28,9,10,8" HorizontalAlignment="left"/>
                                 </Grid>
                             </Border>
                             <Border Name="BorderTestCaseName" BorderBrush="Black" BorderThickness="1" Margin="-1,-1,-1,0">
                                 <Grid>
                                     <Label FontSize="15" FontWeight="Bold" Margin="5,8,0,8" HorizontalAlignment="Left">Test case:</Label>
-                                    <TextBlock TextWrapping="WrapWithOverflow" Name="TestCaseNameLabel" FontSize="14" Margin="80,9,0,8" HorizontalAlignment="Left" VerticalAlignment="Stretch" MinHeight="40"/>
+                                    <TextBlock TextWrapping="WrapWithOverflow" Name="TestCaseNameLabel" FontSize="14" FontWeight="Regular" Margin="80,9,0,8" HorizontalAlignment="Left" VerticalAlignment="Stretch" MinHeight="40"/>
                                 </Grid>
                             </Border>
                             <StackPanel  Orientation="Horizontal">
                                 <Border Name="BorderTestCasePriority" BorderBrush="Black" BorderThickness="0,1,0,1" Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.34'}" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="0,-1,0 ,0" >
                                     <Grid Width="auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                                         <Label FontSize="13" FontWeight="Bold" Margin="5,8,0,8" HorizontalAlignment="Left">Test case priority:</Label>
-                                        <Label FontSize="13" Name ="TestCasePriorityLabel" Margin="120,8,5,8" HorizontalAlignment="Left" />
+                                        <Label FontSize="13" Name ="TestCasePriorityLabel" FontWeight="Regular" Margin="120,8,5,8" HorizontalAlignment="Left" />
                                     </Grid>
                                 </Border>
                                 <Border Name="BorderTestCaseSeverity" BorderBrush="Black" BorderThickness="1" Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.33'}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,-1,-1, 0" >
                                     <Grid Width="auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                                         <Label FontSize="13" FontWeight="Bold" Margin="5,8,5,8" HorizontalAlignment="Left">Test case severity:</Label>
-                                        <Label FontSize="13" Name ="TestCaseSeverityLabel" Margin="122,8,5,8" HorizontalAlignment="Left" />
+                                        <Label FontSize="13" Name ="TestCaseSeverityLabel" FontWeight="Regular" Margin="122,8,5,8" HorizontalAlignment="Left" />
                                     </Grid>
                                 </Border>
                                 <Border Name="BorderTestCaseAutomated" BorderBrush="Black" BorderThickness="1" Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.34'}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,-1,-1, 0" >
                                     <Grid Width="auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                                         <Label FontSize="13" FontWeight="Bold" Margin="5,8,5,8" HorizontalAlignment="Left">Is Automated:</Label>
-                                        <Label FontSize="13" Name ="TestCaseAutomatedLabel" Margin="100,8,5,8" HorizontalAlignment="Left" />
+                                        <Label FontSize="13" Name ="TestCaseAutomatedLabel" FontWeight="Regular" Margin="100,8,5,8" HorizontalAlignment="Left" />
                                     </Grid>
                                 </Border>
                             </StackPanel>
