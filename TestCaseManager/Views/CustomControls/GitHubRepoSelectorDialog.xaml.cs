@@ -1,10 +1,12 @@
 ﻿using FirstFloor.ModernUI.Presentation;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Navigation;
 using TestCaseManager.GitHub;
 using TestCaseManager.Utilities;
 
@@ -108,9 +110,17 @@ namespace TestCaseManager.Views.CustomControls
                         this.CopyToClipboard.Margin = new Thickness(0,-11,0,0);
 
                         this.CopyToClipboard.ToolTip = createdIssueUri.OriginalString;
+                        this.ClipboardUrl.NavigateUri = createdIssueUri;
                     }));
                 });
             }
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(this.ClipboardUrl.NavigateUri.ToString());
+
+            this.Close();
         }
 
         private void Cancel(object sender, RoutedEventArgs e)
