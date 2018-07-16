@@ -16,6 +16,7 @@ using TestCaseManager.Views.CustomControls;
 
 namespace TestCaseManager.Views
 {
+    /// <inheritdoc cref="UserControl" />
     /// <summary>
     ///     Interaction logic for MainWindowProjectAndTestCases.xaml
     /// </summary>
@@ -71,20 +72,11 @@ namespace TestCaseManager.Views
 
         private void ProjectSelected_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            if (projects.SelectedItem != null)
-            {
-                var currentSelectedItem = projects.SelectedItem;
-                switch (currentSelectedItem.GetType().Name.ToLower())
-                {
-                    case "testcaseproxy":
-                    {
-                        SetCurrentTestCase(currentSelectedItem);
-                        break;
-                    }
-                    default:
-                        break;
-                }
-            }
+            if (projects.SelectedItem == null) return;
+
+            var currentSelectedItem = projects.SelectedItem;
+            if (currentSelectedItem.GetType().Name.ToLower() == "testcaseproxy")
+                SetCurrentTestCase(currentSelectedItem);
         }
 
         private void SetCurrentTestCase(object selectedItem)
@@ -235,9 +227,9 @@ namespace TestCaseManager.Views
         {
             var areaTitle = PromptDialog.Prompt("Type the name of this area (to be sure you delete the right area)",
                 "Delete area");
-            var proxy = ((MenuItem) sender).DataContext as AreaProxy;
 
-            if (!string.IsNullOrWhiteSpace(areaTitle) && areaTitle.Equals(proxy.Title))
+            if (((MenuItem) sender).DataContext is AreaProxy proxy && 
+                (!string.IsNullOrWhiteSpace(areaTitle) && areaTitle.Equals(proxy.Title)))
             {
                 var projectProxy = _uiProjectProxyList
                     .FirstOrDefault(proj => proj.Areas.Any(a => a.Id == proxy.Id));
@@ -261,7 +253,10 @@ namespace TestCaseManager.Views
             var areaproxy = ((MenuItem) sender).DataContext as AreaProxy;
             var createdTestCaseProxy = TestCaseDialog.Prompt(areaproxy);
 
-            if (createdTestCaseProxy != null) areaproxy.TestCasesList.Add(createdTestCaseProxy);
+            if (createdTestCaseProxy != null)
+            {
+                areaproxy?.TestCasesList.Add(createdTestCaseProxy);
+            }
         }
 
         private void EditTestCase(object sender, RoutedEventArgs e)
@@ -304,18 +299,21 @@ namespace TestCaseManager.Views
 
         private void DeleteTestCase(object sender, RoutedEventArgs e)
         {
-            var testCaseToDelete = ((MenuItem) sender).DataContext as TestCaseProxy;
+            TestCaseProxy testCaseToDelete = ((MenuItem) sender).DataContext as TestCaseProxy;
             var manager = new TestManager();
-            manager.DeleteById(testCaseToDelete.Id);
-
-            var projectProxy = _uiProjectProxyList
-                .FirstOrDefault(proj => proj.Areas.Any(a => a.Id == testCaseToDelete.AreaId));
-
-            var areaProxy = projectProxy?.Areas.FirstOrDefault(a => a.Id == testCaseToDelete.AreaId);
-            if (areaProxy != null)
+            if (testCaseToDelete != null)
             {
-                areaProxy.TestCasesList.Remove(testCaseToDelete);
-                SetCurrentTestCase(new TestCaseProxy());
+                manager.DeleteById(testCaseToDelete.Id);
+
+                var projectProxy = _uiProjectProxyList
+                    .FirstOrDefault(proj => proj.Areas.Any(a => a.Id == testCaseToDelete.AreaId));
+
+                var areaProxy = projectProxy?.Areas.FirstOrDefault(a => a.Id == testCaseToDelete.AreaId);
+                if (areaProxy != null)
+                {
+                    areaProxy.TestCasesList.Remove(testCaseToDelete);
+                    SetCurrentTestCase(new TestCaseProxy());
+                }
             }
         }
 

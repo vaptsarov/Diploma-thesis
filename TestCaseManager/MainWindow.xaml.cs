@@ -5,7 +5,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using FirstFloor.ModernUI.Presentation;
 using FirstFloor.ModernUI.Windows.Controls;
-using TestCaseManager.Core;
 using TestCaseManager.Core.AuthenticatePoint;
 
 namespace TestCaseManager

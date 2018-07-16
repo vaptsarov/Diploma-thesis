@@ -29,8 +29,7 @@ namespace TestCaseManager.GitHub
             var task = GetRepositories(_client);
             var repo = task.Result;
 
-            return repo.Where(y =>
-                    (y.Permissions.Pull || y.Permissions.Push || y.Permissions.Admin) && y.Fork == false)
+            return repo.Where(y => (y.Permissions.Pull || y.Permissions.Push || y.Permissions.Admin) && y.Fork == false)
                 .Select(x => new Tuple<string, string>(x.Owner.Login, x.Name)).ToList();
         }
 

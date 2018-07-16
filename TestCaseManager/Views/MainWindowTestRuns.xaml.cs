@@ -16,6 +16,7 @@ using TestCaseManager.Views.CustomControls;
 
 namespace TestCaseManager.Views
 {
+    /// <inheritdoc cref="UserControl" />
     /// <summary>
     ///     Interaction logic for MainWindowTestRuns.xaml
     /// </summary>
@@ -135,13 +136,16 @@ namespace TestCaseManager.Views
             if (TestRunListBox.SelectedItem is TestRunProxy currentSelectedItem)
             {
                 TotalLabel.Content = currentSelectedItem.TestCasesList.Count;
-                PassedLabel.Content =
-                    currentSelectedItem.TestCasesList.Count(x => x.Status.Equals(Status.Passed));
-                FailedLabel.Content =
-                    currentSelectedItem.TestCasesList.Count(x => x.Status.Equals(Status.Failed));
+
+                PassedLabel.Content = currentSelectedItem.TestCasesList.Count(x => x.Status.Equals(Status.Passed));
+
+                FailedLabel.Content = currentSelectedItem.TestCasesList.Count(x => x.Status.Equals(Status.Failed));
+
                 NotRanLabel.Content = currentSelectedItem.TestCasesList
                     .Count(x => x.Status.Equals(Status.NotExecuted));
+
                 CreatedBy.Content = currentSelectedItem.CreatedBy;
+
                 CreatedOn.Content = currentSelectedItem.CreatedOn;
 
                 TestCasesList.ItemsSource = currentSelectedItem.TestCasesList;
