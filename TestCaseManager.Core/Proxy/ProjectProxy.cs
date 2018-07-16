@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 
 namespace TestCaseManager.Core.Proxy
 {
@@ -10,7 +9,7 @@ namespace TestCaseManager.Core.Proxy
             Areas = new ObservableCollection<AreaProxy>();
         }
 
-        public int ID { get; set; }
+        public int Id { get; set; }
         public string Title { get; set; }
         public ObservableCollection<AreaProxy> Areas { get; set; }
         public string CreatedBy { get; set; }

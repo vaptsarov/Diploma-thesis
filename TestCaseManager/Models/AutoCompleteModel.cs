@@ -2,36 +2,28 @@
 {
     public class AutoCompleteModel
     {
-        private string[] keywordStrings;
-        private string displayString;
+        private string[] _keywordStrings;
+
+        public AutoCompleteModel(string name, params string[] keywords)
+        {
+            DisplayName = name;
+            _keywordStrings = keywords;
+        }
 
         public string[] KeywordStrings
         {
             get
             {
-                if (keywordStrings == null)
-                {
-                    keywordStrings = new string[] { displayString };
-                }
-                return keywordStrings;
+                if (_keywordStrings == null) _keywordStrings = new[] {DisplayName};
+                return _keywordStrings;
             }
         }
 
-        public string DisplayName
-        {
-            get { return displayString; }
-            set { displayString = value; }
-        }
-
-        public AutoCompleteModel(string name, params string[] keywords)
-        {
-            displayString = name;
-            keywordStrings = keywords;
-        }
+        public string DisplayName { get; set; }
 
         public override string ToString()
         {
-            return displayString;
+            return DisplayName;
         }
     }
 }

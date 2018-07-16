@@ -2,14 +2,14 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         SizeToContent="WidthAndHeight"
-    WindowStartupLocation="CenterOwner"
-    MinWidth="800"
-    MinHeight="100"
-    MaxWidth="800"
-    MaxHeight="585"
-    WindowStyle="None"
-    ResizeMode="NoResize"
-    AllowsTransparency="True" BorderThickness="1" Name="DragWindow" Height="109">
+        WindowStartupLocation="CenterOwner"
+        MinWidth="800"
+        MinHeight="100"
+        MaxWidth="800"
+        MaxHeight="585"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        AllowsTransparency="True" BorderThickness="1" Name="DragWindow" Height="109">
 
     <StackPanel Margin="5,25,5,5" Orientation="Horizontal">
         <DockPanel Name="IssueRegistrationPanel" Margin="35,0,0,10">
@@ -17,31 +17,38 @@
                 <Label Margin="0,-25,0,0" FontWeight="Medium">Create GitHub Issue</Label>
                 <StackPanel Orientation="Horizontal">
                     <Label VerticalAlignment="Center">GitHub Username</Label>
-                    <TextBox Width="140" Name="GitHubUsername" Margin="5"/>
+                    <TextBox Width="140" Name="GitHubUsername" Margin="5" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label VerticalAlignment="Center">Github Password</Label>
-                    <PasswordBox Width="140" Name="GitHubPassword" Margin="10,5,5,5"/>
+                    <PasswordBox Width="140" Name="GitHubPassword" Margin="10,5,5,5" />
 
                 </StackPanel>
             </StackPanel>
             <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Margin="30,-15,0,0">
-                <Button Height="25"  Margin="5" Click="LoadRepositories_Click">Load repositories</Button>
-                <Label Name="InvalidCredentials" Content="Invalid username or password!" FontWeight="Medium" VerticalAlignment="Center" Height="16" Foreground="Red" HorizontalAlignment="Center" Visibility="Hidden"/>
+                <Button Height="25" Margin="5" Click="LoadRepositories_Click">Load repositories</Button>
+                <Label Name="InvalidCredentials" Content="Invalid username or password!" FontWeight="Medium"
+                       VerticalAlignment="Center" Height="16" Foreground="Red" HorizontalAlignment="Center"
+                       Visibility="Hidden" />
 
             </StackPanel>
             <StackPanel VerticalAlignment="Center" Margin="0,5,0,0">
-                <ComboBox Height="25" Width="250" Name="GitHubRepositoryList" BorderThickness="1"  Margin="5" IsTextSearchEnabled="True"/>
+                <ComboBox Height="25" Width="250" Name="GitHubRepositoryList" BorderThickness="1" Margin="5"
+                          IsTextSearchEnabled="True" />
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Content="_Create Issue" Margin="5" Name="CreateIssue" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="CreateIssue_Click" IsEnabled="False"/>
-                    <Button Content="_Cancel" IsCancel="True" Margin="5" Name="btnCancel" Click="Cancel" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+                    <Button Content="_Create Issue" Margin="5" Name="CreateIssue" HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom" Click="CreateIssue_Click" IsEnabled="False" />
+                    <Button Content="_Cancel" IsCancel="True" Margin="5" Name="btnCancel" Click="Cancel"
+                            HorizontalAlignment="Right" VerticalAlignment="Bottom" />
                 </StackPanel>
             </StackPanel>
         </DockPanel>
-        <StackPanel Orientation="Horizontal" Name="GitHubSuccessfulyCreatedPanel" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden" Margin="-900,0,0,0">
+        <StackPanel Orientation="Horizontal" Name="GitHubSuccessfulyCreatedPanel" HorizontalAlignment="Center"
+                    VerticalAlignment="Center" Visibility="Hidden" Margin="-900,0,0,0">
             <Label Name="CreatedLabel">Successfully created GitHub issue:</Label>
             <TextBlock Width="93" VerticalAlignment="Top" Margin="10, 5, 10 ,0">
-                <Hyperlink Name="ClipboardUrl" RequestNavigate="Hyperlink_RequestNavigate" >Open in browser
+                <Hyperlink Name="ClipboardUrl" RequestNavigate="Hyperlink_RequestNavigate">
+                    Open in browser
                 </Hyperlink>
             </TextBlock>
             <Label Margin="0, 5, 15 ,0">or</Label>
@@ -49,4 +56,3 @@
         </StackPanel>
     </StackPanel>
 </Window>
-

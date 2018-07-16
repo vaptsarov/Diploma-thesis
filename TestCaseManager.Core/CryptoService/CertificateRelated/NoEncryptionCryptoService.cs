@@ -1,4 +1,4 @@
-﻿namespace TestCaseManager.Core.CryptoService
+﻿namespace TestCaseManager.Core.CryptoService.CertificateRelated
 {
     public class NoEncryptionCryptoService : ICryptoService
     {

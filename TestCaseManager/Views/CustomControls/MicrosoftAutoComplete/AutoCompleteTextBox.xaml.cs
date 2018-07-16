@@ -1,56 +1,59 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Windows;
 using System.Linq;
+using System.Timers;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Threading;
 using TestCaseManager.Models;
 
 namespace TestCaseManager.Views.CustomControls.MicrosoftAutoComplete
 {
     public partial class AutoCompleteTextBox : Canvas
     {
-        private VisualCollection controls;
-        private TextBox textBox;
-        private ComboBox comboBox;
-        private ObservableCollection<AutoCompleteModel> autoCompletionList;
-        private System.Timers.Timer keypressTimer;
-        private delegate void TextChangedCallback();
-        private bool insertText;
+        private readonly ObservableCollection<AutoCompleteModel> _autoCompletionList;
+        private readonly ComboBox _comboBox;
+        private readonly VisualCollection _controls;
+        private readonly Timer _keypressTimer;
+        private readonly TextBox _textBox;
+        private bool _insertText;
 
         public AutoCompleteTextBox()
         {
-            controls = new VisualCollection(this);
+            _controls = new VisualCollection(this);
             InitializeComponent();
 
-            autoCompletionList = new ObservableCollection<AutoCompleteModel>();
-            Threshold = 3;        // default threshold to 3 char
+            _autoCompletionList = new ObservableCollection<AutoCompleteModel>();
+            Threshold = 3; // default threshold to 3 char
 
             // set up the key press timer
-            keypressTimer = new System.Timers.Timer();
-            keypressTimer.Elapsed += new System.Timers.ElapsedEventHandler(OnTimedEvent);
+            _keypressTimer = new Timer();
+            _keypressTimer.Elapsed += OnTimedEvent;
 
             // set up the text box and the combo box
-            comboBox = new ComboBox();
-            comboBox.IsSynchronizedWithCurrentItem = true;
-            comboBox.IsTabStop = false;
-            comboBox.SelectionChanged += new SelectionChangedEventHandler(comboBox_SelectionChanged);
+            _comboBox = new ComboBox
+            {
+                IsSynchronizedWithCurrentItem = true,
+                IsTabStop = false
+            };
+            _comboBox.SelectionChanged += comboBox_SelectionChanged;
 
-            textBox = new TextBox();
-            textBox.TextChanged += new TextChangedEventHandler(textBox_TextChanged);
-            textBox.VerticalContentAlignment = VerticalAlignment.Center;
+            _textBox = new TextBox();
+            _textBox.TextChanged += textBox_TextChanged;
+            _textBox.VerticalContentAlignment = VerticalAlignment.Center;
 
-            controls.Add(comboBox);
-            controls.Add(textBox);
+            _controls.Add(_comboBox);
+            _controls.Add(_textBox);
         }
 
         public string Text
         {
-            get { return textBox.Text; }
+            get => _textBox.Text;
             set
             {
-                insertText = true;
-                textBox.Text = value;
+                _insertText = true;
+                _textBox.Text = value;
             }
         }
 
@@ -58,32 +61,31 @@ namespace TestCaseManager.Views.CustomControls.MicrosoftAutoComplete
 
         public int Threshold { get; set; }
 
+        protected override int VisualChildrenCount => _controls.Count;
+
         public void AddItem(AutoCompleteModel entry)
         {
-            autoCompletionList.Add(entry);
+            _autoCompletionList.Add(entry);
         }
 
         public void RemoveItem(AutoCompleteModel entry)
         {
-            autoCompletionList.Remove(entry);
+            _autoCompletionList.Remove(entry);
         }
 
         public void RemoveItem(string key)
         {
-            var autoCompleteItem = autoCompletionList.Where(x => x.DisplayName.Equals(key)).FirstOrDefault();
-            if(autoCompletionList != null)
-            {
-                autoCompletionList.Remove(autoCompleteItem);
-            }
+            var autoCompleteItem = _autoCompletionList.Where(x => x.DisplayName.Equals(key)).FirstOrDefault();
+            if (_autoCompletionList != null) _autoCompletionList.Remove(autoCompleteItem);
         }
 
         private void comboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (null != comboBox.SelectedItem)
+            if (null != _comboBox.SelectedItem)
             {
-                insertText = true;
-                ComboBoxItem cbItem = (ComboBoxItem)comboBox.SelectedItem;
-                textBox.Text = cbItem.Content.ToString();
+                _insertText = true;
+                var cbItem = (ComboBoxItem) _comboBox.SelectedItem;
+                _textBox.Text = cbItem.Content.ToString();
             }
         }
 
@@ -91,72 +93,75 @@ namespace TestCaseManager.Views.CustomControls.MicrosoftAutoComplete
         {
             try
             {
-                comboBox.Items.Clear();
-                if (textBox.Text.Length >= Threshold)
+                _comboBox.Items.Clear();
+                if (_textBox.Text.Length >= Threshold)
                 {
-                    foreach (AutoCompleteModel entry in autoCompletionList)
-                    {
-                        foreach (string word in entry.KeywordStrings)
+                    foreach (var entry in _autoCompletionList)
+                    foreach (var word in entry.KeywordStrings)
+                        if (word.StartsWith(_textBox.Text, StringComparison.CurrentCultureIgnoreCase))
                         {
-                            if (word.StartsWith(textBox.Text, StringComparison.CurrentCultureIgnoreCase))
-                            {
-                                ComboBoxItem cbItem = new ComboBoxItem();
-                                cbItem.Content = entry.ToString();
-                                comboBox.Items.Add(cbItem);
-                                break;
-                            }
+                                var cbItem = new ComboBoxItem
+                                {
+                                    Content = entry.ToString()
+                                };
+                                _comboBox.Items.Add(cbItem);
+                            break;
                         }
-                    }
-                    comboBox.IsDropDownOpen = comboBox.HasItems;
+
+                    _comboBox.IsDropDownOpen = _comboBox.HasItems;
                 }
                 else
                 {
-                    comboBox.IsDropDownOpen = false;
+                    _comboBox.IsDropDownOpen = false;
                 }
             }
-            catch { }
+            catch
+            {
+            }
         }
 
-        private void OnTimedEvent(object source, System.Timers.ElapsedEventArgs e)
+        private void OnTimedEvent(object source, ElapsedEventArgs e)
         {
-            keypressTimer.Stop();
-            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal,
-                new TextChangedCallback(this.TextChanged));
+            _keypressTimer.Stop();
+            Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                new TextChangedCallback(TextChanged));
         }
 
         private void textBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             // text was not typed, do nothing and consume the flag
-            if (insertText == true)
-                insertText = false;
+            if (_insertText)
+            {
+                _insertText = false;
+            }
 
             // if the delay time is set, delay handling of text changed
             else
             {
                 if (DelayTime > 0)
                 {
-                    keypressTimer.Interval = DelayTime;
-                    keypressTimer.Start();
+                    _keypressTimer.Interval = DelayTime;
+                    _keypressTimer.Start();
                 }
-                else TextChanged();
+                else
+                {
+                    TextChanged();
+                }
             }
         }
 
         protected override Size ArrangeOverride(Size arrangeSize)
         {
-            textBox.Arrange(new Rect(arrangeSize));
-            comboBox.Arrange(new Rect(arrangeSize));
+            _textBox.Arrange(new Rect(arrangeSize));
+            _comboBox.Arrange(new Rect(arrangeSize));
             return base.ArrangeOverride(arrangeSize);
         }
 
         protected override Visual GetVisualChild(int index)
         {
-            return controls[index];
+            return _controls[index];
         }
 
-        protected override int VisualChildrenCount
-        {
-            get { return controls.Count; }
-        }
+        private delegate void TextChangedCallback();
     }
 }

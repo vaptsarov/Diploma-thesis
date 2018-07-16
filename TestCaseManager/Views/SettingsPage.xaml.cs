@@ -1,9 +1,9 @@
 ﻿using System.Windows.Controls;
 
-namespace TestCaseManager.Pages
+namespace TestCaseManager.Views
 {
     /// <summary>
-    /// Interaction logic for SettingsPage.xaml
+    ///     Interaction logic for SettingsPage.xaml
     /// </summary>
     public partial class SettingsPage : UserControl
     {

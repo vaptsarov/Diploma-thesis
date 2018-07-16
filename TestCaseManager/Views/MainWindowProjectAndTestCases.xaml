@@ -1,11 +1,11 @@
-﻿<UserControl x:Class="TestCaseManager.Pages.MainWindowProjectAndTestCases"
+﻿<UserControl x:Class="TestCaseManager.Views.MainWindowProjectAndTestCases"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:converters="clr-namespace:TestCaseManager.BindingConverters"
              xmlns:local="clr-namespace:TestCaseManager.Core.Proxy;assembly=TestCaseManager.Core"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="1024" d:DesignWidth="300" Loaded="MainWindowProjectAndTestCases_Loaded">
 
     <UserControl.Resources>
@@ -16,43 +16,44 @@
             <StackPanel Orientation="Horizontal">
                 <StackPanel.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Edit case" Click="EditTestCase"/>
-                        <MenuItem Header="Delete case" Click="DeleteTestCase"/>
+                        <MenuItem Header="Edit case" Click="EditTestCase" />
+                        <MenuItem Header="Delete case" Click="DeleteTestCase" />
                     </ContextMenu>
                 </StackPanel.ContextMenu>
-                <TextBlock Text="{Binding Path=Title}" MouseDown="EditTestCase_Click" TextTrimming="CharacterEllipsis" Width="200" FontSize="14"/>
+                <TextBlock Text="{Binding Path=Title}" MouseDown="EditTestCase_Click" TextTrimming="CharacterEllipsis"
+                           Width="200" FontSize="14" />
             </StackPanel>
         </DataTemplate>
 
         <HierarchicalDataTemplate x:Key="areasTemplate"
-                              ItemsSource="{Binding TestCasesList}"
-                              ItemTemplate="{StaticResource testCasesListTemplate}">
+                                  ItemsSource="{Binding TestCasesList}"
+                                  ItemTemplate="{StaticResource testCasesListTemplate}">
             <StackPanel Orientation="Horizontal">
                 <StackPanel.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Create test case" Click="CreateTestCase"/>
+                        <MenuItem Header="Create test case" Click="CreateTestCase" />
                         <Separator />
-                        <MenuItem Header="Edit area" Click="EditArea"/>
-                        <MenuItem Header="Delete area" Click="DeleteArea"/>
+                        <MenuItem Header="Edit area" Click="EditArea" />
+                        <MenuItem Header="Delete area" Click="DeleteArea" />
                     </ContextMenu>
                 </StackPanel.ContextMenu>
-                <TextBlock Text="{Binding Path=Title}" FontSize="14" FontWeight="Medium"/>
+                <TextBlock Text="{Binding Path=Title}" FontSize="14" FontWeight="Medium" />
             </StackPanel>
         </HierarchicalDataTemplate>
 
         <HierarchicalDataTemplate x:Key="projectTypesTemplate"
-                              ItemsSource="{Binding Areas}"
-                              ItemTemplate="{StaticResource areasTemplate}">
+                                  ItemsSource="{Binding Areas}"
+                                  ItemTemplate="{StaticResource areasTemplate}">
             <StackPanel Orientation="Horizontal">
                 <StackPanel.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Create area" Click="AddArea"/>
+                        <MenuItem Header="Create area" Click="AddArea" />
                         <Separator />
-                        <MenuItem Header="Edit project" Click="EditProject"/>
-                        <MenuItem Header="Delete project" Click="DeleteProject"/>
+                        <MenuItem Header="Edit project" Click="EditProject" />
+                        <MenuItem Header="Delete project" Click="DeleteProject" />
                     </ContextMenu>
                 </StackPanel.ContextMenu>
-                <TextBlock Text="{Binding Path=Title}" FontSize="15" FontWeight="Medium"/>
+                <TextBlock Text="{Binding Path=Title}" FontSize="15" FontWeight="Medium" />
             </StackPanel>
         </HierarchicalDataTemplate>
     </UserControl.Resources>
@@ -62,129 +63,203 @@
         <!-- Project/area and test cases left panel on the main screen. -->
         <DockPanel Height="Auto" Name="MainTable" Width="auto" LastChildFill="True" Visibility="Hidden">
             <Grid Name="ProjectGrid">
-                <TextBlock Text="Projects > Areas > Test Cases" Margin="0,-10,0,0" TextTrimming="CharacterEllipsis" FontWeight="Medium" FontSize="16"/>
-                <Border Name="ProjectsBorder" BorderBrush="Black" BorderThickness="1.6" Width="270" Margin="-25,20,0,35" VerticalAlignment="Stretch" HorizontalAlignment="Left" >
+                <TextBlock Text="Projects > Areas > Test Cases" Margin="0,-10,0,0" TextTrimming="CharacterEllipsis"
+                           FontWeight="Medium" FontSize="16" />
+                <Border Name="ProjectsBorder" BorderBrush="Black" BorderThickness="1.6" Width="270"
+                        Margin="-25,20,0,35" VerticalAlignment="Stretch" HorizontalAlignment="Left">
                     <TreeView Grid.Row="1"
-                        ItemTemplate="{DynamicResource projectTypesTemplate}"
-                        ItemsSource="{DynamicResource projList}"
-                        SelectedItemChanged="ProjectSelected_SelectedItemChanged"
-                        Name="projects" ScrollViewer.HorizontalScrollBarVisibility="Hidden" HorizontalAlignment="Stretch"/>
+                              ItemTemplate="{DynamicResource projectTypesTemplate}"
+                              ItemsSource="{DynamicResource projList}"
+                              SelectedItemChanged="ProjectSelected_SelectedItemChanged"
+                              Name="projects" ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                              HorizontalAlignment="Stretch" />
 
-                        <Border.ContextMenu>
+                    <Border.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="Create project" Click="AddProject"/>
+                            <MenuItem Header="Create project" Click="AddProject" />
                         </ContextMenu>
                     </Border.ContextMenu>
                 </Border>
-                <Canvas xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Name="appbar_bug_remove" Width="76" Height="76" Clip="F1 M 0,0L 76,0L 76,76L 0,76L 0,0">
-                    <Path x:Name="Cutter" Width="52.2455" Height="52.2455" Canvas.Left="11.8772" Canvas.Top="11.8772" Stretch="Fill" Fill="#FF000000" Data="F1 M 46.5,19C 45.1193,19 44,20.1193 44,21.5C 44,21.9262 44.1066,22.3274 44.2947,22.6786L 41.8156,25.8516C 40.617,25.2993 39.3339,25 38,25C 36.5982,25 35.2525,25.3305 34.0019,25.938L 31.5976,22.8607C 31.8521,22.4691 32,22.0018 32,21.5C 32,20.1193 30.8807,19 29.5,19C 28.1193,19 27,20.1193 27,21.5C 27,22.8808 28.1193,24 29.5,24L 29.9221,23.9646L 32.2844,26.9882C 30.7591,28.1265 29.4333,29.7061 28.3977,31.6025C 31.1299,32.4842 34.4369,33 38,33C 41.563,33 44.8701,32.4842 47.6023,31.6025C 46.5309,29.6405 45.1489,28.0176 43.5566,26.8718L 45.8641,23.9184L 46.5,24C 47.8807,24 49,22.8807 49,21.5C 49,20.1193 47.8807,19 46.5,19 Z M 54.4999,40L 49.951,40C 49.8763,38.859 49.717,37.7516 49.482,36.6895L 54.8051,34.6461C 55.5785,34.3492 55.9648,33.4816 55.6679,32.7082C 55.371,31.9348 54.5034,31.5485 53.73,31.8454L 48.6187,33.8074L 48.4239,33.3201C 45.7913,34.283 42.541,34.8897 39,34.9864L 39,57.9435C 43.2172,57.4651 46.8161,53.9883 48.6665,49.067L 53.538,51.3386C 54.2888,51.6887 55.1813,51.3639 55.5314,50.6131C 55.8815,49.8623 55.5567,48.9698 54.8059,48.6197L 49.5162,46.1531C 49.7325,45.1391 49.88,44.0847 49.951,43L 54.4999,43C 55.3284,43 55.9999,42.3284 55.9999,41.5C 55.9999,40.6716 55.3284,40 54.4999,40 Z M 21.5,40C 20.6716,40 20,40.6716 20,41.5C 20,42.3285 20.6716,43 21.5,43L 26.0489,43C 26.12,44.0847 26.2674,45.1392 26.4838,46.1531L 21.194,48.6198C 20.4432,48.9699 20.1183,49.8623 20.4685,50.6131C 20.8186,51.364 21.711,51.6888 22.4618,51.3387L 27.3335,49.067C 29.1838,53.9883 32.7827,57.4651 37,57.9435L 37,34.9864C 33.4589,34.8897 30.2087,34.283 27.5761,33.3201L 27.3812,33.8074L 22.27,31.8454C 21.4966,31.5485 20.6289,31.9348 20.332,32.7082C 20.0352,33.4816 20.4215,34.3492 21.1949,34.6461L 26.518,36.6895C 26.2829,37.7516 26.1237,38.8591 26.0489,40L 21.5,40 Z M 20.76,52.4116L 11.8772,61.2943C 12.7656,62.2899 13.7101,63.2344 14.7057,64.1228L 27.567,51.2614L 27.251,50.5315L 22.4934,52.75C 21.8883,53.0322 21.1911,52.8759 20.76,52.4116 Z M 48.4677,30.3608L 64.1227,14.7057C 63.2343,13.7101 62.2899,12.7656 61.2943,11.8772L 46.0376,27.134C 46.9537,28.0476 47.7723,29.1349 48.4677,30.3608 Z "/>
+                <Canvas xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Name="appbar_bug_remove" Width="76"
+                        Height="76" Clip="F1 M 0,0L 76,0L 76,76L 0,76L 0,0">
+                    <Path x:Name="Cutter" Width="52.2455" Height="52.2455" Canvas.Left="11.8772" Canvas.Top="11.8772"
+                          Stretch="Fill" Fill="#FF000000"
+                          Data="F1 M 46.5,19C 45.1193,19 44,20.1193 44,21.5C 44,21.9262 44.1066,22.3274 44.2947,22.6786L 41.8156,25.8516C 40.617,25.2993 39.3339,25 38,25C 36.5982,25 35.2525,25.3305 34.0019,25.938L 31.5976,22.8607C 31.8521,22.4691 32,22.0018 32,21.5C 32,20.1193 30.8807,19 29.5,19C 28.1193,19 27,20.1193 27,21.5C 27,22.8808 28.1193,24 29.5,24L 29.9221,23.9646L 32.2844,26.9882C 30.7591,28.1265 29.4333,29.7061 28.3977,31.6025C 31.1299,32.4842 34.4369,33 38,33C 41.563,33 44.8701,32.4842 47.6023,31.6025C 46.5309,29.6405 45.1489,28.0176 43.5566,26.8718L 45.8641,23.9184L 46.5,24C 47.8807,24 49,22.8807 49,21.5C 49,20.1193 47.8807,19 46.5,19 Z M 54.4999,40L 49.951,40C 49.8763,38.859 49.717,37.7516 49.482,36.6895L 54.8051,34.6461C 55.5785,34.3492 55.9648,33.4816 55.6679,32.7082C 55.371,31.9348 54.5034,31.5485 53.73,31.8454L 48.6187,33.8074L 48.4239,33.3201C 45.7913,34.283 42.541,34.8897 39,34.9864L 39,57.9435C 43.2172,57.4651 46.8161,53.9883 48.6665,49.067L 53.538,51.3386C 54.2888,51.6887 55.1813,51.3639 55.5314,50.6131C 55.8815,49.8623 55.5567,48.9698 54.8059,48.6197L 49.5162,46.1531C 49.7325,45.1391 49.88,44.0847 49.951,43L 54.4999,43C 55.3284,43 55.9999,42.3284 55.9999,41.5C 55.9999,40.6716 55.3284,40 54.4999,40 Z M 21.5,40C 20.6716,40 20,40.6716 20,41.5C 20,42.3285 20.6716,43 21.5,43L 26.0489,43C 26.12,44.0847 26.2674,45.1392 26.4838,46.1531L 21.194,48.6198C 20.4432,48.9699 20.1183,49.8623 20.4685,50.6131C 20.8186,51.364 21.711,51.6888 22.4618,51.3387L 27.3335,49.067C 29.1838,53.9883 32.7827,57.4651 37,57.9435L 37,34.9864C 33.4589,34.8897 30.2087,34.283 27.5761,33.3201L 27.3812,33.8074L 22.27,31.8454C 21.4966,31.5485 20.6289,31.9348 20.332,32.7082C 20.0352,33.4816 20.4215,34.3492 21.1949,34.6461L 26.518,36.6895C 26.2829,37.7516 26.1237,38.8591 26.0489,40L 21.5,40 Z M 20.76,52.4116L 11.8772,61.2943C 12.7656,62.2899 13.7101,63.2344 14.7057,64.1228L 27.567,51.2614L 27.251,50.5315L 22.4934,52.75C 21.8883,53.0322 21.1911,52.8759 20.76,52.4116 Z M 48.4677,30.3608L 64.1227,14.7057C 63.2343,13.7101 62.2899,12.7656 61.2943,11.8772L 46.0376,27.134C 46.9537,28.0476 47.7723,29.1349 48.4677,30.3608 Z " />
                 </Canvas>
-                <Button Name="CreateProjectButton" Height="30" VerticalAlignment="Bottom" BorderBrush="Black" BorderThickness="1.6" Margin="-25,0,0,0" Click="AddProject" FontWeight="Medium" FontSize="15">
+                <Button Name="CreateProjectButton" Height="30" VerticalAlignment="Bottom" BorderBrush="Black"
+                        BorderThickness="1.6" Margin="-25,0,0,0" Click="AddProject" FontWeight="Medium" FontSize="15">
                     <Grid>
-                        <Canvas xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Name="appbar_list_create" Width="150" Height="50" Clip="F1 M 0,0L 76,0L 76,76L 0,76L 0,0">
-                            <Path Width="15" Height="15" Canvas.Left="10" Canvas.Top="3" Stretch="Fill" Fill="#FF000000" Data="F1 M 35,19L 41,19L 41,35L 57,35L 57,41L 41,41L 41,57L 35,57L 35,41L 19,41L 19,35L 35,35L 35,19 Z "/>
+                        <Canvas xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Name="appbar_list_create"
+                                Width="150" Height="50" Clip="F1 M 0,0L 76,0L 76,76L 0,76L 0,0">
+                            <Path Width="15" Height="15" Canvas.Left="10" Canvas.Top="3" Stretch="Fill"
+                                  Fill="#FF000000"
+                                  Data="F1 M 35,19L 41,19L 41,35L 57,35L 57,41L 41,41L 41,57L 35,57L 35,41L 19,41L 19,35L 35,35L 35,19 Z " />
                         </Canvas>
-                        <TextBlock Margin="35,0,0,0" Text="Create Project"/>
+                        <TextBlock Margin="35,0,0,0" Text="Create Project" />
                     </Grid>
                 </Button>
             </Grid>
 
             <Grid Name="ProjectGrid1">
-                <TextBlock Text="Test Case" Margin="30,-10,0,0" HorizontalAlignment="Left" Width="548" FontWeight="Medium" FontSize="16"/>
-                <Border Name="TestCasePanelBorder" BorderBrush="Black" BorderThickness="1.6" Width="auto" Margin="5,20,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
-                    <Grid Name="TestCaseEditView" >
+                <TextBlock Text="Test Case" Margin="30,-10,0,0" HorizontalAlignment="Left" Width="548"
+                           FontWeight="Medium" FontSize="16" />
+                <Border Name="TestCasePanelBorder" BorderBrush="Black" BorderThickness="1.6" Width="auto"
+                        Margin="5,20,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                    <Grid Name="TestCaseEditView">
                         <StackPanel Width="auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                             <Border Name="BorderTestCaseId" BorderBrush="Black" BorderThickness="1" Margin="-1,-1,-1,0">
                                 <Grid>
                                     <Label FontSize="15" FontWeight="Bold" Margin="5,8,0,8" HorizontalAlignment="Left">ID:</Label>
-                                    <Label Name="TestCaseIdLabel" FontSize="14" FontWeight="Regular" Margin="28,9,10,8" HorizontalAlignment="left"/>
+                                    <Label Name="TestCaseIdLabel" FontSize="14" FontWeight="Regular" Margin="28,9,10,8"
+                                           HorizontalAlignment="left" />
                                 </Grid>
                             </Border>
-                            <Border Name="BorderTestCaseName" BorderBrush="Black" BorderThickness="1" Margin="-1,-1,-1,0">
+                            <Border Name="BorderTestCaseName" BorderBrush="Black" BorderThickness="1"
+                                    Margin="-1,-1,-1,0">
                                 <Grid>
                                     <Label FontSize="15" FontWeight="Bold" Margin="5,8,0,8" HorizontalAlignment="Left">Test case:</Label>
-                                    <TextBlock TextWrapping="WrapWithOverflow" Name="TestCaseNameLabel" FontSize="14" FontWeight="Regular" Margin="80,9,0,8" HorizontalAlignment="Left" VerticalAlignment="Stretch" MinHeight="40"/>
+                                    <TextBlock TextWrapping="WrapWithOverflow" Name="TestCaseNameLabel" FontSize="14"
+                                               FontWeight="Regular" Margin="80,9,0,8" HorizontalAlignment="Left"
+                                               VerticalAlignment="Stretch" MinHeight="40" />
                                 </Grid>
                             </Border>
-                            <StackPanel  Orientation="Horizontal">
-                                <Border Name="BorderTestCasePriority" BorderBrush="Black" BorderThickness="0,1,0,1" Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.34'}" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="0,-1,0 ,0" >
+                            <StackPanel Orientation="Horizontal">
+                                <Border Name="BorderTestCasePriority" BorderBrush="Black" BorderThickness="0,1,0,1"
+                                        Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.34'}"
+                                        VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="0,-1,0 ,0">
                                     <Grid Width="auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                                        <Label FontSize="13" FontWeight="Bold" Margin="5,8,0,8" HorizontalAlignment="Left">Test case priority:</Label>
-                                        <Label FontSize="13" Name ="TestCasePriorityLabel" FontWeight="Regular" Margin="120,8,5,8" HorizontalAlignment="Left" />
+                                        <Label FontSize="13" FontWeight="Bold" Margin="5,8,0,8"
+                                               HorizontalAlignment="Left">
+                                            Test case priority:
+                                        </Label>
+                                        <Label FontSize="13" Name="TestCasePriorityLabel" FontWeight="Regular"
+                                               Margin="120,8,5,8" HorizontalAlignment="Left" />
                                     </Grid>
                                 </Border>
-                                <Border Name="BorderTestCaseSeverity" BorderBrush="Black" BorderThickness="1" Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.33'}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,-1,-1, 0" >
+                                <Border Name="BorderTestCaseSeverity" BorderBrush="Black" BorderThickness="1"
+                                        Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.33'}"
+                                        VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,-1,-1, 0">
                                     <Grid Width="auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                                        <Label FontSize="13" FontWeight="Bold" Margin="5,8,5,8" HorizontalAlignment="Left">Test case severity:</Label>
-                                        <Label FontSize="13" Name ="TestCaseSeverityLabel" FontWeight="Regular" Margin="122,8,5,8" HorizontalAlignment="Left" />
+                                        <Label FontSize="13" FontWeight="Bold" Margin="5,8,5,8"
+                                               HorizontalAlignment="Left">
+                                            Test case severity:
+                                        </Label>
+                                        <Label FontSize="13" Name="TestCaseSeverityLabel" FontWeight="Regular"
+                                               Margin="122,8,5,8" HorizontalAlignment="Left" />
                                     </Grid>
                                 </Border>
-                                <Border Name="BorderTestCaseAutomated" BorderBrush="Black" BorderThickness="1" Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.34'}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,-1,-1, 0" >
+                                <Border Name="BorderTestCaseAutomated" BorderBrush="Black" BorderThickness="1"
+                                        Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.34'}"
+                                        VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,-1,-1, 0">
                                     <Grid Width="auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                                        <Label FontSize="13" FontWeight="Bold" Margin="5,8,5,8" HorizontalAlignment="Left">Is Automated:</Label>
-                                        <Label FontSize="13" Name ="TestCaseAutomatedLabel" FontWeight="Regular" Margin="100,8,5,8" HorizontalAlignment="Left" />
+                                        <Label FontSize="13" FontWeight="Bold" Margin="5,8,5,8"
+                                               HorizontalAlignment="Left">
+                                            Is Automated:
+                                        </Label>
+                                        <Label FontSize="13" Name="TestCaseAutomatedLabel" FontWeight="Regular"
+                                               Margin="100,8,5,8" HorizontalAlignment="Left" />
                                     </Grid>
                                 </Border>
                             </StackPanel>
-                            <StackPanel  Orientation="Horizontal">
-                                <Border Name="BorderTestCaseCreatedBy" BorderBrush="Black" BorderThickness="0,1,0,1.6" Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.38'}" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="0,-1,0 ,0">
+                            <StackPanel Orientation="Horizontal">
+                                <Border Name="BorderTestCaseCreatedBy" BorderBrush="Black" BorderThickness="0,1,0,1.6"
+                                        Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.38'}"
+                                        VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="0,-1,0 ,0">
                                     <Grid Width="auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                                        <Label FontSize="13" FontWeight="Bold" Margin="5,8,0,8" HorizontalAlignment="Left">Created by:</Label>
-                                        <Label FontSize="13" Name ="TestCaseCreatedByLabel" Margin="85,8,5,8" HorizontalAlignment="Left" />
+                                        <Label FontSize="13" FontWeight="Bold" Margin="5,8,0,8"
+                                               HorizontalAlignment="Left">
+                                            Created by:
+                                        </Label>
+                                        <Label FontSize="13" Name="TestCaseCreatedByLabel" Margin="85,8,5,8"
+                                               HorizontalAlignment="Left" />
                                     </Grid>
                                 </Border>
-                                <Border Name="BorderTestCaseUpdatedBy" BorderBrush="Black" BorderThickness="1,1,1,1.6" Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.38'}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,-1,-1, 0" >
+                                <Border Name="BorderTestCaseUpdatedBy" BorderBrush="Black" BorderThickness="1,1,1,1.6"
+                                        Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.38'}"
+                                        VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,-1,-1, 0">
                                     <Grid Width="auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                                        <Label FontSize="13" FontWeight="Bold" Margin="5,8,5,8" HorizontalAlignment="Left">Updated by:</Label>
-                                        <Label FontSize="13" Name ="TestCaseUpdatedByLabel" Margin="95,8,5,8" HorizontalAlignment="Left" />
+                                        <Label FontSize="13" FontWeight="Bold" Margin="5,8,5,8"
+                                               HorizontalAlignment="Left">
+                                            Updated by:
+                                        </Label>
+                                        <Label FontSize="13" Name="TestCaseUpdatedByLabel" Margin="95,8,5,8"
+                                               HorizontalAlignment="Left" />
                                     </Grid>
                                 </Border>
-                                <Border Name="BorderTestCaseStatusRun" BorderBrush="Black" BorderThickness="1,1,1,1.6" Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.25'}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,-1,-1, 0" >
+                                <Border Name="BorderTestCaseStatusRun" BorderBrush="Black" BorderThickness="1,1,1,1.6"
+                                        Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.25'}"
+                                        VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,-1,-1, 0">
                                     <Grid Width="auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                                        <Label FontSize="13" FontWeight="Bold" Margin="5,8,5,8" HorizontalAlignment="Left">Last status:</Label>
-                                        <Label FontSize="13" Name ="TestCaseStatusRunLabel" Margin="100,8,5,8" HorizontalAlignment="Left" />
+                                        <Label FontSize="13" FontWeight="Bold" Margin="5,8,5,8"
+                                               HorizontalAlignment="Left">
+                                            Last status:
+                                        </Label>
+                                        <Label FontSize="13" Name="TestCaseStatusRunLabel" Margin="100,8,5,8"
+                                               HorizontalAlignment="Left" />
                                     </Grid>
                                 </Border>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" Height="35">
-                                <Border Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.48'}" Margin="1,-2,1,-1">
-                                    <Label FontSize="14" FontWeight="Medium" VerticalAlignment="Center" HorizontalAlignment="Center">Step definition</Label>
+                                <Border
+                                    Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.48'}"
+                                    Margin="1,-2,1,-1">
+                                    <Label FontSize="14" FontWeight="Medium" VerticalAlignment="Center"
+                                           HorizontalAlignment="Center">
+                                        Step definition
+                                    </Label>
                                 </Border>
-                                <Border Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.48'}" Margin="0,-2,1 ,-1">
-                                    <Label FontSize="14" FontWeight="Medium"  VerticalAlignment="Center" HorizontalAlignment="Center">Expected result</Label>
+                                <Border
+                                    Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.48'}"
+                                    Margin="0,-2,1 ,-1">
+                                    <Label FontSize="14" FontWeight="Medium" VerticalAlignment="Center"
+                                           HorizontalAlignment="Center">
+                                        Expected result
+                                    </Label>
                                 </Border>
                             </StackPanel>
                         </StackPanel>
-                        <Border Name="TestCaseEditViewBorder" BorderBrush="Black" BorderThickness="1,1,1.6,1.6" Width="auto" Margin="-1,200,-1,-1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                            <ListBox Name="listBoxStations" FontSize="14" Grid.Row="1" VerticalAlignment="Stretch" Margin="0,0,0,5" >
+                        <Border Name="TestCaseEditViewBorder" BorderBrush="Black" BorderThickness="1,1,1.6,1.6"
+                                Width="auto" Margin="-1,200,-1,-1" VerticalAlignment="Stretch"
+                                HorizontalAlignment="Stretch">
+                            <ListBox Name="listBoxStations" FontSize="14" Grid.Row="1" VerticalAlignment="Stretch"
+                                     Margin="0,0,0,5">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <Grid Name="Test">
                                             <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto" />
                                             </Grid.RowDefinitions>
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.48'}"/>
-                                                <ColumnDefinition Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.48'}"/>
+                                                <ColumnDefinition
+                                                    Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.48'}" />
+                                                <ColumnDefinition
+                                                    Width="{Binding Path=ActualWidth, ElementName=TestCaseEditViewBorder, Converter={converters:PercentageConverter}, ConverterParameter='0.48'}" />
                                             </Grid.ColumnDefinitions>
-                                            <Border Name="StepBorder" BorderBrush="Black" BorderThickness="0,1,0,1" Grid.Row="0" Grid.Column="0" Margin="0,-3,0,-2">
+                                            <Border Name="StepBorder" BorderBrush="Black" BorderThickness="0,1,0,1"
+                                                    Grid.Row="0" Grid.Column="0" Margin="0,-3,0,-2">
                                                 <Grid>
                                                     <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                                        <TextBlock TextWrapping="Wrap" Text="{Binding Step}" Margin="5,5,5,5" />
+                                                        <TextBlock TextWrapping="Wrap" Text="{Binding Step}"
+                                                                   Margin="5,5,5,5" />
                                                     </ScrollViewer>
                                                 </Grid>
                                             </Border>
 
-                                            <Border Name="DefinitionBorder" BorderBrush="Black" BorderThickness="1,1,0,1" Grid.Row="0" Grid.Column="1" Margin="-1,-3,0 ,-2" >
-                                                <TextBlock TextWrapping="WrapWithOverflow" Text="{Binding ExpectedResult}" Margin="5,5,5,5"/>
+                                            <Border Name="DefinitionBorder" BorderBrush="Black"
+                                                    BorderThickness="1,1,0,1" Grid.Row="0" Grid.Column="1"
+                                                    Margin="-1,-3,0 ,-2">
+                                                <TextBlock TextWrapping="WrapWithOverflow"
+                                                           Text="{Binding ExpectedResult}" Margin="5,5,5,5" />
                                             </Border>
                                         </Grid>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                                 <ListBox.ItemContainerStyle>
                                     <Style TargetType="{x:Type ListBoxItem}">
-                                        <Setter Property="Focusable" Value="False"/>
-                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                        <Setter Property="Focusable" Value="False" />
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                                     </Style>
                                 </ListBox.ItemContainerStyle>
                             </ListBox>

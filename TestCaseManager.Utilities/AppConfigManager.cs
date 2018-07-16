@@ -5,20 +5,14 @@ namespace TestCaseManager.Utilities
 {
     public class AppConfigManager
     {
-        public string GetCertificateThumbprint
-        {
-            get
-            {
-                return this.TryGetConfigurationValue("CertificateThumbprint");
-            }
-        }
+        public string GetCertificateThumbprint => TryGetConfigurationValue("CertificateThumbprint");
 
-        private string TryGetConfigurationValue(string key)
+        private static string TryGetConfigurationValue(string key)
         {
-            string value = ConfigurationManager.AppSettings[key];
+            var value = ConfigurationManager.AppSettings[key];
 
             if (string.IsNullOrEmpty(value))
-                throw new NullReferenceException(string.Format("Missing {0} from configuration.", key));
+                throw new NullReferenceException($"Missing {key} from configuration.");
 
             return value;
         }

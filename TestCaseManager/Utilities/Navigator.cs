@@ -5,39 +5,36 @@ namespace TestCaseManager.Utilities
     public class Navigator : BaseNavigator
     {
         /// <summary>
-        /// The instance
+        ///     The instance
         /// </summary>
-        private static Navigator instance;
+        private static Navigator _instance;
 
         /// <summary>
-        /// Gets the instance.
+        ///     Gets the instance.
         /// </summary>
         /// <value>
-        /// The instance.
+        ///     The instance.
         /// </value>
         public static Navigator Instance
         {
             get
             {
-                if (instance == null)
-                {
-                    instance = new Navigator();
-                }
+                if (_instance == null) _instance = new Navigator();
 
-                return instance;
+                return _instance;
             }
         }
 
         public void NavigateMainWindowProjectAndTestCases(FrameworkElement source)
         {
-            string url = "/Views/MainWindowProjectAndTestCases.xaml";
-            this.Navigate(source, url);
+            var url = "/Views/MainWindowProjectAndTestCases.xaml";
+            Navigate(source, url);
         }
 
         public void NavigateAuthorization(FrameworkElement source)
         {
-            string url = "/Views/AuthorizationHome.xaml";
-            this.Navigate(source, url);
+            var url = "/Views/AuthorizationHome.xaml";
+            Navigate(source, url);
         }
     }
 }

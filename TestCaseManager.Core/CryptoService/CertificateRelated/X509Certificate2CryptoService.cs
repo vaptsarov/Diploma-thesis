@@ -3,68 +3,67 @@ using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
-namespace TestCaseManager.Core.CryptoService
+namespace TestCaseManager.Core.CryptoService.CertificateRelated
 {
     public class X509Certificate2CryptoService : ICryptoService
     {
-        private X509Certificate2 certificate = null;
-        private RSACryptoServiceProvider rsaPublicCryptoProvider = null;
-        private RSACryptoServiceProvider rsaPrivateCryptoProvider = null;
+        private X509Certificate2 _certificate;
+        private RSACryptoServiceProvider _rsaPrivateCryptoProvider;
+        private RSACryptoServiceProvider _rsaPublicCryptoProvider;
 
         public X509Certificate2CryptoService(IX509Certificate2Resolver certificateResolver)
         {
             if (certificateResolver == null)
-                throw new ArgumentNullException(@"The 'certificateResolver' parameter is null.");
+                throw new ArgumentNullException($"The {(IX509Certificate2Resolver) null} parameter is null.");
 
-            this.certificate = certificateResolver.GetCertificate();
-            if (this.certificate == null)
+            _certificate = certificateResolver.GetCertificate();
+            if (_certificate == null)
                 throw new InvalidOperationException(@"The CertificateResolver returned null certificate.");
 
-            this.rsaPublicCryptoProvider = (RSACryptoServiceProvider)this.certificate.PublicKey.Key;
-            this.rsaPrivateCryptoProvider = (RSACryptoServiceProvider)this.certificate.PrivateKey;
+            _rsaPublicCryptoProvider = (RSACryptoServiceProvider) _certificate.PublicKey.Key;
+            _rsaPrivateCryptoProvider = (RSACryptoServiceProvider) _certificate.PrivateKey;
         }
 
         public virtual string Encrypt(string value)
         {
-            byte[] bytestoEncrypt = UTF8Encoding.UTF8.GetBytes(value);
-            byte[] encryptedBytes = this.rsaPublicCryptoProvider.Encrypt(bytestoEncrypt, false);
+            var bytestoEncrypt = Encoding.UTF8.GetBytes(value);
+            var encryptedBytes = _rsaPublicCryptoProvider.Encrypt(bytestoEncrypt, false);
 
-            string encryptedValue = Convert.ToBase64String(encryptedBytes);
+            var encryptedValue = Convert.ToBase64String(encryptedBytes);
             return encryptedValue;
         }
 
         public virtual string Decrypt(string value)
         {
-            if (this.certificate.HasPrivateKey == false)
+            if (_certificate.HasPrivateKey == false)
                 throw new InvalidOperationException(@"The certificate in use does not have a Private Key.");
 
-            byte[] bytestodecrypt = Convert.FromBase64String(value);
-            byte[] decryptedByptes = this.rsaPrivateCryptoProvider.Decrypt(bytestodecrypt, false);
+            var bytestodecrypt = Convert.FromBase64String(value);
+            var decryptedByptes = _rsaPrivateCryptoProvider.Decrypt(bytestodecrypt, false);
 
-            string decryptedValue = UTF8Encoding.UTF8.GetString(decryptedByptes);
+            var decryptedValue = Encoding.UTF8.GetString(decryptedByptes);
             return decryptedValue;
         }
 
         public void Dispose()
         {
-            if (this.certificate != null)
+            if (_certificate != null)
             {
-                this.certificate.Reset();
-                this.certificate = null;
+                _certificate.Reset();
+                _certificate = null;
             }
 
-            if (this.rsaPublicCryptoProvider != null)
+            if (_rsaPublicCryptoProvider != null)
             {
-                this.rsaPublicCryptoProvider.Clear();
-                this.rsaPublicCryptoProvider = null;
+                _rsaPublicCryptoProvider.Clear();
+                _rsaPublicCryptoProvider = null;
             }
 
-            if (this.rsaPrivateCryptoProvider != null)
+            if (_rsaPrivateCryptoProvider != null)
             {
-                this.rsaPrivateCryptoProvider.Clear();
-                this.rsaPrivateCryptoProvider = null;
+                _rsaPrivateCryptoProvider.Clear();
+                _rsaPrivateCryptoProvider = null;
             }
         }
     }
-
 }

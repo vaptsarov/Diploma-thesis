@@ -5,20 +5,20 @@ namespace TestCaseManager.Core.Proxy
 {
     public class TestCaseProxy
     {
-        public TestCaseProxy ()
+        public TestCaseProxy()
         {
-            this.StepDefinitionList = new ObservableCollection<StepDefinitionProxy>();
+            StepDefinitionList = new ObservableCollection<StepDefinitionProxy>();
         }
 
         public TestCaseProxy(
-            int id, 
-            string title, 
-            Priority priority, 
-            Severity severity, 
-            bool isAutomated, 
-            string createdBy, 
-            string updatedBy, 
-            int areaId, 
+            int id,
+            string title,
+            Priority priority,
+            Severity severity,
+            bool isAutomated,
+            string createdBy,
+            string updatedBy,
+            int areaId,
             ObservableCollection<StepDefinitionProxy> stepDefinitionList)
         {
             Id = id;
@@ -28,7 +28,7 @@ namespace TestCaseManager.Core.Proxy
             IsAutomated = isAutomated;
             CreatedBy = createdBy;
             UpdatedBy = updatedBy;
-            AreaID = areaId;
+            AreaId = areaId;
             StepDefinitionList = stepDefinitionList;
         }
 
@@ -39,7 +39,7 @@ namespace TestCaseManager.Core.Proxy
         public bool IsAutomated { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
-        public int AreaID { get; set; }
+        public int AreaId { get; set; }
         public ObservableCollection<StepDefinitionProxy> StepDefinitionList { get; set; }
     }
 }

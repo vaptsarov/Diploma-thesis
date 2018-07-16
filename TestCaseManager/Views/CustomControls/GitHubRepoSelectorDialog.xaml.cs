@@ -1,5 +1,4 @@
-﻿using FirstFloor.ModernUI.Presentation;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -7,34 +6,36 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
+using FirstFloor.ModernUI.Presentation;
 using TestCaseManager.GitHub;
 using TestCaseManager.Utilities;
+using TestCaseManager.Utilities.StringUtility;
 
 namespace TestCaseManager.Views.CustomControls
 {
     /// <summary>
-    /// Interaction logic for GitHubRepoSelectorDialog.xaml
+    ///     Interaction logic for GitHubRepoSelectorDialog.xaml
     /// </summary>
     public partial class GitHubRepoSelectorDialog : Window
     {
-        private IssueManager manager;
-        private static int TestCaseId;
+        private static int _testCaseId;
+        private IssueManager _manager;
 
         public GitHubRepoSelectorDialog()
         {
             InitializeComponent();
 
-            this.Owner = Application.Current.MainWindow;
-            this.DragWindow.MouseLeftButtonDown += new MouseButtonEventHandler(this.AttachDragDropEvent);
-            this.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+            Owner = Application.Current.MainWindow;
+            DragWindow.MouseLeftButtonDown += AttachDragDropEvent;
+            BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
 
-            this.Topmost = true;
+            Topmost = true;
         }
 
         public static string Prompt(int testCaseId)
         {
-            GitHubRepoSelectorDialog inst = new GitHubRepoSelectorDialog();
-            TestCaseId = testCaseId;
+            var inst = new GitHubRepoSelectorDialog();
+            _testCaseId = testCaseId;
 
             inst.ShowDialog();
 
@@ -43,109 +44,105 @@ namespace TestCaseManager.Views.CustomControls
 
         private void AttachDragDropEvent(object sender, MouseButtonEventArgs e)
         {
-            this.DragMove();
+            DragMove();
         }
 
         private void LoadRepositories_Click(object sender, RoutedEventArgs e)
         {
-            this.InvalidCredentials.Visibility = Visibility.Hidden;
-            this.GitHubRepositoryList.ItemsSource = null;
+            InvalidCredentials.Visibility = Visibility.Hidden;
+            GitHubRepositoryList.ItemsSource = null;
 
-            if (!(string.IsNullOrWhiteSpace(this.GitHubUsername.Text) || this.GitHubPassword.SecurePassword.Length == 0))
+            if (!(string.IsNullOrWhiteSpace(GitHubUsername.Text) || GitHubPassword.SecurePassword.Length == 0))
             {
-                manager = IssueManager.Instance(this.GitHubUsername.Text, this.GitHubPassword.SecurePassword);
+                _manager = IssueManager.Instance(GitHubUsername.Text, GitHubPassword.SecurePassword);
                 List<Tuple<string, string>> list = null;
-                bool isAuthenticationCorrect = true;
+                var isAuthenticationCorrect = true;
 
-                Task task = Task.Factory.StartNew(() =>
+                var task = Task.Factory.StartNew(() =>
                 {
-                    Action action = () => list = manager.GetRepositories();
+                    Action action = () => list = _manager.GetRepositories();
                     isAuthenticationCorrect = AreCredentialsCorrectForAction(action);
-
                 });
                 task.ContinueWith(next =>
                 {
                     // Update the main Thread as it is the owner of the UI elements
-                    this.Dispatcher.Invoke((Action)(() =>
+                    Dispatcher.Invoke(() =>
+                    {
+                        if (isAuthenticationCorrect)
                         {
-                            if (isAuthenticationCorrect)
-                            {
-                                this.GitHubRepositoryList.SelectedIndex = 0;
-                                this.GitHubRepositoryList.ItemsSource = list;
-                                this.CreateIssue.IsEnabled = true;
-                            }
-                            else
-                            {
-                                this.InvalidCredentials.Visibility = Visibility.Visible;
-                                this.CreateIssue.IsEnabled = false;
-                            }
-                        }));
+                            GitHubRepositoryList.SelectedIndex = 0;
+                            GitHubRepositoryList.ItemsSource = list;
+                            CreateIssue.IsEnabled = true;
+                        }
+                        else
+                        {
+                            InvalidCredentials.Visibility = Visibility.Visible;
+                            CreateIssue.IsEnabled = false;
+                        }
+                    });
                 });
             }
         }
 
         private void CreateIssue_Click(object sender, RoutedEventArgs e)
         {
-            Tuple<string, string> selectedItem = this.GitHubRepositoryList.SelectedItem as Tuple<string, string>;
+            var selectedItem = GitHubRepositoryList.SelectedItem as Tuple<string, string>;
             Uri createdIssueUri = null;
             if (selectedItem != null)
             {
-                Task task = Task.Factory.StartNew(() =>
+                var task = Task.Factory.StartNew(() =>
                 {
-                    createdIssueUri = this.manager.CreateIssue(selectedItem.Item1, selectedItem.Item2, TestCaseId);
+                    createdIssueUri = _manager.CreateIssue(selectedItem.Item1, selectedItem.Item2, _testCaseId);
                 });
                 task.ContinueWith(next =>
                 {
                     // Update the main Thread as it is the owner of the UI elements
-                    this.Dispatcher.Invoke((Action)(() =>
+                    Dispatcher.Invoke(() =>
                     {
-                        this.IssueRegistrationPanel.Visibility = Visibility.Hidden;
-                        this.GitHubSuccessfulyCreatedPanel.Visibility = Visibility.Visible;
+                        IssueRegistrationPanel.Visibility = Visibility.Hidden;
+                        GitHubSuccessfulyCreatedPanel.Visibility = Visibility.Visible;
 
-                        this.CreatedLabel.Margin = new Thickness(200, 5, 10, 20);
-                        this.CreatedLabel.Width = 180;
+                        CreatedLabel.Margin = new Thickness(200, 5, 10, 20);
+                        CreatedLabel.Width = 180;
 
-                        this.CopyToClipboard.Width = 160;
-                        this.CopyToClipboard.Height = 30;
-                        this.CopyToClipboard.Margin = new Thickness(0,-11,0,0);
+                        CopyToClipboard.Width = 160;
+                        CopyToClipboard.Height = 30;
+                        CopyToClipboard.Margin = new Thickness(0, -11, 0, 0);
 
-                        this.CopyToClipboard.ToolTip = createdIssueUri.OriginalString;
-                        this.ClipboardUrl.NavigateUri = createdIssueUri;
-                    }));
+                        CopyToClipboard.ToolTip = createdIssueUri.OriginalString;
+                        ClipboardUrl.NavigateUri = createdIssueUri;
+                    });
                 });
             }
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            Process.Start(this.ClipboardUrl.NavigateUri.ToString());
+            Process.Start(ClipboardUrl.NavigateUri.ToString());
 
-            this.Close();
+            Close();
         }
 
         private void Cancel(object sender, RoutedEventArgs e)
         {
-            this.CancelDialog();
+            CancelDialog();
         }
 
         private void CancelDialog()
         {
-            this.Close();
+            Close();
         }
 
         private bool AreCredentialsCorrectForAction(Action action)
         {
-            bool areCorrect = true;
+            var areCorrect = true;
             try
             {
                 action.Invoke();
             }
             catch (Exception ex)
             {
-                if (ex.InnerException.ToDetailedString().Contains("Bad credentials"))
-                {
-                    areCorrect = false;
-                }
+                if (ex.InnerException.ToDetailedString().Contains("Bad credentials")) areCorrect = false;
             }
 
             return areCorrect;
@@ -153,9 +150,9 @@ namespace TestCaseManager.Views.CustomControls
 
         private void CopyToClipboard_Click(object sender, RoutedEventArgs e)
         {
-            Clipboard.SetText(this.CopyToClipboard.ToolTip.ToString());
+            Clipboard.SetText(CopyToClipboard.ToolTip.ToString());
 
-            this.Close();
+            Close();
         }
     }
 }

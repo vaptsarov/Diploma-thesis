@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TestCaseManager.Core.Proxy;
+using TestCaseManager.Core.AuthenticatePoint;
 using TestCaseManager.DB;
 
 namespace TestCaseManager.Core.Managers
@@ -11,7 +11,7 @@ namespace TestCaseManager.Core.Managers
         public List<Project> GetAll()
         {
             List<Project> projectList = null;
-            using (TestcaseManagerDB context = new TestcaseManagerDB())
+            using (var context = new TestcaseManagerDB())
             {
                 projectList = context.Projects.ToList();
             }
@@ -22,9 +22,9 @@ namespace TestCaseManager.Core.Managers
         public Project GetById(int id)
         {
             Project project = null;
-            using (TestcaseManagerDB context = new TestcaseManagerDB())
+            using (var context = new TestcaseManagerDB())
             {
-                project = context.Projects.Where(proj => proj.ID == id).FirstOrDefault();
+                project = context.Projects.FirstOrDefault(proj => proj.ID == id);
             }
 
             //TODO: Throw custom exception for null project.
@@ -34,29 +34,13 @@ namespace TestCaseManager.Core.Managers
             return project;
         }
 
-        public Project Create(string title)
-        {
-            Project project = null;
-            using (TestcaseManagerDB context = new TestcaseManagerDB())
-            {
-                project = new Project();
-                project.Title = title;
-                project.CreatedBy = AuthenticationManager.Instance().GetCurrentUsername;
-
-                context.Projects.Add(project);
-                context.SaveChanges();
-            }
-
-            return project;
-        }
-
         public Project Update(Project project)
         {
             Project projectToUpdate = null;
-            using (TestcaseManagerDB context = new TestcaseManagerDB())
+            using (var context = new TestcaseManagerDB())
             {
-                projectToUpdate = context.Projects.Where(proj => proj.ID == project.ID).FirstOrDefault();
-                if(projectToUpdate == null)
+                projectToUpdate = context.Projects.FirstOrDefault(proj => proj.ID == project.ID);
+                if (projectToUpdate == null)
                     throw new NullReferenceException();
 
                 projectToUpdate.Title = project.Title;
@@ -69,9 +53,9 @@ namespace TestCaseManager.Core.Managers
 
         public void DeleteById(int id)
         {
-            using (TestcaseManagerDB context = new TestcaseManagerDB())
+            using (var context = new TestcaseManagerDB())
             {
-                Project project = context.Projects.Where(proj => proj.ID == id).FirstOrDefault();
+                var project = context.Projects.FirstOrDefault(proj => proj.ID == id);
 
                 if (project == null)
                     throw new NullReferenceException();
@@ -79,6 +63,24 @@ namespace TestCaseManager.Core.Managers
                 context.Projects.Remove(project);
                 context.SaveChanges();
             }
+        }
+
+        public Project Create(string title)
+        {
+            Project project = null;
+            using (var context = new TestcaseManagerDB())
+            {
+                project = new Project
+                {
+                    Title = title,
+                    CreatedBy = AuthenticationManager.Instance().GetCurrentUsername
+                };
+
+                context.Projects.Add(project);
+                context.SaveChanges();
+            }
+
+            return project;
         }
     }
 }

@@ -3,30 +3,33 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Security;
+using TestCaseManager.Core.AuthenticatePoint;
 using TestCaseManager.Core.CryptoService;
+using TestCaseManager.Core.CryptoService.CertificateRelated;
 using TestCaseManager.DB;
 using TestCaseManager.Utilities;
+using TestCaseManager.Utilities.StringUtility;
 
 namespace TestCaseManager.Core.Managers
 {
     public class UserManager
     {
-        private readonly AppConfigManager appConfigManager;
-        private readonly X509Certificate2CryptoService cryptoService;
+        private readonly AppConfigManager _appConfigManager;
+        private readonly X509Certificate2CryptoService _cryptoService;
 
         public UserManager()
         {
-            this.appConfigManager = new AppConfigManager();
+            _appConfigManager = new AppConfigManager();
 
-            X509Certificate2FromStoreResolver certificateResolver = 
-                new X509Certificate2FromStoreResolver(appConfigManager.GetCertificateThumbprint);
+            var certificateResolver =
+                new X509Certificate2FromStoreResolver(_appConfigManager.GetCertificateThumbprint);
 
-            cryptoService = new X509Certificate2CryptoService(certificateResolver);
+            _cryptoService = new X509Certificate2CryptoService(certificateResolver);
         }
 
         public ApplicationUser GetUser(int userId)
         {
-            if(userId < 0)
+            if (userId < 0)
                 throw new ArgumentException("User ID must be a positive number.");
 
             ApplicationUser user = null;
@@ -37,7 +40,7 @@ namespace TestCaseManager.Core.Managers
 
             if (user == null)
                 throw new ArgumentNullException(
-                    string.Format("User with Id:{0} , was not found.", userId));
+                    $"User with Id:{userId} , was not found.");
 
             return user;
         }
@@ -55,7 +58,7 @@ namespace TestCaseManager.Core.Managers
 
         public ApplicationUser GetUser(string username, SecureString password)
         {
-            string unsecuredPasswordString = password.ConvertToUnsecureString();
+            var unsecuredPasswordString = password.ConvertToUnsecureString();
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(unsecuredPasswordString))
                 throw new ArgumentException("Username or password was empty or null.");
 
@@ -66,7 +69,7 @@ namespace TestCaseManager.Core.Managers
 
                 foreach (var usr in users)
                 {
-                    string decryptedPassword = cryptoService.Decrypt(usr.Password);
+                    var decryptedPassword = _cryptoService.Decrypt(usr.Password);
                     if (decryptedPassword == unsecuredPasswordString)
                     {
                         user = usr;
@@ -76,28 +79,29 @@ namespace TestCaseManager.Core.Managers
             }
 
             if (user == null)
-                throw new ArgumentNullException("User with the provided credentials was not found.");
+                throw new ArgumentNullException($"User with the provided credentials was not found.");
 
             return user;
         }
 
-        public ApplicationUser CreateUser(string username, SecureString password, bool isAdmin = false, bool isReadOnly = false)
+        public ApplicationUser CreateUser(string username, SecureString password, bool isAdmin = false,
+            bool isReadOnly = false)
         {
-            string unsecuredPasswordString = password.ConvertToUnsecureString();
+            var unsecuredPasswordString = password.ConvertToUnsecureString();
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(unsecuredPasswordString))
                 return null;
 
-            ApplicationUser user = new ApplicationUser();
+            var user = new ApplicationUser();
             using (var db = new TestcaseManagerDB())
             {
                 user.Username = username;
-                string encryptedValue = cryptoService.Encrypt(unsecuredPasswordString);
+                var encryptedValue = _cryptoService.Encrypt(unsecuredPasswordString);
                 user.Password = encryptedValue;
 
-                if(isReadOnly)
+                if (isReadOnly)
                     user.IsReadOnly = true;
 
-                if(isAdmin)
+                if (isAdmin)
                     user.IsAdmin = true;
 
                 user.CreatedBy = AuthenticationManager.Instance().GetCurrentUsername;
@@ -110,7 +114,8 @@ namespace TestCaseManager.Core.Managers
             return user;
         }
 
-        public ApplicationUser UpdateUser(int id, string username, SecureString password, bool isAdmin = false, bool isReadOnly = false)
+        public ApplicationUser UpdateUser(int id, string username, SecureString password, bool isAdmin = false,
+            bool isReadOnly = false)
         {
             if (string.IsNullOrEmpty(username))
                 return null;
@@ -118,15 +123,15 @@ namespace TestCaseManager.Core.Managers
             ApplicationUser user;
             using (var db = new TestcaseManagerDB())
             {
-                user = db.ApplicationUsers.Where(u => u.UserId.Equals(id)).FirstOrDefault();
+                user = db.ApplicationUsers.FirstOrDefault(u => u.UserId.Equals(id));
                 if (user != null)
                 {
                     user.Username = username;
 
-                    string unsecuredPasswordString = password.ConvertToUnsecureString();
+                    var unsecuredPasswordString = password.ConvertToUnsecureString();
                     if (string.IsNullOrWhiteSpace(unsecuredPasswordString) == false)
                     {
-                        string encryptedValue = cryptoService.Encrypt(unsecuredPasswordString);
+                        var encryptedValue = _cryptoService.Encrypt(unsecuredPasswordString);
                         user.Password = encryptedValue;
                     }
 
@@ -144,7 +149,7 @@ namespace TestCaseManager.Core.Managers
         {
             using (var db = new TestcaseManagerDB())
             {
-                var user = db.ApplicationUsers.Where(u => u.UserId.Equals(id)).FirstOrDefault();
+                var user = db.ApplicationUsers.FirstOrDefault(u => u.UserId.Equals(id));
                 if (user != null)
                 {
                     db.ApplicationUsers.Remove(user);
@@ -155,7 +160,7 @@ namespace TestCaseManager.Core.Managers
 
         public bool CheckUsernameExists(string username)
         {
-            bool userExists = false;
+            var userExists = false;
             using (var db = new TestcaseManagerDB())
             {
                 userExists = db.ApplicationUsers.Any(user => user.Username.Equals(username));

@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using TestCaseManager.Core.Managers.ProxyManagers;
+﻿using System.Collections.ObjectModel;
+using TestCaseManager.Core.Converters;
 using TestCaseManager.Core.Proxy.TestRun;
-using System.Linq;
 using TestCaseManager.DB;
 
-namespace TestCaseManager.Core.Managers
+namespace TestCaseManager.Core.Managers.ProxyManagers
 {
     public class TestRunProxyManager : IProxyManager<TestRunProxy>
     {
         public ObservableCollection<TestRunProxy> GetAll()
         {
-            ObservableCollection<TestRunProxy> configurations = new ObservableCollection<TestRunProxy>();
-            using (TestcaseManagerDB context = new TestcaseManagerDB())
+            ObservableCollection<TestRunProxy> configurations;
+            using (var context = new TestcaseManagerDB())
             {
-                configurations = this.RunModelListToProxy(context);
+                configurations = RunModelListToProxy(context);
             }
 
             return configurations;
@@ -23,19 +20,16 @@ namespace TestCaseManager.Core.Managers
 
         private ObservableCollection<TestRunProxy> RunModelListToProxy(TestcaseManagerDB context)
         {
-            ObservableCollection<TestRunProxy> proxyList = new ObservableCollection<TestRunProxy>();
-            foreach (TestRun item in context.TestRuns)
-            {
-                proxyList.Add(ProxyConverter.TestRunModelToProxy(item));
-            }
+            var proxyList = new ObservableCollection<TestRunProxy>();
+            foreach (var item in context.TestRuns) proxyList.Add(ProxyConverter.TestRunModelToProxy(item));
 
             return proxyList;
         }
 
         public TestRunProxy GetById(int runId)
         {
-            TestRun testRunModel = new TestRunManager().GetById(runId);
-            TestRunProxy proxy = ProxyConverter.TestRunModelToProxy(testRunModel);
+            var testRunModel = new TestRunManager().GetById(runId);
+            var proxy = ProxyConverter.TestRunModelToProxy(testRunModel);
 
             return proxy;
         }

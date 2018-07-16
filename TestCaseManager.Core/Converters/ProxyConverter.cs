@@ -1,58 +1,65 @@
-﻿using System.Linq;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using TestCaseManager.Core.Managers;
 using TestCaseManager.Core.Proxy;
 using TestCaseManager.Core.Proxy.TestDefinition;
 using TestCaseManager.Core.Proxy.TestRun;
-using TestCaseManager.DB;
-using TestCaseManager.Utilities;
 using TestCaseManager.Core.Proxy.TestStatus;
-using TestCaseManager.Core.Managers;
+using TestCaseManager.DB;
+using TestCaseManager.Utilities.StringUtility;
 
-namespace TestCaseManager.Core
+namespace TestCaseManager.Core.Converters
 {
     public static class ProxyConverter
     {
         public static ProjectProxy ProjectModelToProxy(Project model)
         {
-            ProjectProxy proxyObject = new ProjectProxy();
-            proxyObject.Title = model.Title;
-            proxyObject.ID = model.ID;
-            proxyObject.CreatedBy = model.CreatedBy;
-            proxyObject.UpdatedBy = model.UpdatedBy;
+            var proxyObject = new ProjectProxy
+            {
+                Title = model.Title,
+                Id = model.ID,
+                CreatedBy = model.CreatedBy,
+                UpdatedBy = model.UpdatedBy
+            };
 
             return proxyObject;
         }
+
         public static AreaProxy AreaModelToProxy(Area model)
         {
-            AreaProxy proxyObject = new AreaProxy();
-            proxyObject.ID = model.ID;
-            proxyObject.Title = model.Title;
-            proxyObject.CreatedBy = model.CreatedBy;
-            proxyObject.UpdatedBy = model.UpdatedBy;
+            var proxyObject = new AreaProxy
+            {
+                Id = model.ID,
+                Title = model.Title,
+                CreatedBy = model.CreatedBy,
+                UpdatedBy = model.UpdatedBy
+            };
 
             return proxyObject;
         }
 
         public static TestCaseProxy TestCaseModelToProxy(TestCase model)
         {
-            TestCaseProxy proxyObject = new TestCaseProxy();
-            proxyObject.Id = model.ID;
-            proxyObject.Title = model.Title;
-            proxyObject.Priority = EnumUtil.ParseEnum<Priority>(model.Priority);
-            proxyObject.Severity = EnumUtil.ParseEnum<Severity>(model.Severity);
-            proxyObject.IsAutomated = model.IsAutomated;
-            proxyObject.CreatedBy = model.CreatedBy;
-            proxyObject.UpdatedBy = model.UpdatedBy;
-            proxyObject.AreaID = model.AreaID;
+            var proxyObject = new TestCaseProxy
+            {
+                Id = model.ID,
+                Title = model.Title,
+                Priority = EnumUtil.ParseEnum<Priority>(model.Priority),
+                Severity = EnumUtil.ParseEnum<Severity>(model.Severity),
+                IsAutomated = model.IsAutomated,
+                CreatedBy = model.CreatedBy,
+                UpdatedBy = model.UpdatedBy,
+                AreaId = model.AreaID
+            };
 
             foreach (var item in new TestManager().GetStepDefinitionsById(model.ID))
             {
-                StepDefinitionProxy proxy = new StepDefinitionProxy();
-                proxy.Step = item.Step;
-                proxy.ExpectedResult = item.ExpectedResult;
-                proxy.ID = item.ID;
-                proxy.TestCaseID = item.TestCaseID;
+                var proxy = new StepDefinitionProxy
+                {
+                    Step = item.Step,
+                    ExpectedResult = item.ExpectedResult,
+                    Id = item.ID,
+                    TestCaseId = item.TestCaseID
+                };
 
                 proxyObject.StepDefinitionList.Add(proxy);
             }
@@ -62,19 +69,23 @@ namespace TestCaseManager.Core
 
         public static TestRunProxy TestRunModelToProxy(TestRun run)
         {
-            TestRunProxy runProxy = new TestRunProxy();
-            runProxy.ID = run.ID;
-            runProxy.Name = run.Name;
-            runProxy.CreatedBy = run.CreatedBy;
-            runProxy.CreatedOn = run.CreatedOn;
-
-            IEnumerable<TestComposite> compositeModel = new TestRunManager().GetCompositeByRunId(runProxy.ID);
-            foreach (TestComposite comp in compositeModel)
+            var runProxy = new TestRunProxy
             {
-                ExtendedTestCaseProxy extendedTestCaseProxy = new ExtendedTestCaseProxy();
-                extendedTestCaseProxy.Status = EnumUtil.ParseEnum<Status>(comp.TestCaseStatus);
+                Id = run.ID,
+                Name = run.Name,
+                CreatedBy = run.CreatedBy,
+                CreatedOn = run.CreatedOn
+            };
 
-                TestCase testCase = new TestManager().GetById(comp.TestCaseID);
+            IEnumerable<TestComposite> compositeModel = new TestRunManager().GetCompositeByRunId(runProxy.Id);
+            foreach (var comp in compositeModel)
+            {
+                var extendedTestCaseProxy = new ExtendedTestCaseProxy
+                {
+                    Status = EnumUtil.ParseEnum<Status>(comp.TestCaseStatus)
+                };
+
+                var testCase = new TestManager().GetById(comp.TestCaseID);
                 extendedTestCaseProxy.Id = testCase.ID;
                 extendedTestCaseProxy.Title = testCase.Title;
                 extendedTestCaseProxy.Priority = EnumUtil.ParseEnum<Priority>(testCase.Priority);
@@ -82,15 +93,17 @@ namespace TestCaseManager.Core
                 extendedTestCaseProxy.IsAutomated = testCase.IsAutomated;
                 extendedTestCaseProxy.CreatedBy = testCase.CreatedBy;
                 extendedTestCaseProxy.UpdatedBy = testCase.UpdatedBy;
-                extendedTestCaseProxy.AreaID = testCase.AreaID;
+                extendedTestCaseProxy.AreaId = testCase.AreaID;
 
                 foreach (var item in new TestManager().GetStepDefinitionsById(testCase.ID))
                 {
-                    StepDefinitionProxy proxy = new StepDefinitionProxy();
-                    proxy.Step = item.Step;
-                    proxy.ExpectedResult = item.ExpectedResult;
-                    proxy.ID = item.ID;
-                    proxy.TestCaseID = item.TestCaseID;
+                    var proxy = new StepDefinitionProxy
+                    {
+                        Step = item.Step,
+                        ExpectedResult = item.ExpectedResult,
+                        Id = item.ID,
+                        TestCaseId = item.TestCaseID
+                    };
 
                     extendedTestCaseProxy.StepDefinitionList.Add(proxy);
                 }

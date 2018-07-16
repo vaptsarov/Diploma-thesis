@@ -2,7 +2,7 @@
 
 namespace TestCaseManager.Core.Managers
 {
-    interface ITestManager<T>
+    internal interface ITestManager<T>
     {
         List<T> GetAll();
         T GetById(int id);

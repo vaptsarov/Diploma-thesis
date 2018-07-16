@@ -5,9 +5,9 @@ namespace TestCaseManager.Core.Proxy.TestDefinition
     [Serializable]
     public class StepDefinitionProxy
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         public string Step { get; set; }
         public string ExpectedResult { get; set; }
-        public int TestCaseID { get; set; }
+        public int TestCaseId { get; set; }
     }
 }

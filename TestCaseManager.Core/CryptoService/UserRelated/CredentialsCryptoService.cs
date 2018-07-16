@@ -7,42 +7,41 @@ using Org.BouncyCastle.Crypto.Modes;
 using Org.BouncyCastle.Crypto.Paddings;
 using Org.BouncyCastle.Crypto.Parameters;
 
-namespace TestCaseManager.Core.CryptoService
+namespace TestCaseManager.Core.CryptoService.UserRelated
 {
     public class CredentialsCryptoService<TBlockCipher, TDigest>
         where TBlockCipher : IBlockCipher, new()
         where TDigest : IDigest, new()
     {
-        private Encoding encoding;
+        private readonly Encoding _encoding;
 
-        private IBlockCipher blockCipher;
+        private readonly byte[] _key;
+        private IBlockCipher _blockCipher;
 
-        private BufferedBlockCipher cipher;
+        private BufferedBlockCipher _cipher;
 
-        private HMac mac;
-
-        private byte[] key;
+        private HMac _mac;
 
         public CredentialsCryptoService(Encoding encoding, byte[] key, byte[] macKey)
         {
-            this.encoding = encoding;
-            this.key = key;
-            this.Init(key, macKey, new Pkcs7Padding());
+            this._encoding = encoding;
+            this._key = key;
+            Init(key, macKey, new Pkcs7Padding());
         }
 
         public CredentialsCryptoService(Encoding encoding, byte[] key, byte[] macKey, IBlockCipherPadding padding)
         {
-            this.encoding = encoding;
-            this.key = key;
-            this.Init(key, macKey, padding);
+            this._encoding = encoding;
+            this._key = key;
+            Init(key, macKey, padding);
         }
 
         private void Init(byte[] key, byte[] macKey, IBlockCipherPadding padding)
         {
-            this.blockCipher = new CbcBlockCipher(new TBlockCipher());
-            this.cipher = new PaddedBufferedBlockCipher(this.blockCipher, padding);
-            this.mac = new HMac(new TDigest());
-            this.mac.Init(new KeyParameter(macKey));
+            _blockCipher = new CbcBlockCipher(new TBlockCipher());
+            _cipher = new PaddedBufferedBlockCipher(_blockCipher, padding);
+            _mac = new HMac(new TDigest());
+            _mac.Init(new KeyParameter(macKey));
         }
 
         public string Encrypt(string plain)
@@ -52,17 +51,17 @@ namespace TestCaseManager.Core.CryptoService
 
         public byte[] EncryptBytes(string plain)
         {
-            byte[] input = this.encoding.GetBytes(plain);
+            var input = _encoding.GetBytes(plain);
 
-            var iv = this.GenerateIV();
+            var iv = GenerateIv();
 
-            var cipher = this.BouncyCastleCrypto(true, input, new ParametersWithIV(new KeyParameter(key), iv));
-            byte[] message = CombineArrays(iv, cipher);
+            var cipher = BouncyCastleCrypto(true, input, new ParametersWithIV(new KeyParameter(_key), iv));
+            var message = CombineArrays(iv, cipher);
 
-            this.mac.Reset();
-            this.mac.BlockUpdate(message, 0, message.Length);
-            byte[] digest = new byte[this.mac.GetUnderlyingDigest().GetDigestSize()];
-            this.mac.DoFinal(digest, 0);
+            _mac.Reset();
+            _mac.BlockUpdate(message, 0, message.Length);
+            var digest = new byte[_mac.GetUnderlyingDigest().GetDigestSize()];
+            _mac.DoFinal(digest, 0);
 
             var result = CombineArrays(digest, message);
             return result;
@@ -71,57 +70,48 @@ namespace TestCaseManager.Core.CryptoService
         public byte[] DecryptBytes(byte[] bytes)
         {
             // split the digest into component parts
-            var digest = new byte[this.mac.GetUnderlyingDigest().GetDigestSize()];
+            var digest = new byte[_mac.GetUnderlyingDigest().GetDigestSize()];
             var message = new byte[bytes.Length - digest.Length];
-            var iv = new byte[this.blockCipher.GetBlockSize()];
+            var iv = new byte[_blockCipher.GetBlockSize()];
             var cipher = new byte[message.Length - iv.Length];
 
             Buffer.BlockCopy(bytes, 0, digest, 0, digest.Length);
             Buffer.BlockCopy(bytes, digest.Length, message, 0, message.Length);
-            if (!IsValidHMac(digest, message))
-            {
-                throw new CryptoException();
-            }
+            if (!IsValidHMac(digest, message)) throw new CryptoException();
 
             Buffer.BlockCopy(message, 0, iv, 0, iv.Length);
             Buffer.BlockCopy(message, iv.Length, cipher, 0, cipher.Length);
 
-            byte[] result = this.BouncyCastleCrypto(false, cipher, new ParametersWithIV(new KeyParameter(key), iv));
+            var result = BouncyCastleCrypto(false, cipher, new ParametersWithIV(new KeyParameter(_key), iv));
             return result;
         }
 
         public string Decrypt(byte[] bytes)
         {
-            return this.encoding.GetString(DecryptBytes(bytes));
+            return _encoding.GetString(DecryptBytes(bytes));
         }
 
         public string Decrypt(string cipher)
         {
-            return this.Decrypt(Convert.FromBase64String(cipher));
+            return Decrypt(Convert.FromBase64String(cipher));
         }
 
         private bool IsValidHMac(byte[] digest, byte[] message)
         {
-            this.mac.Reset();
-            this.mac.BlockUpdate(message, 0, message.Length);
-            byte[] computed = new byte[this.mac.GetUnderlyingDigest().GetDigestSize()];
-            this.mac.DoFinal(computed, 0);
+            _mac.Reset();
+            _mac.BlockUpdate(message, 0, message.Length);
+            var computed = new byte[_mac.GetUnderlyingDigest().GetDigestSize()];
+            _mac.DoFinal(computed, 0);
 
             return AreEqual(digest, computed);
         }
 
         private static bool AreEqual(byte[] digest, byte[] computed)
         {
-            if (digest.Length != computed.Length)
-            {
-                return false;
-            }
+            if (digest.Length != computed.Length) return false;
 
-            int result = 0;
-            for (int i = 0; i < digest.Length; i++)
-            {
-                result |= digest[i] ^ computed[i];
-            }
+            var result = 0;
+            for (var i = 0; i < digest.Length; i++) result |= digest[i] ^ computed[i];
 
             return result == 0;
         }
@@ -130,9 +120,9 @@ namespace TestCaseManager.Core.CryptoService
         {
             try
             {
-                cipher.Init(forEncrypt, parameters);
+                _cipher.Init(forEncrypt, parameters);
 
-                return this.cipher.DoFinal(input);
+                return _cipher.DoFinal(input);
             }
             catch (CryptoException)
             {
@@ -140,12 +130,12 @@ namespace TestCaseManager.Core.CryptoService
             }
         }
 
-        private byte[] GenerateIV()
+        private byte[] GenerateIv()
         {
             using (var provider = new RNGCryptoServiceProvider())
             {
                 // 1st block
-                byte[] result = new byte[this.blockCipher.GetBlockSize()];
+                var result = new byte[_blockCipher.GetBlockSize()];
                 provider.GetBytes(result);
 
                 return result;
@@ -154,7 +144,7 @@ namespace TestCaseManager.Core.CryptoService
 
         private static byte[] CombineArrays(byte[] source1, byte[] source2)
         {
-            byte[] result = new byte[source1.Length + source2.Length];
+            var result = new byte[source1.Length + source2.Length];
             Buffer.BlockCopy(source1, 0, result, 0, source1.Length);
             Buffer.BlockCopy(source2, 0, result, source1.Length, source2.Length);
 

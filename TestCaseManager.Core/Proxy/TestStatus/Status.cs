@@ -4,6 +4,6 @@
     {
         NotExecuted,
         Passed,
-        Failed,
+        Failed
     }
 }

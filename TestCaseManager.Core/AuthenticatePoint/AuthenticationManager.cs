@@ -1,74 +1,63 @@
 ﻿using System;
 using System.Security;
-using TestCaseManager.Core.AuthenticatePoint;
 using TestCaseManager.Core.Managers;
 
-namespace TestCaseManager.Core
+namespace TestCaseManager.Core.AuthenticatePoint
 {
     public class AuthenticationManager : IAuthenticate, IAdmin
     {
-        private static bool IsAnAdmin;
-        private static bool IsReadOnly;
-        private static string CurrentUser;
+        private static bool _isAnAdmin;
+        private static bool _isReadOnly;
+        private static string _currentUser;
 
-        private static AuthenticationManager instance = null;
-        private static object lockedObj = new object();
+        private static AuthenticationManager _instance;
+        private static readonly object LockedObj = new object();
 
-        public event EventHandler ValidAuthenticationEvent;
-        public event EventHandler LogoutEvent;
+        public string GetCurrentUsername => _currentUser;
 
-        public string GetCurrentUsername
+        public bool IsUserAnAdmin()
         {
-            get { return CurrentUser; }
-        }
-
-        public static AuthenticationManager Instance()
-        {
-            if (instance == null)
-            {
-                lock (lockedObj)
-                {
-                    if (instance == null)
-                    {
-                        instance = new AuthenticationManager();
-                    }
-                }
-            }
-
-            return instance;
+            return _isAnAdmin;
         }
 
         public bool IsUserReadOnly()
         {
-            return IsReadOnly;
-        }
-
-        public bool IsUserAnAdmin()
-        {
-            return IsAnAdmin;
+            return _isReadOnly;
         }
 
         public void RegisterUserForAuthentication(string username, SecureString password)
         {
-            UserManager userManager = new UserManager();
+            var userManager = new UserManager();
             var currentApplicationUser = userManager.GetUser(username, password);
 
-            AuthenticationManager.IsAnAdmin = currentApplicationUser.IsAdmin;
-            AuthenticationManager.IsReadOnly = currentApplicationUser.IsReadOnly;
-            AuthenticationManager.CurrentUser = currentApplicationUser.Username;
+            _isAnAdmin = currentApplicationUser.IsAdmin;
+            _isReadOnly = currentApplicationUser.IsReadOnly;
+            _currentUser = currentApplicationUser.Username;
 
-            if (this.ValidAuthenticationEvent != null)
-                this.ValidAuthenticationEvent(this, EventArgs.Empty);
+            ValidAuthenticationEvent?.Invoke(this, EventArgs.Empty);
+        }
+
+        public event EventHandler ValidAuthenticationEvent;
+        public event EventHandler LogoutEvent;
+
+        public static AuthenticationManager Instance()
+        {
+            if (_instance != null) return _instance;
+            lock (LockedObj)
+            {
+                if (_instance == null) _instance = new AuthenticationManager();
+            }
+
+            return _instance;
         }
 
         public void RemoveAuthenticatedUser()
         {
-            AuthenticationManager.IsAnAdmin = false;
-            AuthenticationManager.IsReadOnly = true;
-            AuthenticationManager.CurrentUser = null;
+            _isAnAdmin = false;
+            _isReadOnly = true;
+            _currentUser = null;
 
-            if (this.LogoutEvent != null)
-                this.LogoutEvent(this, EventArgs.Empty);
+            LogoutEvent?.Invoke(this, EventArgs.Empty);
         }
     }
 }

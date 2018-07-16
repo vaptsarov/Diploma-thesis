@@ -3,29 +3,31 @@
 namespace TestCaseManager.Views.CustomControls
 {
     /// <summary>
-    /// Interaction logic for PromptDialog.xaml
+    ///     Interaction logic for PromptDialog.xaml
     /// </summary>
     public partial class PromptDialog : Window
     {
         public PromptDialog(string windowTitle, string title, string defaultValue = "")
         {
-            this.InitializeComponent();
-            this.Owner = Application.Current.MainWindow;
-            this.Loaded += new RoutedEventHandler(PromptDialog_Loaded);
+            InitializeComponent();
+            Owner = Application.Current.MainWindow;
+            Loaded += PromptDialog_Loaded;
 
             this.windowTitle.Text = windowTitle;
             Title = title;
-            this.textBox.Text = defaultValue;
+            textBox.Text = defaultValue;
         }
 
-        void PromptDialog_Loaded(object sender, RoutedEventArgs e)
+        public string ResponseText => textBox.Text;
+
+        private void PromptDialog_Loaded(object sender, RoutedEventArgs e)
         {
-            this.textBox.Focus();
+            textBox.Focus();
         }
 
         public static string Prompt(string windowTitle, string title, string defaultValue = "")
         {
-            PromptDialog inst = new PromptDialog(windowTitle, title, defaultValue);
+            var inst = new PromptDialog(windowTitle, title, defaultValue);
             inst.ShowDialog();
             if (inst.DialogResult == true)
                 return inst.ResponseText;
@@ -33,23 +35,15 @@ namespace TestCaseManager.Views.CustomControls
             return null;
         }
 
-        public string ResponseText
-        {
-            get
-            {
-                return this.textBox.Text;
-            }
-        }
-
         private void btnOk_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = true;
-            this.Close();
+            DialogResult = true;
+            Close();
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Close();
         }
     }
 }

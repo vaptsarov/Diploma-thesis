@@ -1,50 +1,51 @@
-﻿using FirstFloor.ModernUI.Presentation;
-using System;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using FirstFloor.ModernUI.Presentation;
+using TestCaseManager.Core;
+using TestCaseManager.Core.Converters;
 using TestCaseManager.Core.Managers;
+using TestCaseManager.Core.Managers.ProxyManagers;
 using TestCaseManager.Core.Proxy;
 using TestCaseManager.Core.Proxy.TestRun;
 using TestCaseManager.Core.Proxy.TestStatus;
-using System.Collections.Generic;
 using TestCaseManager.DB;
-using TestCaseManager.Core;
 
 namespace TestCaseManager.Views.CustomControls
 {
     /// <summary>
-    /// Interaction logic for CreateTestCaseDialog.xaml
+    ///     Interaction logic for CreateTestCaseDialog.xaml
     /// </summary>
     public partial class TestCaseSelectorDialog : Window
     {
+        public TestCaseSelectorDialog()
+        {
+            InitializeComponent();
+            Owner = Application.Current.MainWindow;
+            Loaded += PromptDialog_Loaded;
+
+            AppearanceManager.Current.PropertyChanged += OnAppearanceManagerPropertyChanged;
+            DragWindow.MouseLeftButtonDown += AttachDragDropEvent;
+        }
+
         private static int RunId { get; set; }
         private TestRunProxy TestRunProxy { get; set; }
         private ObservableCollection<ProjectProxy> ProjectProxyList { get; set; }
         private ObservableCollection<ExtendedTestCaseProxy> TestCasesList { get; set; }
 
-        public TestCaseSelectorDialog()
-        {
-            this.InitializeComponent();
-            this.Owner = Application.Current.MainWindow;
-            this.Loaded += new RoutedEventHandler(this.PromptDialog_Loaded);
-
-            AppearanceManager.Current.PropertyChanged += this.OnAppearanceManagerPropertyChanged;
-            this.DragWindow.MouseLeftButtonDown += new MouseButtonEventHandler(this.AttachDragDropEvent);
-        }
-
         private void AttachDragDropEvent(object sender, MouseButtonEventArgs e)
         {
-            this.DragMove();
+            DragMove();
         }
 
         public static void Prompt(int testRunId)
         {
-            TestCaseSelectorDialog instance = new TestCaseSelectorDialog();
+            var instance = new TestCaseSelectorDialog();
             RunId = testRunId;
 
             instance.ShowDialog();
@@ -53,128 +54,119 @@ namespace TestCaseManager.Views.CustomControls
         private void PromptDialog_Loaded(object sender, RoutedEventArgs e)
         {
             // Initial DB data retrieve
-            Task task = Task.Factory.StartNew(() =>
+            var task = Task.Factory.StartNew(() =>
             {
-                TestRunProxyManager testRunManager = new TestRunProxyManager();
-                this.TestRunProxy = testRunManager.GetById(RunId);
+                var testRunManager = new TestRunProxyManager();
+                TestRunProxy = testRunManager.GetById(RunId);
 
-                ProjectProxyManager proxyManager = new ProjectProxyManager();
-                this.ProjectProxyList = proxyManager.GetAll();
+                var proxyManager = new ProjectProxyManager();
+                ProjectProxyList = proxyManager.GetAll();
             });
             task.ContinueWith(next =>
             {
                 // Update the main Thread as it is the owner of the UI elements
-                this.Dispatcher.Invoke((Action)(() =>
+                Dispatcher.Invoke(() =>
                 {
-                    foreach (var testCase in this.TestRunProxy.TestCasesList)
+                    foreach (var testCase in TestRunProxy.TestCasesList)
                     {
-                        ProjectProxy projectProxy = this.ProjectProxyList.Where(proj => proj.Areas.Any(a => a.ID == testCase.AreaID)).FirstOrDefault();
+                        var projectProxy = ProjectProxyList.Where(proj => proj.Areas.Any(a => a.Id == testCase.AreaId))
+                            .FirstOrDefault();
                         if (projectProxy != null)
                         {
-                            AreaProxy areaProxy = projectProxy.Areas.Where(a => a.ID == testCase.AreaID).FirstOrDefault();
+                            var areaProxy = projectProxy.Areas.Where(a => a.Id == testCase.AreaId).FirstOrDefault();
                             if (areaProxy != null)
                             {
-                                TestCaseProxy testCaseToRemove = areaProxy.TestCasesList.Where(tc => tc.Id == testCase.Id).FirstOrDefault();
+                                var testCaseToRemove = areaProxy.TestCasesList.Where(tc => tc.Id == testCase.Id)
+                                    .FirstOrDefault();
                                 if (testCaseToRemove != null)
                                     areaProxy.TestCasesList.Remove(testCaseToRemove);
                             }
                         }
                     }
 
-                    this.SetCurrentAccentColor();
-                    this.ProjectTreeView.ItemsSource = this.ProjectProxyList;
+                    SetCurrentAccentColor();
+                    ProjectTreeView.ItemsSource = ProjectProxyList;
 
-                    this.TestCasesList = this.TestRunProxy.TestCasesList;
-                    this.SelectedTestCasesList.ItemsSource = this.TestCasesList;
+                    TestCasesList = TestRunProxy.TestCasesList;
+                    SelectedTestCasesList.ItemsSource = TestCasesList;
 
-                    this.TestRunList.Visibility = Visibility.Visible;
-                    this.progressBar.Visibility = Visibility.Hidden;
-
-                }));
+                    TestRunList.Visibility = Visibility.Visible;
+                    progressBar.Visibility = Visibility.Hidden;
+                });
             });
         }
 
         private void OnAppearanceManagerPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "ThemeSource" || e.PropertyName == "AccentColor")
-            {
-                this.SetCurrentAccentColor();
-            }
+            if (e.PropertyName == "ThemeSource" || e.PropertyName == "AccentColor") SetCurrentAccentColor();
         }
 
         private void SetCurrentAccentColor()
         {
-            this.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+            BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
 
             // If theme set is light version, the font color should be black, if dark - should be white.
             if (AppearanceManager.LightThemeSource != AppearanceManager.Current.ThemeSource)
-            {
-                this.Background = new SolidColorBrush(Color.FromRgb(37, 37, 38));
-            }
+                Background = new SolidColorBrush(Color.FromRgb(37, 37, 38));
             else if (AppearanceManager.DarkThemeSource != AppearanceManager.Current.ThemeSource)
-            {
-                this.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
-            }
+                Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
         }
 
         private void SaveRun(object sender, RoutedEventArgs e)
         {
             ICollection<TestCase> testCasesModelList = new Collection<TestCase>();
-            this.TestCasesList.ToList().ForEach(x =>
-            {
-                testCasesModelList.Add(ModelConverter.TestCaseProxyToModel(x));
-            });
+            TestCasesList.ToList().ForEach(x => { testCasesModelList.Add(ModelConverter.TestCaseProxyToModel(x)); });
 
-            TestRunManager manager = new TestRunManager();
-            manager.RelateTestCaseToTestRun(this.TestRunProxy.ID, testCasesModelList);
+            var manager = new TestRunManager();
+            manager.RelateTestCaseToTestRun(TestRunProxy.Id, testCasesModelList);
 
-            this.CancelDialog();
+            CancelDialog();
         }
 
         private void Cancel(object sender, RoutedEventArgs e)
         {
-            this.CancelDialog();
+            CancelDialog();
         }
 
         private void CancelDialog()
         {
-            this.Close();
+            Close();
         }
 
         private void AddToTestList(object sender, RoutedEventArgs e)
         {
-            if (this.ProjectTreeView.SelectedItem is TestCaseProxy)
+            if (ProjectTreeView.SelectedItem is TestCaseProxy)
             {
-                ExtendedTestCaseProxy testCase = new ExtendedTestCaseProxy(this.ProjectTreeView.SelectedItem as TestCaseProxy, Status.NotExecuted);
-                ProjectProxy projectProxy = this.ProjectProxyList.Where(proj => proj.Areas.Any(a => a.ID == testCase.AreaID)).FirstOrDefault();
+                var testCase =
+                    new ExtendedTestCaseProxy(ProjectTreeView.SelectedItem as TestCaseProxy, Status.NotExecuted);
+                var projectProxy = ProjectProxyList.Where(proj => proj.Areas.Any(a => a.Id == testCase.AreaId))
+                    .FirstOrDefault();
                 if (projectProxy != null)
                 {
-                    AreaProxy areaProxy = projectProxy.Areas.Where(a => a.ID == testCase.AreaID).FirstOrDefault();
+                    var areaProxy = projectProxy.Areas.Where(a => a.Id == testCase.AreaId).FirstOrDefault();
                     if (areaProxy != null)
-                        areaProxy.TestCasesList.Remove(this.ProjectTreeView.SelectedItem as TestCaseProxy);
+                        areaProxy.TestCasesList.Remove(ProjectTreeView.SelectedItem as TestCaseProxy);
                 }
 
-                if (this.TestCasesList.Any(x => x.Id == testCase.Id) == false)
-                    this.TestCasesList.Add(testCase);
+                if (TestCasesList.Any(x => x.Id == testCase.Id) == false)
+                    TestCasesList.Add(testCase);
             }
         }
 
         private void RemoveFromTestList(object sender, RoutedEventArgs e)
         {
-            if (this.SelectedTestCasesList.SelectedItem != null)
+            if (SelectedTestCasesList.SelectedItem != null)
             {
-                TestCaseProxy testCase = this.SelectedTestCasesList.SelectedItem as ExtendedTestCaseProxy;
-                ProjectProxy projectProxy = this.ProjectProxyList.Where(proj => proj.Areas.Any(a => a.ID == testCase.AreaID)).FirstOrDefault();
+                TestCaseProxy testCase = SelectedTestCasesList.SelectedItem as ExtendedTestCaseProxy;
+                var projectProxy = ProjectProxyList.Where(proj => proj.Areas.Any(a => a.Id == testCase.AreaId))
+                    .FirstOrDefault();
                 if (projectProxy != null)
                 {
-                    AreaProxy areaProxy = projectProxy.Areas.Where(a => a.ID == testCase.AreaID).FirstOrDefault();
-                    if (areaProxy != null)
-                    {
-                        areaProxy.TestCasesList.Add(testCase);
-                    }
+                    var areaProxy = projectProxy.Areas.Where(a => a.Id == testCase.AreaId).FirstOrDefault();
+                    if (areaProxy != null) areaProxy.TestCasesList.Add(testCase);
                 }
 
-                this.TestCasesList.Remove(this.SelectedTestCasesList.SelectedItem as ExtendedTestCaseProxy);
+                TestCasesList.Remove(SelectedTestCasesList.SelectedItem as ExtendedTestCaseProxy);
             }
         }
     }

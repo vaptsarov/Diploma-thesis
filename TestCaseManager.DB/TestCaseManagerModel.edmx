@@ -1,175 +1,192 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+
 <edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
   <!-- EF Runtime content -->
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="TestcaseManagerDemoModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-  <EntityContainer Name="TestcaseManagerDemoModelStoreContainer">
-    <EntitySet Name="ApplicationUsers" EntityType="TestcaseManagerDemoModel.Store.ApplicationUsers" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="Areas" EntityType="TestcaseManagerDemoModel.Store.Areas" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="Projects" EntityType="TestcaseManagerDemoModel.Store.Projects" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="StepDefinitions" EntityType="TestcaseManagerDemoModel.Store.StepDefinitions" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="TestCases" EntityType="TestcaseManagerDemoModel.Store.TestCases" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="TestComposites" EntityType="TestcaseManagerDemoModel.Store.TestComposites" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="TestRuns" EntityType="TestcaseManagerDemoModel.Store.TestRuns" store:Type="Tables" Schema="dbo" />
-    <AssociationSet Name="FK_Areas_Projects" Association="TestcaseManagerDemoModel.Store.FK_Areas_Projects">
-      <End Role="Project" EntitySet="Projects" />
-      <End Role="Area" EntitySet="Areas" />
-    </AssociationSet>
-    <AssociationSet Name="FK_TestCases_Areas" Association="TestcaseManagerDemoModel.Store.FK_TestCases_Areas">
-      <End Role="Area" EntitySet="Areas" />
-      <End Role="TestCas" EntitySet="TestCases" />
-    </AssociationSet>
-    <AssociationSet Name="FK_StepDefinitions_TestCases" Association="TestcaseManagerDemoModel.Store.FK_StepDefinitions_TestCases">
-      <End Role="TestCas" EntitySet="TestCases" />
-      <End Role="StepDefinition" EntitySet="StepDefinitions" />
-    </AssociationSet>
-    <AssociationSet Name="FK_TestComposite_TestCases" Association="TestcaseManagerDemoModel.Store.FK_TestComposite_TestCases">
-      <End Role="TestCase" EntitySet="TestCases" />
-      <End Role="TestComposite" EntitySet="TestComposites" />
-    </AssociationSet>
-    <AssociationSet Name="FK_TestComposite_TestRuns" Association="TestcaseManagerDemoModel.Store.FK_TestComposite_TestRuns">
-      <End Role="TestRun" EntitySet="TestRuns" />
-      <End Role="TestComposite" EntitySet="TestComposites" />
-    </AssociationSet>
-  </EntityContainer>
-  <EntityType Name="ApplicationUsers">
-    <Key>
-      <PropertyRef Name="UserId" />
-    </Key>
-    <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Username" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="IsAdmin" Type="bit" Nullable="false" />
-    <Property Name="IsReadOnly" Type="bit" Nullable="false" />
-    <Property Name="CreatedBy" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="UpdatedBy" Type="nvarchar(max)" Nullable="true" />
-    <Property Name="CreatedOn" Type="datetime" Nullable="false" />
-  </EntityType>
-  <EntityType Name="Areas">
-    <Key>
-      <PropertyRef Name="ID" />
-    </Key>
-    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="CreatedBy" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="UpdatedBy" Type="nvarchar(max)" Nullable="true" />
-    <Property Name="ProjectId" Type="int" Nullable="false" />
-  </EntityType>
-  <EntityType Name="Projects">
-    <Key>
-      <PropertyRef Name="ID" />
-    </Key>
-    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="CreatedBy" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="UpdatedBy" Type="nvarchar(max)" Nullable="true" />
-  </EntityType>
-  <EntityType Name="StepDefinitions">
-    <Key>
-      <PropertyRef Name="ID" />
-    </Key>
-    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Step" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="ExpectedResult" Type="nvarchar(max)" Nullable="true" />
-    <Property Name="TestCaseID" Type="int" Nullable="false" />
-  </EntityType>
-  <EntityType Name="TestCases">
-    <Key>
-      <PropertyRef Name="ID" />
-    </Key>
-    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="Priority" Type="nvarchar" Nullable="false" MaxLength="100" />
-    <Property Name="Severity" Type="nvarchar" Nullable="false" MaxLength="100" />
-    <Property Name="IsAutomated" Type="bit" Nullable="false" />
-    <Property Name="CreatedBy" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="UpdatedBy" Type="nvarchar(max)" Nullable="true" />
-    <Property Name="AreaID" Type="int" Nullable="false" />
-  </EntityType>
-  <EntityType Name="TestComposites">
-    <Key>
-      <PropertyRef Name="TestRunID" />
-      <PropertyRef Name="TestCaseID" />
-    </Key>
-    <Property Name="TestRunID" Type="int" Nullable="false" />
-    <Property Name="TestCaseID" Type="int" Nullable="false" />
-    <Property Name="TestCaseStatus" Type="nvarchar" Nullable="true" MaxLength="100" />
-  </EntityType>
-  <EntityType Name="TestRuns">
-    <Key>
-      <PropertyRef Name="ID" />
-    </Key>
-    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="CreatedOn" Type="datetime" Nullable="false" />
-    <Property Name="CreatedBy" Type="nvarchar(max)" Nullable="false" />
-  </EntityType>
-  <Association Name="FK_Areas_Projects">
-    <End Role="Project" Type="TestcaseManagerDemoModel.Store.Projects" Multiplicity="1" />
-    <End Role="Area" Type="TestcaseManagerDemoModel.Store.Areas" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Project">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="Area">
-        <PropertyRef Name="ProjectId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_TestCases_Areas">
-    <End Role="Area" Type="TestcaseManagerDemoModel.Store.Areas" Multiplicity="1" />
-    <End Role="TestCas" Type="TestcaseManagerDemoModel.Store.TestCases" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Area">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="TestCas">
-        <PropertyRef Name="AreaID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_StepDefinitions_TestCases">
-    <End Role="TestCas" Type="TestcaseManagerDemoModel.Store.TestCases" Multiplicity="1" />
-    <End Role="StepDefinition" Type="TestcaseManagerDemoModel.Store.StepDefinitions" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="TestCas">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="StepDefinition">
-        <PropertyRef Name="TestCaseID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_TestComposite_TestCases">
-    <End Role="TestCase" Type="TestcaseManagerDemoModel.Store.TestCases" Multiplicity="1" />
-    <End Role="TestComposite" Type="TestcaseManagerDemoModel.Store.TestComposites" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="TestCase">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="TestComposite">
-        <PropertyRef Name="TestCaseID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_TestComposite_TestRuns">
-    <End Role="TestRun" Type="TestcaseManagerDemoModel.Store.TestRuns" Multiplicity="1" />
-    <End Role="TestComposite" Type="TestcaseManagerDemoModel.Store.TestComposites" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="TestRun">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="TestComposite">
-        <PropertyRef Name="TestRunID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-</Schema></edmx:StorageModels>
+      <Schema Namespace="TestcaseManagerDemoModel.Store" Alias="Self" Provider="System.Data.SqlClient"
+              ProviderManifestToken="2008"
+              xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator"
+              xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="TestcaseManagerDemoModelStoreContainer">
+          <EntitySet Name="ApplicationUsers" EntityType="TestcaseManagerDemoModel.Store.ApplicationUsers"
+                     store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Areas" EntityType="TestcaseManagerDemoModel.Store.Areas" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Projects" EntityType="TestcaseManagerDemoModel.Store.Projects" store:Type="Tables"
+                     Schema="dbo" />
+          <EntitySet Name="StepDefinitions" EntityType="TestcaseManagerDemoModel.Store.StepDefinitions"
+                     store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="TestCases" EntityType="TestcaseManagerDemoModel.Store.TestCases" store:Type="Tables"
+                     Schema="dbo" />
+          <EntitySet Name="TestComposites" EntityType="TestcaseManagerDemoModel.Store.TestComposites"
+                     store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="TestRuns" EntityType="TestcaseManagerDemoModel.Store.TestRuns" store:Type="Tables"
+                     Schema="dbo" />
+          <AssociationSet Name="FK_Areas_Projects" Association="TestcaseManagerDemoModel.Store.FK_Areas_Projects">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="Area" EntitySet="Areas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TestCases_Areas" Association="TestcaseManagerDemoModel.Store.FK_TestCases_Areas">
+            <End Role="Area" EntitySet="Areas" />
+            <End Role="TestCas" EntitySet="TestCases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StepDefinitions_TestCases"
+                          Association="TestcaseManagerDemoModel.Store.FK_StepDefinitions_TestCases">
+            <End Role="TestCas" EntitySet="TestCases" />
+            <End Role="StepDefinition" EntitySet="StepDefinitions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TestComposite_TestCases"
+                          Association="TestcaseManagerDemoModel.Store.FK_TestComposite_TestCases">
+            <End Role="TestCase" EntitySet="TestCases" />
+            <End Role="TestComposite" EntitySet="TestComposites" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TestComposite_TestRuns"
+                          Association="TestcaseManagerDemoModel.Store.FK_TestComposite_TestRuns">
+            <End Role="TestRun" EntitySet="TestRuns" />
+            <End Role="TestComposite" EntitySet="TestComposites" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="ApplicationUsers">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="IsAdmin" Type="bit" Nullable="false" />
+          <Property Name="IsReadOnly" Type="bit" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="UpdatedBy" Type="nvarchar(max)" Nullable="true" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Areas">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="UpdatedBy" Type="nvarchar(max)" Nullable="true" />
+          <Property Name="ProjectId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Projects">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="UpdatedBy" Type="nvarchar(max)" Nullable="true" />
+        </EntityType>
+        <EntityType Name="StepDefinitions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Step" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ExpectedResult" Type="nvarchar(max)" Nullable="true" />
+          <Property Name="TestCaseID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TestCases">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Priority" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="Severity" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="IsAutomated" Type="bit" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="UpdatedBy" Type="nvarchar(max)" Nullable="true" />
+          <Property Name="AreaID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TestComposites">
+          <Key>
+            <PropertyRef Name="TestRunID" />
+            <PropertyRef Name="TestCaseID" />
+          </Key>
+          <Property Name="TestRunID" Type="int" Nullable="false" />
+          <Property Name="TestCaseID" Type="int" Nullable="false" />
+          <Property Name="TestCaseStatus" Type="nvarchar" Nullable="true" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="TestRuns">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Areas_Projects">
+          <End Role="Project" Type="TestcaseManagerDemoModel.Store.Projects" Multiplicity="1" />
+          <End Role="Area" Type="TestcaseManagerDemoModel.Store.Areas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Area">
+              <PropertyRef Name="ProjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TestCases_Areas">
+          <End Role="Area" Type="TestcaseManagerDemoModel.Store.Areas" Multiplicity="1" />
+          <End Role="TestCas" Type="TestcaseManagerDemoModel.Store.TestCases" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Area">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TestCas">
+              <PropertyRef Name="AreaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StepDefinitions_TestCases">
+          <End Role="TestCas" Type="TestcaseManagerDemoModel.Store.TestCases" Multiplicity="1" />
+          <End Role="StepDefinition" Type="TestcaseManagerDemoModel.Store.StepDefinitions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TestCas">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StepDefinition">
+              <PropertyRef Name="TestCaseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TestComposite_TestCases">
+          <End Role="TestCase" Type="TestcaseManagerDemoModel.Store.TestCases" Multiplicity="1" />
+          <End Role="TestComposite" Type="TestcaseManagerDemoModel.Store.TestComposites" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TestCase">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TestComposite">
+              <PropertyRef Name="TestCaseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TestComposite_TestRuns">
+          <End Role="TestRun" Type="TestcaseManagerDemoModel.Store.TestRuns" Multiplicity="1" />
+          <End Role="TestComposite" Type="TestcaseManagerDemoModel.Store.TestComposites" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TestRun">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TestComposite">
+              <PropertyRef Name="TestRunID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="TestcaseManagerDemoModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="TestcaseManagerDemoModel" Alias="Self" p1:UseStrongSpatialTypes="false"
+              xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation"
+              xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation"
+              xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="TestcaseManagerDB" p1:LazyLoadingEnabled="true">
           <EntitySet Name="ApplicationUsers" EntityType="TestcaseManagerDemoModel.ApplicationUser" />
           <EntitySet Name="Areas" EntityType="TestcaseManagerDemoModel.Area" />
@@ -184,17 +201,20 @@
             <End Role="Area" EntitySet="Areas" />
             <End Role="TestCas" EntitySet="TestCases" />
           </AssociationSet>
-          <AssociationSet Name="FK_StepDefinitions_TestCases" Association="TestcaseManagerDemoModel.FK_StepDefinitions_TestCases">
+          <AssociationSet Name="FK_StepDefinitions_TestCases"
+                          Association="TestcaseManagerDemoModel.FK_StepDefinitions_TestCases">
             <End Role="TestCas" EntitySet="TestCases" />
             <End Role="StepDefinition" EntitySet="StepDefinitions" />
           </AssociationSet>
           <EntitySet Name="TestComposites" EntityType="TestcaseManagerDemoModel.TestComposite" />
           <EntitySet Name="TestRuns" EntityType="TestcaseManagerDemoModel.TestRun" />
-          <AssociationSet Name="FK_TestComposite_TestCases" Association="TestcaseManagerDemoModel.FK_TestComposite_TestCases">
+          <AssociationSet Name="FK_TestComposite_TestCases"
+                          Association="TestcaseManagerDemoModel.FK_TestComposite_TestCases">
             <End Role="TestCase" EntitySet="TestCases" />
             <End Role="TestComposite" EntitySet="TestComposites" />
           </AssociationSet>
-          <AssociationSet Name="FK_TestComposite_TestRuns" Association="TestcaseManagerDemoModel.FK_TestComposite_TestRuns">
+          <AssociationSet Name="FK_TestComposite_TestRuns"
+                          Association="TestcaseManagerDemoModel.FK_TestComposite_TestRuns">
             <End Role="TestRun" EntitySet="TestRuns" />
             <End Role="TestComposite" EntitySet="TestComposites" />
           </AssociationSet>
@@ -221,8 +241,10 @@
           <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ProjectId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Project" Relationship="TestcaseManagerDemoModel.FK_Areas_Projects" FromRole="Area" ToRole="Project" />
-          <NavigationProperty Name="TestCases" Relationship="TestcaseManagerDemoModel.FK_TestCases_Areas" FromRole="Area" ToRole="TestCas" />
+          <NavigationProperty Name="Project" Relationship="TestcaseManagerDemoModel.FK_Areas_Projects" FromRole="Area"
+                              ToRole="Project" />
+          <NavigationProperty Name="TestCases" Relationship="TestcaseManagerDemoModel.FK_TestCases_Areas"
+                              FromRole="Area" ToRole="TestCas" />
         </EntityType>
         <EntityType Name="Project">
           <Key>
@@ -232,7 +254,8 @@
           <Property Name="Title" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Areas" Relationship="TestcaseManagerDemoModel.FK_Areas_Projects" FromRole="Project" ToRole="Area" />
+          <NavigationProperty Name="Areas" Relationship="TestcaseManagerDemoModel.FK_Areas_Projects" FromRole="Project"
+                              ToRole="Area" />
         </EntityType>
         <EntityType Name="StepDefinition">
           <Key>
@@ -242,7 +265,8 @@
           <Property Name="Step" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ExpectedResult" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="TestCaseID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="TestCas" Relationship="TestcaseManagerDemoModel.FK_StepDefinitions_TestCases" FromRole="StepDefinition" ToRole="TestCas" />
+          <NavigationProperty Name="TestCas" Relationship="TestcaseManagerDemoModel.FK_StepDefinitions_TestCases"
+                              FromRole="StepDefinition" ToRole="TestCas" />
         </EntityType>
         <EntityType Name="TestCase">
           <Key>
@@ -256,9 +280,13 @@
           <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="AreaID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Area" Relationship="TestcaseManagerDemoModel.FK_TestCases_Areas" FromRole="TestCas" ToRole="Area" />
-          <NavigationProperty Name="StepDefinitions" Relationship="TestcaseManagerDemoModel.FK_StepDefinitions_TestCases" FromRole="TestCas" ToRole="StepDefinition" />
-          <NavigationProperty Name="TestComposites" Relationship="TestcaseManagerDemoModel.FK_TestComposite_TestCases" FromRole="TestCase" ToRole="TestComposite" />
+          <NavigationProperty Name="Area" Relationship="TestcaseManagerDemoModel.FK_TestCases_Areas" FromRole="TestCas"
+                              ToRole="Area" />
+          <NavigationProperty Name="StepDefinitions"
+                              Relationship="TestcaseManagerDemoModel.FK_StepDefinitions_TestCases" FromRole="TestCas"
+                              ToRole="StepDefinition" />
+          <NavigationProperty Name="TestComposites" Relationship="TestcaseManagerDemoModel.FK_TestComposite_TestCases"
+                              FromRole="TestCase" ToRole="TestComposite" />
         </EntityType>
         <Association Name="FK_Areas_Projects">
           <End Type="TestcaseManagerDemoModel.Project" Role="Project" Multiplicity="1" />
@@ -304,8 +332,10 @@
           <Property Name="TestRunID" Type="Int32" Nullable="false" />
           <Property Name="TestCaseID" Type="Int32" Nullable="false" />
           <Property Name="TestCaseStatus" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="TestCas" Relationship="TestcaseManagerDemoModel.FK_TestComposite_TestCases" FromRole="TestComposite" ToRole="TestCase" />
-          <NavigationProperty Name="TestRun" Relationship="TestcaseManagerDemoModel.FK_TestComposite_TestRuns" FromRole="TestComposite" ToRole="TestRun" />
+          <NavigationProperty Name="TestCas" Relationship="TestcaseManagerDemoModel.FK_TestComposite_TestCases"
+                              FromRole="TestComposite" ToRole="TestCase" />
+          <NavigationProperty Name="TestRun" Relationship="TestcaseManagerDemoModel.FK_TestComposite_TestRuns"
+                              FromRole="TestComposite" ToRole="TestRun" />
         </EntityType>
         <EntityType Name="TestRun">
           <Key>
@@ -315,7 +345,8 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="TestComposites" Relationship="TestcaseManagerDemoModel.FK_TestComposite_TestRuns" FromRole="TestRun" ToRole="TestComposite" />
+          <NavigationProperty Name="TestComposites" Relationship="TestcaseManagerDemoModel.FK_TestComposite_TestRuns"
+                              FromRole="TestRun" ToRole="TestComposite" />
         </EntityType>
         <Association Name="FK_TestComposite_TestCases">
           <End Type="TestcaseManagerDemoModel.TestCase" Role="TestCase" Multiplicity="1" />
@@ -345,88 +376,90 @@
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="TestcaseManagerDemoModelStoreContainer" CdmEntityContainer="TestcaseManagerDB">
-    <EntitySetMapping Name="ApplicationUsers">
-      <EntityTypeMapping TypeName="IsTypeOf(TestcaseManagerDemoModel.ApplicationUser)">
-        <MappingFragment StoreEntitySet="ApplicationUsers">
-          <ScalarProperty Name="UserId" ColumnName="UserId" />
-          <ScalarProperty Name="Username" ColumnName="Username" />
-          <ScalarProperty Name="Password" ColumnName="Password" />
-          <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
-          <ScalarProperty Name="IsReadOnly" ColumnName="IsReadOnly" />
-          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-          <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Areas">
-      <EntityTypeMapping TypeName="IsTypeOf(TestcaseManagerDemoModel.Area)">
-        <MappingFragment StoreEntitySet="Areas">
-          <ScalarProperty Name="ID" ColumnName="ID" />
-          <ScalarProperty Name="Title" ColumnName="Title" />
-          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-          <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-          <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Projects">
-      <EntityTypeMapping TypeName="IsTypeOf(TestcaseManagerDemoModel.Project)">
-        <MappingFragment StoreEntitySet="Projects">
-          <ScalarProperty Name="ID" ColumnName="ID" />
-          <ScalarProperty Name="Title" ColumnName="Title" />
-          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-          <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="StepDefinitions">
-      <EntityTypeMapping TypeName="IsTypeOf(TestcaseManagerDemoModel.StepDefinition)">
-        <MappingFragment StoreEntitySet="StepDefinitions">
-          <ScalarProperty Name="ID" ColumnName="ID" />
-          <ScalarProperty Name="Step" ColumnName="Step" />
-          <ScalarProperty Name="ExpectedResult" ColumnName="ExpectedResult" />
-          <ScalarProperty Name="TestCaseID" ColumnName="TestCaseID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="TestCases">
-      <EntityTypeMapping TypeName="IsTypeOf(TestcaseManagerDemoModel.TestCase)">
-        <MappingFragment StoreEntitySet="TestCases">
-          <ScalarProperty Name="ID" ColumnName="ID" />
-          <ScalarProperty Name="Title" ColumnName="Title" />
-          <ScalarProperty Name="Priority" ColumnName="Priority" />
-          <ScalarProperty Name="Severity" ColumnName="Severity" />
-          <ScalarProperty Name="IsAutomated" ColumnName="IsAutomated" />
-          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-          <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-          <ScalarProperty Name="AreaID" ColumnName="AreaID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="TestComposites">
-      <EntityTypeMapping TypeName="IsTypeOf(TestcaseManagerDemoModel.TestComposite)">
-        <MappingFragment StoreEntitySet="TestComposites">
-          <ScalarProperty Name="TestRunID" ColumnName="TestRunID" />
-          <ScalarProperty Name="TestCaseID" ColumnName="TestCaseID" />
-          <ScalarProperty Name="TestCaseStatus" ColumnName="TestCaseStatus" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="TestRuns">
-      <EntityTypeMapping TypeName="IsTypeOf(TestcaseManagerDemoModel.TestRun)">
-        <MappingFragment StoreEntitySet="TestRuns">
-          <ScalarProperty Name="ID" ColumnName="ID" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
-          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-  </EntityContainerMapping>
-</Mapping></edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TestcaseManagerDemoModelStoreContainer"
+                                CdmEntityContainer="TestcaseManagerDB">
+          <EntitySetMapping Name="ApplicationUsers">
+            <EntityTypeMapping TypeName="IsTypeOf(TestcaseManagerDemoModel.ApplicationUser)">
+              <MappingFragment StoreEntitySet="ApplicationUsers">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
+                <ScalarProperty Name="IsReadOnly" ColumnName="IsReadOnly" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Areas">
+            <EntityTypeMapping TypeName="IsTypeOf(TestcaseManagerDemoModel.Area)">
+              <MappingFragment StoreEntitySet="Areas">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Projects">
+            <EntityTypeMapping TypeName="IsTypeOf(TestcaseManagerDemoModel.Project)">
+              <MappingFragment StoreEntitySet="Projects">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StepDefinitions">
+            <EntityTypeMapping TypeName="IsTypeOf(TestcaseManagerDemoModel.StepDefinition)">
+              <MappingFragment StoreEntitySet="StepDefinitions">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Step" ColumnName="Step" />
+                <ScalarProperty Name="ExpectedResult" ColumnName="ExpectedResult" />
+                <ScalarProperty Name="TestCaseID" ColumnName="TestCaseID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TestCases">
+            <EntityTypeMapping TypeName="IsTypeOf(TestcaseManagerDemoModel.TestCase)">
+              <MappingFragment StoreEntitySet="TestCases">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Priority" ColumnName="Priority" />
+                <ScalarProperty Name="Severity" ColumnName="Severity" />
+                <ScalarProperty Name="IsAutomated" ColumnName="IsAutomated" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="AreaID" ColumnName="AreaID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TestComposites">
+            <EntityTypeMapping TypeName="IsTypeOf(TestcaseManagerDemoModel.TestComposite)">
+              <MappingFragment StoreEntitySet="TestComposites">
+                <ScalarProperty Name="TestRunID" ColumnName="TestRunID" />
+                <ScalarProperty Name="TestCaseID" ColumnName="TestCaseID" />
+                <ScalarProperty Name="TestCaseStatus" ColumnName="TestCaseStatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TestRuns">
+            <EntityTypeMapping TypeName="IsTypeOf(TestcaseManagerDemoModel.TestRun)">
+              <MappingFragment StoreEntitySet="TestRuns">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
   <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">

@@ -2,74 +2,73 @@
 using System.Security;
 using System.Windows;
 using System.Windows.Controls;
-using TestCaseManager.Core;
+using TestCaseManager.Core.AuthenticatePoint;
 using TestCaseManager.Core.Managers;
+using TestCaseManager.Models;
 using TestCaseManager.Utilities;
-using TestCaseManager.Views;
 
-namespace TestCaseManager.Pages
+namespace TestCaseManager.Views
 {
     /// <summary>
-    /// Interaction logic for AuthorizationHome.xaml
+    ///     Interaction logic for AuthorizationHome.xaml
     /// </summary>
     public partial class AuthorizationPage : UserControl
     {
-        private TextboxViewModel textboxViewModel = null;
+        private TextboxViewModel _textboxViewModel;
 
         public AuthorizationPage()
         {
-            this.InitializeComponent();
-            this.RegisterEvents();
-            this.SetVisibilityForInvalidCredentialsLabel(false);
+            InitializeComponent();
+            RegisterEvents();
+            SetVisibilityForInvalidCredentialsLabel(false);
         }
+
         private void RegisterEvents()
         {
             // Event for logged user
             AuthenticationManager.Instance().ValidAuthenticationEvent += (s, e) =>
             {
-                this.Visibility = Visibility.Hidden;
-                this.Username.Clear();
-                this.Password.Clear();
+                Visibility = Visibility.Hidden;
+                Username.Clear();
+                Password.Clear();
 
                 Navigator.Instance.NavigateMainWindowProjectAndTestCases(this);
             };
 
-            AuthenticationManager.Instance().LogoutEvent += (s, e) =>
-            {
-                this.Visibility = Visibility.Visible;
-            };
+            AuthenticationManager.Instance().LogoutEvent += (s, e) => { Visibility = Visibility.Visible; };
         }
 
         private void AuthorizeCredentials_Button(object sender, RoutedEventArgs e)
         {
-            this.RegisterUsernameValidation();
-            this.SetVisibilityForInvalidCredentialsLabel(false);
+            RegisterUsernameValidation();
+            SetVisibilityForInvalidCredentialsLabel(false);
 
             // Verification if both of the properties are null or empty
-            if ((string.IsNullOrEmpty(this.Username.Text) && this.Password.SecurePassword != null) == false)
+            if ((string.IsNullOrEmpty(Username.Text)) == false)
             {
                 // Check whether the credentials are correct or not
-                var isUserCorrect = this.IsUserCredentialsCorrect(this.Username.Text, this.Password.SecurePassword);
+                var isUserCorrect = IsUserCredentialsCorrect(Username.Text, Password.SecurePassword);
                 if (isUserCorrect == false)
-                    this.SetVisibilityForInvalidCredentialsLabel();
+                    SetVisibilityForInvalidCredentialsLabel();
                 else
-                {
-                    AuthenticationManager.Instance().RegisterUserForAuthentication(this.Username.Text, this.Password.SecurePassword);
-                }
+                    AuthenticationManager.Instance()
+                        .RegisterUserForAuthentication(Username.Text, Password.SecurePassword);
             }
         }
 
         private void RegisterUsernameValidation()
         {
-            this.textboxViewModel = new TextboxViewModel();
-            this.textboxViewModel.Text = this.Username.Text;
-            this.DataContext = this.textboxViewModel;
+            _textboxViewModel = new TextboxViewModel
+            {
+                Text = Username.Text
+            };
+            DataContext = _textboxViewModel;
         }
 
         private bool IsUserCredentialsCorrect(string username, SecureString password)
         {
-            UserManager userManager = new UserManager();
-            bool isUserCredentialsCorrect = true;
+            var userManager = new UserManager();
+            var isUserCredentialsCorrect = true;
             try
             {
                 userManager.GetUser(username, password);
@@ -88,10 +87,7 @@ namespace TestCaseManager.Pages
 
         private void SetVisibilityForInvalidCredentialsLabel(bool isVisible = true)
         {
-            if (isVisible)
-                this.InvalidCredentials.Visibility = Visibility.Visible;
-            else
-                this.InvalidCredentials.Visibility = Visibility.Hidden;
+            InvalidCredentials.Visibility = isVisible ? Visibility.Visible : Visibility.Hidden;
         }
     }
 }

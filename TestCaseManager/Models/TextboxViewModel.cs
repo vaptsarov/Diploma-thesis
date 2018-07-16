@@ -1,66 +1,53 @@
 ﻿using System.ComponentModel;
 
-namespace TestCaseManager.Views
+namespace TestCaseManager.Models
 {
     public class TextboxViewModel : INotifyPropertyChanged, IDataErrorInfo
     {
-        private static string text;
+        private static string _text;
+
         public string Text
         {
-            get
-            {
-                return text;
-            }
+            get => _text;
             set
             {
-                if (text != value)
+                if (_text != value)
                 {
-                    text = value;
+                    _text = value;
                     OnPropertyChanged("Text");
                 }
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-
-        }
-
-        public string Error
-        {
-            get { return string.Empty; }
-        }
+        public string Error => string.Empty;
 
         /// <summary>
-        /// Will be called for each and every property when ever it's value is changed
+        ///     Will be called for each and every property when ever it's value is changed
         /// </summary>
         /// <param name="columnName">Name of the property whose value is changed</param>
         /// <returns></returns>
-        public string this[string columnName]
+        public string this[string columnName] => Validate(columnName);
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
         {
-            get
-            {
-                return Validate(columnName);
-            }
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private string Validate(string properyName)
         {
-            string validationMessage = string.Empty;
+            var validationMessage = string.Empty;
             switch (properyName)
             {
                 case "Text":
-                    {
-                        if(string.IsNullOrEmpty(text))
-                            validationMessage = "Value can't be null or empty.";
-                        break;
-                    }
+                {
+                    if (string.IsNullOrEmpty(_text))
+                        validationMessage = "Value can't be null or empty.";
+                    break;
+                }
             }
+
             return validationMessage;
         }
     }

@@ -2,49 +2,17 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using TestCaseManager.Core.AuthenticatePoint;
 using TestCaseManager.DB;
 
 namespace TestCaseManager.Core.Managers
 {
     public class TestManager : ITestManager<TestCase>
     {
-        public TestCase Create(int areaId, TestCase testCase)
-        {
-            TestCase @case = null;
-            using (TestcaseManagerDB context = new TestcaseManagerDB())
-            {
-                @case = this.MapPrimaryProperties(testCase);
-                @case.AreaID = areaId;
-                @case.CreatedBy = AuthenticationManager.Instance().GetCurrentUsername;
-
-                context.TestCases.Add(@case);
-                context.SaveChanges();
-
-                if (testCase.StepDefinitions != null)
-                {
-                    foreach (StepDefinition item in testCase.StepDefinitions)
-                    {
-                        if (item.Step != null)
-                        {
-                            StepDefinition definition = new StepDefinition();
-                            definition.Step = item.Step;
-                            definition.ExpectedResult = item.ExpectedResult;
-                            definition.TestCaseID = @case.ID;
-                            @case.StepDefinitions.Add(definition);
-                        }
-                    }
-
-                    context.SaveChanges();
-                }
-            }
-
-            return @case;
-        }
-
         public List<TestCase> GetAll()
         {
             List<TestCase> testCasesList = null;
-            using (TestcaseManagerDB context = new TestcaseManagerDB())
+            using (var context = new TestcaseManagerDB())
             {
                 testCasesList = context.TestCases.ToList();
             }
@@ -55,9 +23,9 @@ namespace TestCaseManager.Core.Managers
         public TestCase GetById(int id)
         {
             TestCase testCase = null;
-            using (TestcaseManagerDB context = new TestcaseManagerDB())
+            using (var context = new TestcaseManagerDB())
             {
-                testCase = context.TestCases.Where(tc => tc.ID == id).FirstOrDefault();
+                testCase = context.TestCases.FirstOrDefault(tc => tc.ID == id);
             }
 
             //TODO: Throw custom exception for null project.
@@ -67,26 +35,12 @@ namespace TestCaseManager.Core.Managers
             return testCase;
         }
 
-        public ICollection<StepDefinition> GetStepDefinitionsById(int testCaseId)
-        {
-            ICollection<StepDefinition> stepDefinitions = new Collection<StepDefinition>();
-            using (TestcaseManagerDB context = new TestcaseManagerDB())
-            {
-                var @case = context.TestCases.Where(x => x.ID == testCaseId).FirstOrDefault();
-
-                if (@case.StepDefinitions != null && @case.StepDefinitions.Count() > 0)
-                    stepDefinitions = @case.StepDefinitions;
-            }
-
-            return stepDefinitions;
-        }
-
         public TestCase Update(TestCase testCase)
         {
             TestCase @case = null;
-            using (TestcaseManagerDB context = new TestcaseManagerDB())
+            using (var context = new TestcaseManagerDB())
             {
-                @case = context.TestCases.Where(tc => tc.ID == testCase.ID).FirstOrDefault();
+                @case = context.TestCases.FirstOrDefault(tc => tc.ID == testCase.ID);
 
                 @case.Title = testCase.Title;
                 @case.Severity = testCase.Severity;
@@ -96,12 +50,11 @@ namespace TestCaseManager.Core.Managers
 
                 if (testCase.StepDefinitions != null)
                 {
-                    List<StepDefinition> expectedStepDefinitions = new List<StepDefinition>();
-                    foreach (StepDefinition item in testCase.StepDefinitions)
-                    {
+                    var expectedStepDefinitions = new List<StepDefinition>();
+                    foreach (var item in testCase.StepDefinitions)
                         if (item.Step != null)
                         {
-                            StepDefinition definition = context.StepDefinitions.Where(sd => sd.ID == item.ID && sd.TestCaseID == @case.ID).FirstOrDefault();
+                            var definition = context.StepDefinitions.FirstOrDefault(sd => sd.ID == item.ID && sd.TestCaseID == @case.ID);
                             if (definition != null)
                             {
                                 definition.Step = item.Step;
@@ -109,33 +62,31 @@ namespace TestCaseManager.Core.Managers
                             }
                             else
                             {
-                                definition = new StepDefinition();
-                                definition.Step = item.Step;
-                                definition.ExpectedResult = item.ExpectedResult;
-                                definition.TestCaseID = @case.ID;
+                                definition = new StepDefinition
+                                {
+                                    Step = item.Step,
+                                    ExpectedResult = item.ExpectedResult,
+                                    TestCaseID = @case.ID
+                                };
                                 @case.StepDefinitions.Add(definition);
                             }
 
                             context.SaveChanges();
                             expectedStepDefinitions.Add(definition);
                         }
-                    }
 
                     // Register steps definitions for delete
-                    List<StepDefinition> stepsDefinitionsToDelete = new List<StepDefinition>();
-                    foreach (StepDefinition item in @case.StepDefinitions)
+                    var stepsDefinitionsToDelete = new List<StepDefinition>();
+                    foreach (var item in @case.StepDefinitions)
                     {
-                        StepDefinition stepDefinition = expectedStepDefinitions.Where(x => x.ID == item.ID).FirstOrDefault();
+                        var stepDefinition = expectedStepDefinitions.FirstOrDefault(x => x.ID == item.ID);
 
                         if (stepDefinition == null)
                             stepsDefinitionsToDelete.Add(item);
                     }
 
                     // Delete orphans
-                    foreach (StepDefinition orphan in stepsDefinitionsToDelete)
-                    {
-                        context.StepDefinitions.Remove(orphan);
-                    }
+                    foreach (var orphan in stepsDefinitionsToDelete) context.StepDefinitions.Remove(orphan);
                 }
 
                 context.SaveChanges();
@@ -146,35 +97,82 @@ namespace TestCaseManager.Core.Managers
 
         public void DeleteById(int id)
         {
-            using (TestcaseManagerDB context = new TestcaseManagerDB())
+            using (var context = new TestcaseManagerDB())
             {
-                TestCase testCase = context.TestCases.Where(tc => tc.ID == id).FirstOrDefault();
+                var testCase = context.TestCases.FirstOrDefault(tc => tc.ID == id);
 
                 if (testCase == null)
                     throw new NullReferenceException();
 
                 IList<TestComposite> composites = context.TestComposites.Where(comp => comp.TestCaseID == id).ToList();
-                if (composites.Count() > 0)
-                {
+                if (composites.Any())
                     foreach (var item in composites)
                     {
                         context.TestComposites.Remove(item);
                         context.SaveChanges();
                     }
-                }
 
                 context.TestCases.Remove(testCase);
                 context.SaveChanges();
             }
         }
 
-        private TestCase MapPrimaryProperties(TestCase item)
+        public TestCase Create(int areaId, TestCase testCase)
         {
-            TestCase testCase = new TestCase();
-            testCase.Title = item.Title;
-            testCase.Severity = item.Severity;
-            testCase.Priority = item.Priority;
-            testCase.IsAutomated = item.IsAutomated;
+            TestCase @case = null;
+            using (var context = new TestcaseManagerDB())
+            {
+                @case = MapPrimaryProperties(testCase);
+                @case.AreaID = areaId;
+                @case.CreatedBy = AuthenticationManager.Instance().GetCurrentUsername;
+
+                context.TestCases.Add(@case);
+                context.SaveChanges();
+
+                if (testCase.StepDefinitions != null)
+                {
+                    foreach (var item in testCase.StepDefinitions)
+                        if (item.Step != null)
+                        {
+                            var definition = new StepDefinition
+                            {
+                                Step = item.Step,
+                                ExpectedResult = item.ExpectedResult,
+                                TestCaseID = @case.ID
+                            };
+                            @case.StepDefinitions.Add(definition);
+                        }
+
+                    context.SaveChanges();
+                }
+            }
+
+            return @case;
+        }
+
+        public ICollection<StepDefinition> GetStepDefinitionsById(int testCaseId)
+        {
+            ICollection<StepDefinition> stepDefinitions = new Collection<StepDefinition>();
+            using (var context = new TestcaseManagerDB())
+            {
+                var @case = context.TestCases.FirstOrDefault(x => x.ID == testCaseId);
+
+                if (@case?.StepDefinitions != null && @case.StepDefinitions.Any())
+                    stepDefinitions = @case.StepDefinitions;
+            }
+
+            return stepDefinitions;
+        }
+
+        private static TestCase MapPrimaryProperties(TestCase item)
+        {
+            var testCase = new TestCase
+            {
+                Title = item.Title,
+                Severity = item.Severity,
+                Priority = item.Priority,
+                IsAutomated = item.IsAutomated
+            };
 
             return testCase;
         }

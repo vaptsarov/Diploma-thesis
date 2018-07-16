@@ -1,104 +1,100 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Linq;
 using System.Windows.Controls;
+using System.Windows.Media;
 using TestCaseManager.Core.Managers;
 using TestCaseManager.DB;
 using TestCaseManager.Models;
-using System.Windows.Media;
 
 namespace TestCaseManager.Views.Administration
 {
     /// <summary>
-    /// Interaction logic for ManageUsersPage.xaml
+    ///     Interaction logic for ManageUsersPage.xaml
     /// </summary>
     public partial class ManageUsersPage : UserControl
     {
-        private ICollection<ApplicationUser> users;
-        private ApplicationUser selectedUser;
+        private ApplicationUser _selectedUser;
+        private ICollection<ApplicationUser> _users;
 
         public ManageUsersPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            Task task = Task.Factory.StartNew(() =>
+            var task = Task.Factory.StartNew(() =>
             {
-                UserManager manager = new UserManager();
-                users = manager.GetAll();
+                var manager = new UserManager();
+                _users = manager.GetAll();
             });
             task.ContinueWith(next =>
             {
                 // Update the main Thread as it is the owner of the UI elements
-                this.Dispatcher.Invoke((Action)(() =>
+                Dispatcher.Invoke(() =>
                 {
-                    foreach (var user in users)
-                    {
-                        this.AutoCompleteBox.AddItem(new AutoCompleteModel(user.Username, user.Username));
-                    }
-                }));
+                    foreach (var user in _users)
+                        AutoCompleteBox.AddItem(new AutoCompleteModel(user.Username, user.Username));
+                });
             });
         }
 
         private void SelectUser_Click(object sender, RoutedEventArgs e)
         {
-            this.MessageLabel.Content = string.Empty;
+            MessageLabel.Content = string.Empty;
 
-            string username = this.AutoCompleteBox.Text;
+            var username = AutoCompleteBox.Text;
             if (string.IsNullOrWhiteSpace(username) == false)
-            {
-                if (this.users.Any(user => user.Username.Equals(username)))
+                if (_users.Any(user => user.Username.Equals(username)))
                 {
-                    selectedUser = this.users.Where(user => user.Username.Equals(username)).First();
-                    this.Username.Text = selectedUser.Username;
-                    this.IsAdminCheckBox.IsChecked = selectedUser.IsAdmin;
+                    _selectedUser = _users.Where(user => user.Username.Equals(username)).First();
+                    Username.Text = _selectedUser.Username;
+                    IsAdminCheckBox.IsChecked = _selectedUser.IsAdmin;
                 }
-            }
         }
 
         private void EditUser_Click(object sender, RoutedEventArgs e)
         {
-            string username = this.Username.Text;
-            if(string.IsNullOrWhiteSpace(username) == false && this.selectedUser != null)
+            var username = Username.Text;
+            if (string.IsNullOrWhiteSpace(username) == false && _selectedUser != null)
             {
-                UserManager manager = new UserManager();
-                var updatedUser = manager.UpdateUser(this.selectedUser.UserId, username, this.Password.SecurePassword, this.IsAdminCheckBox.IsChecked.Value);
+                var manager = new UserManager();
+                var updatedUser = manager.UpdateUser(_selectedUser.UserId, username, Password.SecurePassword,
+                    IsAdminCheckBox.IsChecked.Value);
 
-                this.users.Remove(selectedUser);
-                this.users.Add(updatedUser);
-                this.selectedUser = updatedUser;
+                _users.Remove(_selectedUser);
+                _users.Add(updatedUser);
+                _selectedUser = updatedUser;
 
-                this.MessageLabel.Content = "User is successfuly updated.";
-                this.MessageLabel.Foreground = new SolidColorBrush(Color.FromRgb(0, 204, 0));
+                MessageLabel.Content = "User is successfuly updated.";
+                MessageLabel.Foreground = new SolidColorBrush(Color.FromRgb(0, 204, 0));
 
-                this.ClearFields();
+                ClearFields();
             }
         }
 
         private void DeleteUser_Click(object sender, RoutedEventArgs e)
         {
-            if(this.selectedUser != null)
+            if (_selectedUser != null)
             {
-                UserManager manager = new UserManager();
-                manager.DeleteUser(this.selectedUser.UserId);
+                var manager = new UserManager();
+                manager.DeleteUser(_selectedUser.UserId);
 
-                this.users.Remove(selectedUser);
-                this.AutoCompleteBox.RemoveItem(this.selectedUser.Username);
-                this.selectedUser = null;
+                _users.Remove(_selectedUser);
+                AutoCompleteBox.RemoveItem(_selectedUser.Username);
+                _selectedUser = null;
 
-                this.ClearFields();
+                ClearFields();
             }
         }
 
         private void ClearFields()
         {
-            this.Username.Text = string.Empty;
-            this.IsAdminCheckBox.IsChecked = false;
-            this.Password.Clear();
+            Username.Text = string.Empty;
+            IsAdminCheckBox.IsChecked = false;
+            Password.Clear();
         }
     }
 }

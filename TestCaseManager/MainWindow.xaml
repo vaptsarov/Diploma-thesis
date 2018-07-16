@@ -2,8 +2,9 @@
                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                   xmlns:mui="http://firstfloorsoftware.com/ModernUI"
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                  Title="Test Case Manager" IsTitleVisible="True"    
-        ContentSource="/Views/AuthorizationHome.xaml" ResizeMode="CanResizeWithGrip" Width="1024" Height="764"  MinWidth="1024" MinHeight="764">
+                  Title="Test Case Manager" IsTitleVisible="True"
+                  ContentSource="/Views/AuthorizationHome.xaml" ResizeMode="CanResizeWithGrip" Width="1024"
+                  Height="764" MinWidth="1024" MinHeight="764">
 
     <mui:ModernWindow.MenuLinkGroups>
         <mui:LinkGroup DisplayName="">
@@ -11,14 +12,13 @@
                 <mui:Link DisplayName="" Source="/Views/AuthorizationHome.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
-        <mui:LinkGroup DisplayName="Back" GroupKey="Back">
-        </mui:LinkGroup>
+        <mui:LinkGroup DisplayName="Back" GroupKey="Back" />
     </mui:ModernWindow.MenuLinkGroups>
     <mui:ModernWindow.TitleLinks>
         <!--<mui:Link DisplayName="Test Cases" Source="/Views/MainWindowProjectAndTestCases.xaml" />
             <mui:Link DisplayName="Test Runs" Source="/Views/MainWindowTestRuns.xaml" />-->
-            <mui:Link DisplayName="Settings" Source="/Views/SettingsPage.xaml" />
-            <mui:Link DisplayName="GitHub Project Location" Source="https://github.com/vaptsarov/Diploma-thesis" />
-            <mui:Link x:Name="LoginLink" DisplayName="Login" Source="/Views/AuthorizationHome.xaml" />
+        <mui:Link DisplayName="Settings" Source="/Views/SettingsPage.xaml" />
+        <mui:Link DisplayName="GitHub Project Location" Source="https://github.com/vaptsarov/Diploma-thesis" />
+        <mui:Link x:Name="LoginLink" DisplayName="Login" Source="/Views/AuthorizationHome.xaml" />
     </mui:ModernWindow.TitleLinks>
 </mui:ModernWindow>

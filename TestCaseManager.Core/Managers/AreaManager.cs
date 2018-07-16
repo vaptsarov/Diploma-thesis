@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TestCaseManager.Core.Proxy;
+using TestCaseManager.Core.AuthenticatePoint;
 using TestCaseManager.DB;
 
 namespace TestCaseManager.Core.Managers
@@ -11,7 +11,7 @@ namespace TestCaseManager.Core.Managers
         public List<Area> GetAll()
         {
             List<Area> areaList = null;
-            using (TestcaseManagerDB context = new TestcaseManagerDB())
+            using (var context = new TestcaseManagerDB())
             {
                 areaList = context.Areas.ToList();
             }
@@ -22,9 +22,9 @@ namespace TestCaseManager.Core.Managers
         public Area GetById(int id)
         {
             Area area = null;
-            using (TestcaseManagerDB context = new TestcaseManagerDB())
+            using (var context = new TestcaseManagerDB())
             {
-                area = context.Areas.Where(a => a.ID == id).FirstOrDefault();
+                area = context.Areas.FirstOrDefault(a => a.ID == id);
             }
 
             //TODO: Throw custom exception for null project.
@@ -34,29 +34,12 @@ namespace TestCaseManager.Core.Managers
             return area;
         }
 
-        public Area Create(string title, int projectId)
-        {
-            Area area = null;
-            using (TestcaseManagerDB context = new TestcaseManagerDB())
-            {
-                area = new Area();
-                area.Title = title;
-                area.ProjectId = projectId;
-                area.CreatedBy = AuthenticationManager.Instance().GetCurrentUsername;
-
-                context.Areas.Add(area);
-                context.SaveChanges();
-            }
-
-            return area;
-        }
-
         public Area Update(Area area)
         {
             Area areaToUpdate = null;
-            using (TestcaseManagerDB context = new TestcaseManagerDB())
+            using (var context = new TestcaseManagerDB())
             {
-                areaToUpdate = context.Areas.Where(x => x.ID == area.ID).FirstOrDefault();
+                areaToUpdate = context.Areas.FirstOrDefault(x => x.ID == area.ID);
                 if (areaToUpdate == null)
                     throw new NullReferenceException();
 
@@ -70,9 +53,9 @@ namespace TestCaseManager.Core.Managers
 
         public void DeleteById(int id)
         {
-            using (TestcaseManagerDB context = new TestcaseManagerDB())
+            using (var context = new TestcaseManagerDB())
             {
-                Area area = context.Areas.Where(a => a.ID == id).FirstOrDefault();
+                var area = context.Areas.FirstOrDefault(a => a.ID == id);
 
                 if (area == null)
                     throw new NullReferenceException();
@@ -80,6 +63,25 @@ namespace TestCaseManager.Core.Managers
                 context.Areas.Remove(area);
                 context.SaveChanges();
             }
+        }
+
+        public Area Create(string title, int projectId)
+        {
+            Area area = null;
+            using (var context = new TestcaseManagerDB())
+            {
+                area = new Area
+                {
+                    Title = title,
+                    ProjectId = projectId,
+                    CreatedBy = AuthenticationManager.Instance().GetCurrentUsername
+                };
+
+                context.Areas.Add(area);
+                context.SaveChanges();
+            }
+
+            return area;
         }
     }
 }

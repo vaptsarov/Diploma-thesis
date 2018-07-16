@@ -1,204 +1,210 @@
-﻿using FirstFloor.ModernUI.Presentation;
-using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using FirstFloor.ModernUI.Presentation;
 using TestCaseManager.Core;
+using TestCaseManager.Core.Converters;
 using TestCaseManager.Core.Managers;
 using TestCaseManager.Core.Proxy;
 using TestCaseManager.Core.Proxy.TestDefinition;
+using TestCaseManager.Models;
 using TestCaseManager.Utilities;
+using TestCaseManager.Utilities.StringUtility;
 
 namespace TestCaseManager.Views.CustomControls
 {
     /// <summary>
-    /// Interaction logic for CreateTestCaseDialog.xaml
+    ///     Interaction logic for CreateTestCaseDialog.xaml
     /// </summary>
     public partial class TestCaseDialog : Window
     {
-        private TextboxViewModel textboxViewModel;
-        private AreaProxy relatedArea;
-        private bool isEditingExistingTestCase;
-        private int testCaseId;
+        private static TestCaseProxy _testCase;
 
-        private readonly ObservableCollection<StepDefinitionProxy> stepDefinitionList = new ObservableCollection<StepDefinitionProxy>();
-        private static TestCaseProxy testCase;
+        private readonly bool _isEditingExistingTestCase;
+        private readonly AreaProxy _relatedArea;
+
+        private readonly ObservableCollection<StepDefinitionProxy> _stepDefinitionList =
+            new ObservableCollection<StepDefinitionProxy>();
+
+        private readonly int _testCaseId;
+        private TextboxViewModel _textboxViewModel;
 
         public TestCaseDialog()
         {
-            this.InitializeComponent();
-            this.Owner = Application.Current.MainWindow;
-            this.Loaded += new RoutedEventHandler(this.PromptDialog_Loaded);
-            AppearanceManager.Current.PropertyChanged += this.OnAppearanceManagerPropertyChanged;
+            InitializeComponent();
+            Owner = Application.Current.MainWindow;
+            Loaded += PromptDialog_Loaded;
+            AppearanceManager.Current.PropertyChanged += OnAppearanceManagerPropertyChanged;
 
-            this.DragWindow.MouseLeftButtonDown += new MouseButtonEventHandler(this.AttachDragDropEvent);
-        }
-
-        private void AttachDragDropEvent(object sender, MouseButtonEventArgs e)
-        {
-            this.DragMove();
-        }
-
-        private void OnAppearanceManagerPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "ThemeSource" || e.PropertyName == "AccentColor")
-            {
-                this.SetCurrentAccentColor();
-            }
-        }
-
-        private void SetCurrentAccentColor()
-        {
-            this.TestCasePanelBorder.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
-            this.TestCaseEditViewBorder.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
-            this.BorderTestCaseName.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
-            this.BorderTestCasePriority.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
-            this.BorderTestCaseSeverity.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
-            this.BorderTestCaseAutomated.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
-
-            this.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
-
-            // If theme set is light version, the font color should be black, if dark - should be white.
-            if (AppearanceManager.LightThemeSource != AppearanceManager.Current.ThemeSource)
-            {
-                this.TestStepList.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
-                this.Background = new SolidColorBrush(Color.FromRgb(37,37,38));
-            }
-            else if (AppearanceManager.DarkThemeSource != AppearanceManager.Current.ThemeSource)
-            {
-                this.TestStepList.Foreground = new SolidColorBrush(Color.FromRgb(0, 0, 0));
-                this.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
-            }
+            DragWindow.MouseLeftButtonDown += AttachDragDropEvent;
         }
 
         public TestCaseDialog(AreaProxy area) : this()
         {
-            this.relatedArea = area;
-            this.TestStepList.ItemsSource = this.stepDefinitionList;
+            _relatedArea = area;
+            TestStepList.ItemsSource = _stepDefinitionList;
         }
 
         public TestCaseDialog(TestCaseProxy editTestCase) : this()
         {
-            this.CreateOrEditTestCase.Content = "Save Test Case";
+            CreateOrEditTestCase.Content = "Save Test Case";
 
-            this.TestCaseTitleValidation(editTestCase.Title);
-            this.testCaseId = editTestCase.Id;
-            this.PriorityComboBox.SelectedIndex = (int)editTestCase.Priority;
-            this.SeverityComboBox.SelectedIndex = (int)editTestCase.Severity;
-            this.IsAutomatedCheckBox.IsChecked = editTestCase.IsAutomated;
+            TestCaseTitleValidation(editTestCase.Title);
+            _testCaseId = editTestCase.Id;
+            PriorityComboBox.SelectedIndex = (int) editTestCase.Priority;
+            SeverityComboBox.SelectedIndex = (int) editTestCase.Severity;
+            IsAutomatedCheckBox.IsChecked = editTestCase.IsAutomated;
 
             // Deep clone is needed in case of step definitions changes, which are not saved in the db.
-            this.stepDefinitionList = DeepCloneUtility.DeepClone(editTestCase.StepDefinitionList);
-            this.TestStepList.ItemsSource = this.stepDefinitionList;
+            _stepDefinitionList = DeepCloneUtility.DeepClone(editTestCase.StepDefinitionList);
+            TestStepList.ItemsSource = _stepDefinitionList;
 
-            this.isEditingExistingTestCase = true;
+            _isEditingExistingTestCase = true;
+        }
+
+        private void AttachDragDropEvent(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
+
+        private void OnAppearanceManagerPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "ThemeSource" || e.PropertyName == "AccentColor") SetCurrentAccentColor();
+        }
+
+        private void SetCurrentAccentColor()
+        {
+            TestCasePanelBorder.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+            TestCaseEditViewBorder.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+            BorderTestCaseName.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+            BorderTestCasePriority.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+            BorderTestCaseSeverity.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+            BorderTestCaseAutomated.BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+
+            BorderBrush = new SolidColorBrush(AppearanceManager.Current.AccentColor);
+
+            // If theme set is light version, the font color should be black, if dark - should be white.
+            if (AppearanceManager.LightThemeSource != AppearanceManager.Current.ThemeSource)
+            {
+                TestStepList.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+                Background = new SolidColorBrush(Color.FromRgb(37, 37, 38));
+            }
+            else if (AppearanceManager.DarkThemeSource != AppearanceManager.Current.ThemeSource)
+            {
+                TestStepList.Foreground = new SolidColorBrush(Color.FromRgb(0, 0, 0));
+                Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+            }
         }
 
         public static TestCaseProxy Prompt(AreaProxy relatedArea)
         {
-            TestCaseDialog inst = new TestCaseDialog(relatedArea);
+            var inst = new TestCaseDialog(relatedArea);
             inst.ShowDialog();
 
-            return testCase;
+            return _testCase;
         }
 
         public static TestCaseProxy Prompt(TestCaseProxy editTestCase)
         {
-            TestCaseDialog inst = new TestCaseDialog(editTestCase);
+            var inst = new TestCaseDialog(editTestCase);
             inst.ShowDialog();
 
-            return testCase;
+            return _testCase;
         }
 
         private void CreateTestCase(object sender, RoutedEventArgs e)
         {
-            this.TestCaseTitleValidation(this.TestCaseTitle.Text);
+            TestCaseTitleValidation(TestCaseTitle.Text);
 
-            if (!string.IsNullOrWhiteSpace(this.TestCaseTitle.Text))
+            if (!string.IsNullOrWhiteSpace(TestCaseTitle.Text))
             {
-                TestCaseProxy testCase = new TestCaseProxy();
-                testCase.Id = this.testCaseId;
-                testCase.Title = this.TestCaseTitle.Text;
-                testCase.Priority = EnumUtil.ParseEnum<Priority>((this.PriorityComboBox.SelectedItem as ComboBoxItem).Content.ToString());
-                testCase.Severity = EnumUtil.ParseEnum<Severity>((this.SeverityComboBox.SelectedItem as ComboBoxItem).Content.ToString());
-                testCase.IsAutomated = this.IsAutomatedCheckBox.IsChecked ?? false;
-
-                testCase.StepDefinitionList = new ObservableCollection<StepDefinitionProxy>();
-                foreach (var item in this.TestStepList.ItemsSource)
+                var testCase = new TestCaseProxy
                 {
-                    StepDefinitionProxy stepDefinition = new StepDefinitionProxy();
-                    stepDefinition.ID = (item as StepDefinitionProxy).ID;
-                    stepDefinition.Step = (item as StepDefinitionProxy).Step;
-                    stepDefinition.ExpectedResult = (item as StepDefinitionProxy).ExpectedResult;
-                    stepDefinition.TestCaseID = testCase.Id;
+                    Id = _testCaseId,
+                    Title = TestCaseTitle.Text,
+                    Priority =
+                    EnumUtil.ParseEnum<Priority>((PriorityComboBox.SelectedItem as ComboBoxItem).Content.ToString()),
+                    Severity =
+                    EnumUtil.ParseEnum<Severity>((SeverityComboBox.SelectedItem as ComboBoxItem).Content.ToString()),
+                    IsAutomated = IsAutomatedCheckBox.IsChecked ?? false,
+
+                    StepDefinitionList = new ObservableCollection<StepDefinitionProxy>()
+                };
+                foreach (var item in TestStepList.ItemsSource)
+                {
+                    var stepDefinition = new StepDefinitionProxy
+                    {
+                        Id = (item as StepDefinitionProxy).Id,
+                        Step = (item as StepDefinitionProxy).Step,
+                        ExpectedResult = (item as StepDefinitionProxy).ExpectedResult,
+                        TestCaseId = testCase.Id
+                    };
 
                     testCase.StepDefinitionList.Add(stepDefinition);
                 }
 
-                TestManager manager = new TestManager();
+                var manager = new TestManager();
 
-                if (!this.isEditingExistingTestCase)
-                {
-                    TestCaseDialog.testCase = ProxyConverter.TestCaseModelToProxy(manager.Create(relatedArea.ID, ModelConverter.TestCaseProxyToModel(testCase)));
-                }
+                if (!_isEditingExistingTestCase)
+                    TestCaseDialog._testCase = ProxyConverter.TestCaseModelToProxy(manager.Create(_relatedArea.Id,
+                        ModelConverter.TestCaseProxyToModel(testCase)));
                 else
-                {
-                    TestCaseDialog.testCase = ProxyConverter.TestCaseModelToProxy(manager.Update(ModelConverter.TestCaseProxyToModel(testCase)));
-                }
+                    TestCaseDialog._testCase =
+                        ProxyConverter.TestCaseModelToProxy(
+                            manager.Update(ModelConverter.TestCaseProxyToModel(testCase)));
 
-                this.CancelDialog();
+                CancelDialog();
             }
         }
 
         private void TestCaseTitleValidation(string title)
         {
-            this.textboxViewModel = new TextboxViewModel();
-            this.textboxViewModel.Text = title;
-            this.DataContext = this.textboxViewModel;
+            _textboxViewModel = new TextboxViewModel
+            {
+                Text = title
+            };
+            DataContext = _textboxViewModel;
         }
 
         private void AddTestStep(object sender, RoutedEventArgs e)
         {
-            this.stepDefinitionList.Add(new StepDefinitionProxy());
+            _stepDefinitionList.Add(new StepDefinitionProxy());
         }
 
         private void DeleteTestStep(object sender, RoutedEventArgs e)
         {
-            StepDefinitionProxy stepDefinitionToDelete = this.TestStepList.SelectedItem as StepDefinitionProxy;
-            if (stepDefinitionToDelete != null)
-            {
-                this.stepDefinitionList.Remove(stepDefinitionToDelete);
-            }
+            var stepDefinitionToDelete = TestStepList.SelectedItem as StepDefinitionProxy;
+            if (stepDefinitionToDelete != null) _stepDefinitionList.Remove(stepDefinitionToDelete);
         }
 
         private void Cancel(object sender, RoutedEventArgs e)
         {
-            this.CancelDialog();
+            CancelDialog();
         }
 
         private void CancelDialog()
         {
-            this.Close();
+            Close();
         }
 
         private void PromptDialog_Loaded(object sender, RoutedEventArgs e)
         {
-            this.SetCurrentAccentColor();
-            this.TestCaseTitle.Focus();
+            SetCurrentAccentColor();
+            TestCaseTitle.Focus();
         }
 
-        private void OnSelected(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void OnSelected(object sender, MouseButtonEventArgs e)
         {
             var initialSelectedItem = sender as DependencyObject;
             while (initialSelectedItem != null)
             {
                 if (initialSelectedItem is ListBoxItem)
                 {
-                    var selectedListBoxItem = (initialSelectedItem as ListBoxItem);
-                    this.TestStepList.SelectedItem = selectedListBoxItem.Content;
+                    var selectedListBoxItem = initialSelectedItem as ListBoxItem;
+                    TestStepList.SelectedItem = selectedListBoxItem.Content;
                     break;
                 }
 

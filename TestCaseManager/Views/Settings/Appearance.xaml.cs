@@ -1,9 +1,10 @@
 ﻿using System.Windows.Controls;
+using TestCaseManager.Models;
 
-namespace TestCaseManager.Pages.Settings
+namespace TestCaseManager.Views.Settings
 {
     /// <summary>
-    /// Interaction logic for Appearance.xaml
+    ///     Interaction logic for Appearance.xaml
     /// </summary>
     public partial class Appearance : UserControl
     {
@@ -12,7 +13,7 @@ namespace TestCaseManager.Pages.Settings
             InitializeComponent();
 
             // create and assign the appearance view model
-            this.DataContext = new AppearanceViewModel();
+            DataContext = new AppearanceViewModel();
         }
     }
 }

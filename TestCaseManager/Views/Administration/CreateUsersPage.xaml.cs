@@ -3,47 +3,48 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using TestCaseManager.Core.Managers;
 using TestCaseManager.Utilities;
+using TestCaseManager.Utilities.StringUtility;
 
 namespace TestCaseManager.Views.Administration
 {
     /// <summary>
-    /// Interaction logic for CreateUserPage.xaml
+    ///     Interaction logic for CreateUserPage.xaml
     /// </summary>
     public partial class CreateUserPage : UserControl
     {
         public CreateUserPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         private void CreateUser_Click(object sender, RoutedEventArgs e)
         {
-            UserManager manager = new UserManager();
-            bool userExists = manager.CheckUsernameExists(this.Username.Text);
-            if (string.IsNullOrWhiteSpace(this.Username.Text) == false &&
+            var manager = new UserManager();
+            var userExists = manager.CheckUsernameExists(Username.Text);
+            if (string.IsNullOrWhiteSpace(Username.Text) == false &&
                 userExists == false &&
-                string.IsNullOrWhiteSpace(this.Password.SecurePassword.ConvertToUnsecureString()) == false)
+                string.IsNullOrWhiteSpace(Password.SecurePassword.ConvertToUnsecureString()) == false)
             {
-                manager.CreateUser(this.Username.Text, this.Password.SecurePassword, this.IsAdminCheckBox.IsChecked.Value);
-                this.MessageLabel.Content = "Successfuly created the application user.";
-                this.MessageLabel.Foreground = new SolidColorBrush(Color.FromRgb(0, 204, 0));
+                manager.CreateUser(Username.Text, Password.SecurePassword, IsAdminCheckBox.IsChecked.Value);
+                MessageLabel.Content = "Successfuly created the application user.";
+                MessageLabel.Foreground = new SolidColorBrush(Color.FromRgb(0, 204, 0));
 
-                this.ClearFields();
+                ClearFields();
             }
             else if (userExists)
             {
-                this.MessageLabel.Content = "The application user already exists.";
-                this.MessageLabel.Foreground = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+                MessageLabel.Content = "The application user already exists.";
+                MessageLabel.Foreground = new SolidColorBrush(Color.FromRgb(255, 0, 0));
 
-                this.ClearFields();
+                ClearFields();
             }
         }
 
         private void ClearFields()
         {
-            this.Username.Clear();
-            this.Password.Clear();
-            this.IsAdminCheckBox.IsChecked = false;
+            Username.Clear();
+            Password.Clear();
+            IsAdminCheckBox.IsChecked = false;
         }
     }
 }

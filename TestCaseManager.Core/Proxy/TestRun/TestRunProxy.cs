@@ -7,10 +7,10 @@ namespace TestCaseManager.Core.Proxy.TestRun
     {
         public TestRunProxy()
         {
-            this.TestCasesList = new ObservableCollection<ExtendedTestCaseProxy>();
+            TestCasesList = new ObservableCollection<ExtendedTestCaseProxy>();
         }
 
-        public int ID { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public DateTime CreatedOn { get; set; }
         public string CreatedBy { get; set; }

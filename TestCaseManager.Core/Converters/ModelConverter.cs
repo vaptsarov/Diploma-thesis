@@ -4,58 +4,67 @@ using TestCaseManager.Core.Proxy;
 using TestCaseManager.Core.Proxy.TestDefinition;
 using TestCaseManager.DB;
 
-namespace TestCaseManager.Core
+namespace TestCaseManager.Core.Converters
 {
     public static class ModelConverter
     {
         public static Project ProjectProxyToModel(ProjectProxy proxy)
         {
-            Project model = new Project();
-            model.Title = proxy.Title;
-            model.ID = proxy.ID;
-            model.CreatedBy = proxy.CreatedBy;
-            model.UpdatedBy = proxy.UpdatedBy;
+            var model = new Project
+            {
+                Title = proxy.Title,
+                ID = proxy.Id,
+                CreatedBy = proxy.CreatedBy,
+                UpdatedBy = proxy.UpdatedBy
+            };
 
             return model;
         }
 
         public static Area AreaProxyToModel(AreaProxy proxy)
         {
-            Area area = new Area();
-            area.ID = proxy.ID;
-            area.Title = proxy.Title;
-            area.CreatedBy = proxy.CreatedBy;
-            area.UpdatedBy = proxy.UpdatedBy;
+            var area = new Area
+            {
+                ID = proxy.Id,
+                Title = proxy.Title,
+                CreatedBy = proxy.CreatedBy,
+                UpdatedBy = proxy.UpdatedBy
+            };
 
             return area;
         }
 
         public static TestCase TestCaseProxyToModel(TestCaseProxy proxy)
         {
-            TestCase testCase = new TestCase();
-            testCase.ID = proxy.Id;
-            testCase.Title = proxy.Title;
-            testCase.Priority = proxy.Priority.ToString();
-            testCase.Severity = proxy.Severity.ToString();
-            testCase.IsAutomated = proxy.IsAutomated;
-            testCase.CreatedBy = proxy.CreatedBy;
-            testCase.UpdatedBy = proxy.UpdatedBy;
-            testCase.AreaID = proxy.AreaID;
-            testCase.StepDefinitions = StepDefinitionModelToProxy(proxy.StepDefinitionList);
+            var testCase = new TestCase
+            {
+                ID = proxy.Id,
+                Title = proxy.Title,
+                Priority = proxy.Priority.ToString(),
+                Severity = proxy.Severity.ToString(),
+                IsAutomated = proxy.IsAutomated,
+                CreatedBy = proxy.CreatedBy,
+                UpdatedBy = proxy.UpdatedBy,
+                AreaID = proxy.AreaId,
+                StepDefinitions = StepDefinitionModelToProxy(proxy.StepDefinitionList)
+            };
 
             return testCase;
         }
 
-        public static ICollection<StepDefinition> StepDefinitionModelToProxy(ICollection<StepDefinitionProxy> stepDefinitions)
+        public static ICollection<StepDefinition> StepDefinitionModelToProxy(
+            ICollection<StepDefinitionProxy> stepDefinitions)
         {
             ICollection<StepDefinition> list = new Collection<StepDefinition>();
             foreach (var item in stepDefinitions)
             {
-                StepDefinition proxy = new StepDefinition();
-                proxy.Step = item.Step;
-                proxy.ExpectedResult = item.ExpectedResult;
-                proxy.ID = item.ID;
-                proxy.TestCaseID = item.TestCaseID;
+                var proxy = new StepDefinition
+                {
+                    Step = item.Step,
+                    ExpectedResult = item.ExpectedResult,
+                    ID = item.Id,
+                    TestCaseID = item.TestCaseId
+                };
 
                 list.Add(proxy);
             }
