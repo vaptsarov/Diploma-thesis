@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -95,40 +96,52 @@ namespace TestCaseManager.Views
 
         private void AddTestRun(object sender, RoutedEventArgs e)
         {
-            var projectTitle = PromptDialog.Prompt("Test Run name", "Create new test run");
-            if (!string.IsNullOrWhiteSpace(projectTitle))
+            this.RunWithOverlayer(() =>
             {
-                var runManager = new TestRunManager();
-                var proxyProject = ProxyConverter.TestRunModelToProxy(runManager.Create(projectTitle));
-                _uiTestRunList.Add(proxyProject);
-            }
+                var projectTitle = PromptDialog.Prompt("Test Run name", "Create new test run");
+                if (!string.IsNullOrWhiteSpace(projectTitle))
+                {
+                    var runManager = new TestRunManager();
+                    var proxyProject = ProxyConverter.TestRunModelToProxy(runManager.Create(projectTitle));
+                    _uiTestRunList.Add(proxyProject);
+                }
+            });
         }
 
         private void AddTests(object sender, RoutedEventArgs e)
         {
-            if (TestRunListBox.SelectedItem is TestRunProxy selectedTestRun)
+            this.RunWithOverlayer(() =>
             {
-                TestCaseSelectorDialog.Prompt(selectedTestRun.Id);
-                UpdateTestRun(selectedTestRun);
-            }
+                if (TestRunListBox.SelectedItem is TestRunProxy selectedTestRun)
+                {
+                    TestCaseSelectorDialog.Prompt(selectedTestRun.Id);
+                    UpdateTestRun(selectedTestRun);
+                }
+            });
         }
 
         private void RunTests(object sender, RoutedEventArgs e)
         {
-            if (TestRunListBox.SelectedItem is TestRunProxy selectedTestRun && selectedTestRun.TestCasesList.Count > 0)
+            this.RunWithOverlayer(() =>
             {
-                TestCaseRunDialog.Prompt(selectedTestRun.Id);
-                UpdateTestRun(selectedTestRun);
-            }
+                if (TestRunListBox.SelectedItem is TestRunProxy selectedTestRun && selectedTestRun.TestCasesList.Count > 0)
+                {
+                    TestCaseRunDialog.Prompt(selectedTestRun.Id);
+                    UpdateTestRun(selectedTestRun);
+                }
+            });
         }
 
         private void UpdateTestRun(TestRunProxy selectedTestRun)
         {
-            var manager = new TestRunProxyManager();
-            var updatedTestRun = manager.GetById(selectedTestRun.Id);
+            this.RunWithOverlayer(() =>
+            {
+                var manager = new TestRunProxyManager();
+                var updatedTestRun = manager.GetById(selectedTestRun.Id);
 
-            selectedTestRun.TestCasesList = updatedTestRun.TestCasesList;
-            OnSelectedItem(this, null);
+                selectedTestRun.TestCasesList = updatedTestRun.TestCasesList;
+                OnSelectedItem(this, null);
+            });
         }
 
         private void OnSelectedItem(object sender, SelectionChangedEventArgs args)
@@ -165,6 +178,19 @@ namespace TestCaseManager.Views
                 }
 
                 initialSelectedItem = VisualTreeHelper.GetParent(initialSelectedItem);
+            }
+        }
+
+        private void RunWithOverlayer(Action action)
+        {
+            Overlay.Visibility = Visibility.Visible;
+            try
+            {
+                action.Invoke();
+            }
+            finally
+            {
+                Overlay.Visibility = Visibility.Collapsed;
             }
         }
     }

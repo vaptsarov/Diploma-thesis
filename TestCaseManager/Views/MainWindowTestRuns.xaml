@@ -5,13 +5,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:converters="clr-namespace:TestCaseManager.BindingConverters"
              mc:Ignorable="d"
-             d:DesignHeight="1024" d:DesignWidth="300" Loaded="MainWindowTestRuns_Loaded">
+             d:DesignHeight="1024" d:DesignWidth="768" Loaded="MainWindowTestRuns_Loaded">
     <Grid>
+        <Grid x:Name="Overlay" Panel.ZIndex="1000" Visibility="Collapsed">
+            <Grid.Background>
+                <SolidColorBrush Color="#ABFFFFFF" />
+            </Grid.Background>
+        </Grid>
+        
         <ProgressBar Name="progressBar" Minimum="0" Maximum="1" Height="16" IsIndeterminate="True" Margin="0,0,0,16" />
         <DockPanel Height="Auto" Name="MainTable" Width="Auto" LastChildFill="True" Visibility="Hidden">
             <Grid Name="TestRunGrid">
-                <TextBlock Text="Test Runs" Margin="0,0,0,36" />
-                <Border Name="TestRunBorder" BorderBrush="Black" BorderThickness="1.6" Width="270" Margin="-25,20,0,35"
+                <TextBlock Text="Test Runs" Margin="0,-5,0,36" FontWeight="Medium" FontSize="16"/>
+                <Border Name="TestRunBorder" BorderBrush="Black" BorderThickness="1.6" Width="270" Margin="0,20,0,35"
                         VerticalAlignment="Stretch" HorizontalAlignment="Left">
                     <ListBox Name="TestRunListBox" FontSize="13" Grid.Row="1" VerticalAlignment="Stretch"
                              Margin="0,0,0,5" SelectionChanged="OnSelectedItem">
@@ -27,7 +33,7 @@
                 </Border>
                 <Button Name="CreateTestRunButton" Width="270" Height="30" HorizontalAlignment="Left"
                         VerticalAlignment="Bottom" BorderBrush="Black" BorderThickness="1.6" FontWeight="Medium"
-                        FontSize="15" Margin="-25,20,0,0" Click="AddTestRun">
+                        FontSize="15" Margin="0,20,0,0" Click="AddTestRun">
                     <Grid>
                         <Canvas xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Name="appbar_list_create"

@@ -5,7 +5,17 @@
                   Title="Test Case Manager" IsTitleVisible="True"
                   ContentSource="/Views/AuthorizationHome.xaml" ResizeMode="CanResizeWithGrip" Width="1024"
                   Height="764" MinWidth="1024" MinHeight="764">
-
+    <mui:ModernWindow.Resources>
+        <Style TargetType="{x:Type mui:ModernButton}">
+            <Style.Triggers>
+                <Trigger Property="Command" Value="NavigationCommands.BrowseBack">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Setter Property="Margin" Value="-10,0,0,0"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </mui:ModernWindow.Resources>
+    
     <mui:ModernWindow.MenuLinkGroups>
         <mui:LinkGroup DisplayName="">
             <mui:LinkGroup.Links>

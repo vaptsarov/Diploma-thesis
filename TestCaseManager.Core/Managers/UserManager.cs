@@ -66,7 +66,6 @@ namespace TestCaseManager.Core.Managers
             using (var db = new TestcaseManagerDB())
             {
                 var users = db.ApplicationUsers.Where(usr => usr.Username == username).ToList();
-
                 foreach (var usr in users)
                 {
                     var decryptedPassword = _cryptoService.Decrypt(usr.Password);
