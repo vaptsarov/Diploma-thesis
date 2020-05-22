@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using TestCaseManager.Core.AuthenticatePoint;
-using TestCaseManager.DB;
-
-namespace TestCaseManager.Core.Managers
+﻿namespace TestCaseManager.Core.Managers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using AuthenticatePoint;
+    using DB;
+
     public class AreaManager : ITestManager<Area>
     {
         public List<Area> GetAll()
         {
-            List<Area> areaList = null;
+            List<Area> areaList;
             using (var context = new TestcaseManagerDB())
             {
                 areaList = context.Areas.ToList();
@@ -21,7 +21,7 @@ namespace TestCaseManager.Core.Managers
 
         public Area GetById(int id)
         {
-            Area area = null;
+            Area area;
             using (var context = new TestcaseManagerDB())
             {
                 area = context.Areas.FirstOrDefault(a => a.ID == id);
@@ -36,7 +36,7 @@ namespace TestCaseManager.Core.Managers
 
         public Area Update(Area area)
         {
-            Area areaToUpdate = null;
+            Area areaToUpdate;
             using (var context = new TestcaseManagerDB())
             {
                 areaToUpdate = context.Areas.FirstOrDefault(x => x.ID == area.ID);
@@ -44,7 +44,7 @@ namespace TestCaseManager.Core.Managers
                     throw new NullReferenceException();
 
                 areaToUpdate.Title = area.Title;
-                areaToUpdate.UpdatedBy = AuthenticationManager.Instance().GetCurrentUsername;
+                areaToUpdate.UpdatedBy = AuthenticationManager.SingletonInstance().GetCurrentUsername;
                 context.SaveChanges();
             }
 
@@ -67,14 +67,14 @@ namespace TestCaseManager.Core.Managers
 
         public Area Create(string title, int projectId)
         {
-            Area area = null;
+            Area area;
             using (var context = new TestcaseManagerDB())
             {
                 area = new Area
                 {
                     Title = title,
                     ProjectId = projectId,
-                    CreatedBy = AuthenticationManager.Instance().GetCurrentUsername
+                    CreatedBy = AuthenticationManager.SingletonInstance().GetCurrentUsername
                 };
 
                 context.Areas.Add(area);

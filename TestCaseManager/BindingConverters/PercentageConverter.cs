@@ -1,10 +1,10 @@
-﻿using System;
-using System.Globalization;
-using System.Windows.Data;
-using System.Windows.Markup;
-
-namespace TestCaseManager.BindingConverters
+﻿namespace TestCaseManager.BindingConverters
 {
+    using System;
+    using System.Globalization;
+    using System.Windows.Data;
+    using System.Windows.Markup;
+
     public class PercentageConverter : MarkupExtension, IValueConverter
     {
         private static PercentageConverter _instance;

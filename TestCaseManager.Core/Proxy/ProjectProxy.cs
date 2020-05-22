@@ -1,7 +1,7 @@
-﻿using System.Collections.ObjectModel;
-
-namespace TestCaseManager.Core.Proxy
+﻿namespace TestCaseManager.Core.Proxy
 {
+    using System.Collections.ObjectModel;
+
     public class ProjectProxy
     {
         public ProjectProxy()

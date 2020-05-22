@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace TestCaseManager.Core.CryptoService.CertificateRelated
+﻿namespace TestCaseManager.Core.CryptoService.CertificateRelated
 {
+    using System;
+
     /// <summary>
     ///     A dedicated component for resolving <see cref="ICryptoService" /> instances
     /// </summary>
@@ -16,7 +16,8 @@ namespace TestCaseManager.Core.CryptoService.CertificateRelated
         public static Func<ICryptoService> CryptoServiceInitializer
         {
             get => _cryptoServiceInitializer;
-            set => _cryptoServiceInitializer = value ?? throw new ArgumentNullException($"The CryptoServiceInitializer cannot be null.");
+            set => _cryptoServiceInitializer =
+                value ?? throw new ArgumentNullException($"The CryptoServiceInitializer cannot be null.");
         }
 
         public static ICryptoService Get()

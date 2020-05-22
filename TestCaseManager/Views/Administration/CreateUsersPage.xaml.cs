@@ -1,12 +1,11 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using TestCaseManager.Core.Managers;
-using TestCaseManager.Utilities;
-using TestCaseManager.Utilities.StringUtility;
-
-namespace TestCaseManager.Views.Administration
+﻿namespace TestCaseManager.Views.Administration
 {
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Media;
+    using Core.Managers;
+    using Utilities.StringUtility;
+
     /// <summary>
     ///     Interaction logic for CreateUserPage.xaml
     /// </summary>
@@ -26,7 +25,7 @@ namespace TestCaseManager.Views.Administration
                 string.IsNullOrWhiteSpace(Password.SecurePassword.ConvertToUnsecureString()) == false)
             {
                 manager.CreateUser(Username.Text, Password.SecurePassword, IsAdminCheckBox.IsChecked.Value);
-                MessageLabel.Content = "Successfuly created the application user.";
+                MessageLabel.Content = "Successful creation of the application user.";
                 MessageLabel.Foreground = new SolidColorBrush(Color.FromRgb(0, 204, 0));
 
                 ClearFields();

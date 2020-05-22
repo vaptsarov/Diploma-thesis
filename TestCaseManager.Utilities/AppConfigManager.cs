@@ -1,8 +1,8 @@
-﻿using System;
-using System.Configuration;
-
-namespace TestCaseManager.Utilities
+﻿namespace TestCaseManager.Utilities
 {
+    using System;
+    using System.Configuration;
+
     public class AppConfigManager
     {
         public string GetCertificateThumbprint => TryGetConfigurationValue("CertificateThumbprint");

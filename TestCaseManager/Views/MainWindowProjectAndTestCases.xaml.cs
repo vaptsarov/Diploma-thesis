@@ -1,22 +1,22 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Timers;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using FirstFloor.ModernUI.Presentation;
-using TestCaseManager.Core.Converters;
-using TestCaseManager.Core.Managers;
-using TestCaseManager.Core.Managers.ProxyManagers;
-using TestCaseManager.Core.Proxy;
-using TestCaseManager.Views.CustomControls;
-
-namespace TestCaseManager.Views
+﻿namespace TestCaseManager.Views
 {
+    using System;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using System.Timers;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using Core.Converters;
+    using Core.Managers;
+    using Core.Managers.ProxyManagers;
+    using Core.Proxy;
+    using CustomControls;
+    using FirstFloor.ModernUI.Presentation;
+
     /// <inheritdoc cref="UserControl" />
     /// <summary>
     ///     Interaction logic for MainWindowProjectAndTestCases.xaml
@@ -32,7 +32,7 @@ namespace TestCaseManager.Views
             AppearanceManager.Current.PropertyChanged += OnAppearanceManagerPropertyChanged;
         }
 
-        private void MainWindowProjectAndTestCases_Loaded(object sensder, RoutedEventArgs e)
+        private void MainWindowProjectAndTestCases_Loaded(object sender, RoutedEventArgs e)
         {
             // Initial DB data retrieve
             var task = Task.Factory.StartNew(() =>
@@ -137,11 +137,24 @@ namespace TestCaseManager.Views
             }
         }
 
+        private void RunWithOverlayer(Action action)
+        {
+            Overlay.Visibility = Visibility.Visible;
+            try
+            {
+                action.Invoke();
+            }
+            finally
+            {
+                Overlay.Visibility = Visibility.Collapsed;
+            }
+        }
+
         #region Project CRUD
 
         private void AddProject(object sender, RoutedEventArgs e)
         {
-            this.RunWithOverlayer(() =>
+            RunWithOverlayer(() =>
             {
                 var projectTitle = PromptDialog.Prompt("Project name", "Create new project");
                 if (!string.IsNullOrWhiteSpace(projectTitle))
@@ -155,41 +168,41 @@ namespace TestCaseManager.Views
 
         private void DeleteProject(object sender, RoutedEventArgs e)
         {
-            this.RunWithOverlayer(() =>
+            RunWithOverlayer(() =>
             {
-                var proxy = ((MenuItem)sender).DataContext as ProjectProxy;
+                var proxy = ((MenuItem) sender).DataContext as ProjectProxy;
 
                 var projectTitle =
                     PromptDialog.Prompt("Type the name of this project (to be sure you delete the right project)",
                         "Delete project");
 
-                if (!string.IsNullOrWhiteSpace(projectTitle) && projectTitle.Equals(proxy.Title))
-                {
-                    var projManager = new ProjectManager();
-                    projManager.DeleteById(proxy.Id);
+                if (string.IsNullOrWhiteSpace(projectTitle) || !projectTitle.Equals(proxy?.Title)) 
+                    return;
+                
+                var projManager = new ProjectManager();
+                projManager.DeleteById(proxy.Id);
 
-                    _uiProjectProxyList.Remove(proxy);
-                }
+                _uiProjectProxyList.Remove(proxy);
             });
         }
 
         private void EditProject(object sender, RoutedEventArgs e)
         {
-            this.RunWithOverlayer(() =>
+            RunWithOverlayer(() =>
             {
-                var proxy = ((MenuItem)sender).DataContext as ProjectProxy;
+                var proxy = ((MenuItem) sender).DataContext as ProjectProxy;
 
                 var projectTitle = PromptDialog.Prompt("New project name", "Edit project name");
-                if (!string.IsNullOrWhiteSpace(projectTitle) && !projectTitle.Equals(proxy.Title))
-                {
-                    proxy.Title = projectTitle;
+                if (string.IsNullOrWhiteSpace(projectTitle) || projectTitle.Equals(proxy?.Title)) 
+                    return;
 
-                    var projManager = new ProjectManager();
-                    projManager.Update(ModelConverter.ProjectProxyToModel(proxy));
+                proxy.Title = projectTitle;
 
-                    _uiProjectProxyList.Remove(proxy);
-                    _uiProjectProxyList.Add(proxy);
-                }
+                var projManager = new ProjectManager();
+                projManager.Update(ModelConverter.ProjectProxyToModel(proxy));
+
+                _uiProjectProxyList.Remove(proxy);
+                _uiProjectProxyList.Add(proxy);
             });
         }
 
@@ -199,10 +212,10 @@ namespace TestCaseManager.Views
 
         private void AddArea(object sender, RoutedEventArgs e)
         {
-            this.RunWithOverlayer(() =>
+            RunWithOverlayer(() =>
             {
                 var areaTitle = PromptDialog.Prompt("Area name", "Create new area");
-                var proxy = ((MenuItem)sender).DataContext as ProjectProxy;
+                var proxy = ((MenuItem) sender).DataContext as ProjectProxy;
 
                 if (!string.IsNullOrWhiteSpace(areaTitle))
                 {
@@ -215,9 +228,9 @@ namespace TestCaseManager.Views
 
         private void EditArea(object sender, RoutedEventArgs e)
         {
-            this.RunWithOverlayer(() =>
+            RunWithOverlayer(() =>
             {
-                var areaProxy = ((MenuItem)sender).DataContext as AreaProxy;
+                var areaProxy = ((MenuItem) sender).DataContext as AreaProxy;
 
                 var areaTitle = PromptDialog.Prompt("New area name", "Edit area name");
                 if (!string.IsNullOrWhiteSpace(areaTitle) && !areaTitle.Equals(areaProxy.Title))
@@ -241,13 +254,13 @@ namespace TestCaseManager.Views
 
         private void DeleteArea(object sender, RoutedEventArgs e)
         {
-            this.RunWithOverlayer(() =>
+            RunWithOverlayer(() =>
             {
                 var areaTitle = PromptDialog.Prompt("Type the name of this area (to be sure you delete the right area)",
-                "Delete area");
+                    "Delete area");
 
-                if (((MenuItem)sender).DataContext is AreaProxy proxy &&
-                    (!string.IsNullOrWhiteSpace(areaTitle) && areaTitle.Equals(proxy.Title)))
+                if (((MenuItem) sender).DataContext is AreaProxy proxy && !string.IsNullOrWhiteSpace(areaTitle) &&
+                    areaTitle.Equals(proxy.Title))
                 {
                     var projectProxy = _uiProjectProxyList
                         .FirstOrDefault(proj => proj.Areas.Any(a => a.Id == proxy.Id));
@@ -269,34 +282,31 @@ namespace TestCaseManager.Views
 
         private void CreateTestCase(object sender, RoutedEventArgs e)
         {
-            this.RunWithOverlayer(() =>
+            RunWithOverlayer(() =>
             {
-                var areaproxy = ((MenuItem)sender).DataContext as AreaProxy;
+                var areaproxy = ((MenuItem) sender).DataContext as AreaProxy;
                 var createdTestCaseProxy = TestCaseDialog.Prompt(areaproxy);
 
-                if (createdTestCaseProxy != null)
-                {
-                    areaproxy?.TestCasesList.Add(createdTestCaseProxy);
-                }
+                if (createdTestCaseProxy != null) areaproxy?.TestCasesList.Add(createdTestCaseProxy);
             });
         }
 
         private void EditTestCase(object sender, RoutedEventArgs e)
         {
-            this.RunWithOverlayer(() =>
+            RunWithOverlayer(() =>
             {
-                var testCase = ((MenuItem)sender).DataContext as TestCaseProxy;
+                var testCase = ((MenuItem) sender).DataContext as TestCaseProxy;
                 EditTestCaseFromProxy(testCase);
             });
         }
 
         private void EditTestCase_Click(object sender, MouseButtonEventArgs e)
         {
-            this.RunWithOverlayer(() =>
+            RunWithOverlayer(() =>
             {
                 if (e.LeftButton == MouseButtonState.Pressed && e.ClickCount == 2)
                 {
-                    var testCase = ((TextBlock)sender).DataContext as TestCaseProxy;
+                    var testCase = ((TextBlock) sender).DataContext as TestCaseProxy;
                     EditTestCaseFromProxy(testCase);
                 }
             });
@@ -304,7 +314,7 @@ namespace TestCaseManager.Views
 
         private void EditTestCaseFromProxy(TestCaseProxy testCase)
         {
-            this.RunWithOverlayer(() =>
+            RunWithOverlayer(() =>
             {
                 var editedTestCase = TestCaseDialog.Prompt(testCase);
                 if (editedTestCase != null)
@@ -329,10 +339,10 @@ namespace TestCaseManager.Views
 
         private void DeleteTestCase(object sender, RoutedEventArgs e)
         {
-            this.RunWithOverlayer(() =>
+            RunWithOverlayer(() =>
             {
                 var manager = new TestManager();
-                if (((MenuItem)sender).DataContext is TestCaseProxy testCaseToDelete)
+                if (((MenuItem) sender).DataContext is TestCaseProxy testCaseToDelete)
                 {
                     manager.DeleteById(testCaseToDelete.Id);
 
@@ -350,18 +360,5 @@ namespace TestCaseManager.Views
         }
 
         #endregion
-
-        private void RunWithOverlayer(Action action)
-        {
-            Overlay.Visibility = Visibility.Visible;
-            try
-            {
-                action.Invoke();
-            }
-            finally
-            {
-                Overlay.Visibility = Visibility.Collapsed;
-            }
-        }
     }
 }

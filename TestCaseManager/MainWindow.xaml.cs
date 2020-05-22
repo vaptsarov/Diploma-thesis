@@ -1,14 +1,14 @@
-﻿using System;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using FirstFloor.ModernUI.Presentation;
-using FirstFloor.ModernUI.Windows.Controls;
-using TestCaseManager.Core.AuthenticatePoint;
-
-namespace TestCaseManager
+﻿namespace TestCaseManager
 {
+    using System;
+    using System.Linq;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Input;
+    using Core.AuthenticatePoint;
+    using FirstFloor.ModernUI.Presentation;
+    using FirstFloor.ModernUI.Windows.Controls;
+
     /// <summary>
     ///     Interaction logic for MainWindow.xaml
     /// </summary>
@@ -46,7 +46,7 @@ namespace TestCaseManager
         private void RegisterEvents()
         {
             // Event for logged user
-            AuthenticationManager.Instance().ValidAuthenticationEvent += (s, e) =>
+            AuthenticationManager.SingletonInstance().ValidAuthenticationEvent += (s, e) =>
             {
                 var titleLink = TitleLinks.First(link => link.DisplayName.Equals(LoginButtonContent));
                 titleLink.DisplayName = LogoutButtonContent;
@@ -54,7 +54,7 @@ namespace TestCaseManager
                 TitleLinks.Insert(0, _testCasesLink);
                 TitleLinks.Insert(1, _testRunLink);
 
-                if (AuthenticationManager.Instance().IsUserAnAdmin())
+                if (AuthenticationManager.SingletonInstance().IsUserAnAdmin())
                 {
                     TitleLinks.Insert(2, _administrationLink);
                     TitleLinks.Insert(3, _emptyLink);
@@ -65,7 +65,7 @@ namespace TestCaseManager
                 }
             };
 
-            AuthenticationManager.Instance().LogoutEvent += (s, e) =>
+            AuthenticationManager.SingletonInstance().LogoutEvent += (s, e) =>
             {
                 var titleLink = TitleLinks.First(link => link.DisplayName.Equals(LogoutButtonContent));
                 titleLink.DisplayName = LoginButtonContent;
@@ -83,7 +83,7 @@ namespace TestCaseManager
                 return;
 
             if (link.Content.ToString().Equals(LogoutButtonContent))
-                AuthenticationManager.Instance().RemoveAuthenticatedUser();
+                AuthenticationManager.SingletonInstance().RemoveAuthenticatedUser();
         }
     }
 }

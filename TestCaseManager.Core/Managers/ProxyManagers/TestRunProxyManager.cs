@@ -1,10 +1,10 @@
-﻿using System.Collections.ObjectModel;
-using TestCaseManager.Core.Converters;
-using TestCaseManager.Core.Proxy.TestRun;
-using TestCaseManager.DB;
-
-namespace TestCaseManager.Core.Managers.ProxyManagers
+﻿namespace TestCaseManager.Core.Managers.ProxyManagers
 {
+    using System.Collections.ObjectModel;
+    using Converters;
+    using DB;
+    using Proxy.TestRun;
+
     public class TestRunProxyManager : IProxyManager<TestRunProxy>
     {
         public ObservableCollection<TestRunProxy> GetAll()

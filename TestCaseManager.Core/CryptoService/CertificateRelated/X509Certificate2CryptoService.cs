@@ -1,10 +1,10 @@
-﻿using System;
-using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-
-namespace TestCaseManager.Core.CryptoService.CertificateRelated
+﻿namespace TestCaseManager.Core.CryptoService.CertificateRelated
 {
+    using System;
+    using System.Security.Cryptography;
+    using System.Security.Cryptography.X509Certificates;
+    using System.Text;
+
     public class X509Certificate2CryptoService : ICryptoService
     {
         private X509Certificate2 _certificate;

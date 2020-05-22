@@ -1,8 +1,8 @@
-﻿using System.Windows.Controls;
-using TestCaseManager.Models;
-
-namespace TestCaseManager.Views.Settings
+﻿namespace TestCaseManager.Views.Settings
 {
+    using System.Windows.Controls;
+    using Models;
+
     /// <summary>
     ///     Interaction logic for Appearance.xaml
     /// </summary>

@@ -1,7 +1,7 @@
-﻿using System.Security;
-
-namespace TestCaseManager.Core.AuthenticatePoint
+﻿namespace TestCaseManager.Core.AuthenticatePoint
 {
+    using System.Security;
+
     public interface IAuthenticate
     {
         bool IsUserReadOnly();

@@ -1,22 +1,22 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Timers;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using FirstFloor.ModernUI.Presentation;
-using TestCaseManager.Core.Converters;
-using TestCaseManager.Core.Managers;
-using TestCaseManager.Core.Managers.ProxyManagers;
-using TestCaseManager.Core.Proxy.TestRun;
-using TestCaseManager.Core.Proxy.TestStatus;
-using TestCaseManager.Views.CustomControls;
-
-namespace TestCaseManager.Views
+﻿namespace TestCaseManager.Views
 {
+    using System;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using System.Timers;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Media;
+    using Core.Converters;
+    using Core.Managers;
+    using Core.Managers.ProxyManagers;
+    using Core.Proxy.TestRun;
+    using Core.Proxy.TestStatus;
+    using CustomControls;
+    using FirstFloor.ModernUI.Presentation;
+
     /// <inheritdoc cref="UserControl" />
     /// <summary>
     ///     Interaction logic for MainWindowTestRuns.xaml
@@ -96,7 +96,7 @@ namespace TestCaseManager.Views
 
         private void AddTestRun(object sender, RoutedEventArgs e)
         {
-            this.RunWithOverlayer(() =>
+            RunWithOverlayer(() =>
             {
                 var projectTitle = PromptDialog.Prompt("Test Run name", "Create new test run");
                 if (!string.IsNullOrWhiteSpace(projectTitle))
@@ -110,7 +110,7 @@ namespace TestCaseManager.Views
 
         private void AddTests(object sender, RoutedEventArgs e)
         {
-            this.RunWithOverlayer(() =>
+            RunWithOverlayer(() =>
             {
                 if (TestRunListBox.SelectedItem is TestRunProxy selectedTestRun)
                 {
@@ -122,9 +122,10 @@ namespace TestCaseManager.Views
 
         private void RunTests(object sender, RoutedEventArgs e)
         {
-            this.RunWithOverlayer(() =>
+            RunWithOverlayer(() =>
             {
-                if (TestRunListBox.SelectedItem is TestRunProxy selectedTestRun && selectedTestRun.TestCasesList.Count > 0)
+                if (TestRunListBox.SelectedItem is TestRunProxy selectedTestRun &&
+                    selectedTestRun.TestCasesList.Count > 0)
                 {
                     TestCaseRunDialog.Prompt(selectedTestRun.Id);
                     UpdateTestRun(selectedTestRun);
@@ -134,7 +135,7 @@ namespace TestCaseManager.Views
 
         private void UpdateTestRun(TestRunProxy selectedTestRun)
         {
-            this.RunWithOverlayer(() =>
+            RunWithOverlayer(() =>
             {
                 var manager = new TestRunProxyManager();
                 var updatedTestRun = manager.GetById(selectedTestRun.Id);

@@ -1,7 +1,7 @@
-﻿using System.Security.Cryptography.X509Certificates;
-
-namespace TestCaseManager.Core.CryptoService
+﻿namespace TestCaseManager.Core.CryptoService
 {
+    using System.Security.Cryptography.X509Certificates;
+
     /// <summary>
     ///     Contract for X509Certificate2 certificate resolvers.
     /// </summary>

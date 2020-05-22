@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.ObjectModel;
-
-namespace TestCaseManager.Core.Proxy.TestRun
+﻿namespace TestCaseManager.Core.Proxy.TestRun
 {
+    using System;
+    using System.Collections.ObjectModel;
+
     public class TestRunProxy
     {
         public TestRunProxy()

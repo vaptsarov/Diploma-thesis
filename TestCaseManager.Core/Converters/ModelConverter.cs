@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using TestCaseManager.Core.Proxy;
-using TestCaseManager.Core.Proxy.TestDefinition;
-using TestCaseManager.DB;
-
-namespace TestCaseManager.Core.Converters
+﻿namespace TestCaseManager.Core.Converters
 {
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using DB;
+    using Proxy;
+    using Proxy.TestDefinition;
+
     public static class ModelConverter
     {
         public static Project ProjectProxyToModel(ProjectProxy proxy)

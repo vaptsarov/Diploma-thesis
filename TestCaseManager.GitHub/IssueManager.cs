@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
-using Octokit;
-using TestCaseManager.Core.Managers;
-using TestCaseManager.DB;
-using TestCaseManager.Utilities.StringUtility;
-
-namespace TestCaseManager.GitHub
+﻿namespace TestCaseManager.GitHub
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Security;
+    using System.Text;
+    using System.Threading.Tasks;
+    using Core.Managers;
+    using DB;
+    using Octokit;
+    using Utilities.StringUtility;
+
     public class IssueManager
     {
         private static IGitHubClient _client;
@@ -46,7 +46,8 @@ namespace TestCaseManager.GitHub
             return new Uri(createdIssue.HtmlUrl);
         }
 
-        private static async Task<Issue> CreateGitHubIssue(IGitHubClient client, string ownerName, string repositoryName,
+        private static async Task<Issue> CreateGitHubIssue(IGitHubClient client, string ownerName,
+            string repositoryName,
             NewIssue issue)
         {
             return await client.Issue.Create(ownerName, repositoryName, issue);

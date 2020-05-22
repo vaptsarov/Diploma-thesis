@@ -1,9 +1,9 @@
-﻿using System;
-using System.Security;
-using TestCaseManager.Core.Managers;
-
-namespace TestCaseManager.Core.AuthenticatePoint
+﻿namespace TestCaseManager.Core.AuthenticatePoint
 {
+    using System;
+    using System.Security;
+    using Managers;
+
     public class AuthenticationManager : IAuthenticate, IAdmin
     {
         private static bool _isAnAdmin;
@@ -40,12 +40,16 @@ namespace TestCaseManager.Core.AuthenticatePoint
         public event EventHandler ValidAuthenticationEvent;
         public event EventHandler LogoutEvent;
 
-        public static AuthenticationManager Instance()
+        public static AuthenticationManager SingletonInstance()
         {
-            if (_instance != null) return _instance;
+            if (_instance != null)
+                return _instance;
+
             lock (LockedObj)
             {
-                if (_instance == null) _instance = new AuthenticationManager();
+                if (_instance == null)
+                    // ReSharper disable once PossibleMultipleWriteAccessInDoubleCheckLocking
+                    _instance = new AuthenticationManager();
             }
 
             return _instance;

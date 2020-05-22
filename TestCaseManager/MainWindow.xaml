@@ -9,13 +9,13 @@
         <Style TargetType="{x:Type mui:ModernButton}">
             <Style.Triggers>
                 <Trigger Property="Command" Value="NavigationCommands.BrowseBack">
-                    <Setter Property="Visibility" Value="Collapsed"/>
-                    <Setter Property="Margin" Value="-10,0,0,0"/>
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Setter Property="Margin" Value="-10,0,0,0" />
                 </Trigger>
             </Style.Triggers>
         </Style>
     </mui:ModernWindow.Resources>
-    
+
     <mui:ModernWindow.MenuLinkGroups>
         <mui:LinkGroup DisplayName="">
             <mui:LinkGroup.Links>

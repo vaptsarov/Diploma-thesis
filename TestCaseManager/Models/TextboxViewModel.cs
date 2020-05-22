@@ -1,7 +1,7 @@
-﻿using System.ComponentModel;
-
-namespace TestCaseManager.Models
+﻿namespace TestCaseManager.Models
 {
+    using System.ComponentModel;
+
     public class TextboxViewModel : INotifyPropertyChanged, IDataErrorInfo
     {
         private static string _text;

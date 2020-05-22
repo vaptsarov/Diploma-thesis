@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using TestCaseManager.Core.AuthenticatePoint;
-using TestCaseManager.DB;
-
-namespace TestCaseManager.Core.Managers
+﻿namespace TestCaseManager.Core.Managers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
+    using AuthenticatePoint;
+    using DB;
+
     public class TestManager : ITestManager<TestCase>
     {
         public List<TestCase> GetAll()
         {
-            List<TestCase> testCasesList = null;
+            List<TestCase> testCasesList;
             using (var context = new TestcaseManagerDB())
             {
                 testCasesList = context.TestCases.ToList();
@@ -22,7 +22,7 @@ namespace TestCaseManager.Core.Managers
 
         public TestCase GetById(int id)
         {
-            TestCase testCase = null;
+            TestCase testCase;
             using (var context = new TestcaseManagerDB())
             {
                 testCase = context.TestCases.FirstOrDefault(tc => tc.ID == id);
@@ -37,56 +37,60 @@ namespace TestCaseManager.Core.Managers
 
         public TestCase Update(TestCase testCase)
         {
-            TestCase @case = null;
+            TestCase @case;
             using (var context = new TestcaseManagerDB())
             {
                 @case = context.TestCases.FirstOrDefault(tc => tc.ID == testCase.ID);
 
-                @case.Title = testCase.Title;
-                @case.Severity = testCase.Severity;
-                @case.Priority = testCase.Priority;
-                @case.IsAutomated = testCase.IsAutomated;
-                @case.UpdatedBy = AuthenticationManager.Instance().GetCurrentUsername;
-
-                if (testCase.StepDefinitions != null)
+                if (@case != null)
                 {
-                    var expectedStepDefinitions = new List<StepDefinition>();
-                    foreach (var item in testCase.StepDefinitions)
-                        if (item.Step != null)
-                        {
-                            var definition = context.StepDefinitions.FirstOrDefault(sd => sd.ID == item.ID && sd.TestCaseID == @case.ID);
-                            if (definition != null)
+                    @case.Title = testCase.Title;
+                    @case.Severity = testCase.Severity;
+                    @case.Priority = testCase.Priority;
+                    @case.IsAutomated = testCase.IsAutomated;
+                    @case.UpdatedBy = AuthenticationManager.SingletonInstance().GetCurrentUsername;
+
+                    if (testCase.StepDefinitions != null)
+                    {
+                        var expectedStepDefinitions = new List<StepDefinition>();
+                        foreach (var item in testCase.StepDefinitions)
+                            if (item.Step != null)
                             {
-                                definition.Step = item.Step;
-                                definition.ExpectedResult = item.ExpectedResult;
-                            }
-                            else
-                            {
-                                definition = new StepDefinition
+                                var definition = context.StepDefinitions.FirstOrDefault(sd =>
+                                    sd.ID == item.ID && sd.TestCaseID == @case.ID);
+                                if (definition != null)
                                 {
-                                    Step = item.Step,
-                                    ExpectedResult = item.ExpectedResult,
-                                    TestCaseID = @case.ID
-                                };
-                                @case.StepDefinitions.Add(definition);
+                                    definition.Step = item.Step;
+                                    definition.ExpectedResult = item.ExpectedResult;
+                                }
+                                else
+                                {
+                                    definition = new StepDefinition
+                                    {
+                                        Step = item.Step,
+                                        ExpectedResult = item.ExpectedResult,
+                                        TestCaseID = @case.ID
+                                    };
+                                    @case.StepDefinitions.Add(definition);
+                                }
+
+                                context.SaveChanges();
+                                expectedStepDefinitions.Add(definition);
                             }
 
-                            context.SaveChanges();
-                            expectedStepDefinitions.Add(definition);
+                        // Register steps definitions for delete
+                        var stepsDefinitionsToDelete = new List<StepDefinition>();
+                        foreach (var item in @case.StepDefinitions)
+                        {
+                            var stepDefinition = expectedStepDefinitions.FirstOrDefault(x => x.ID == item.ID);
+
+                            if (stepDefinition == null)
+                                stepsDefinitionsToDelete.Add(item);
                         }
 
-                    // Register steps definitions for delete
-                    var stepsDefinitionsToDelete = new List<StepDefinition>();
-                    foreach (var item in @case.StepDefinitions)
-                    {
-                        var stepDefinition = expectedStepDefinitions.FirstOrDefault(x => x.ID == item.ID);
-
-                        if (stepDefinition == null)
-                            stepsDefinitionsToDelete.Add(item);
+                        // Delete orphans
+                        foreach (var orphan in stepsDefinitionsToDelete) context.StepDefinitions.Remove(orphan);
                     }
-
-                    // Delete orphans
-                    foreach (var orphan in stepsDefinitionsToDelete) context.StepDefinitions.Remove(orphan);
                 }
 
                 context.SaveChanges();
@@ -119,32 +123,32 @@ namespace TestCaseManager.Core.Managers
 
         public TestCase Create(int areaId, TestCase testCase)
         {
-            TestCase @case = null;
+            TestCase @case;
             using (var context = new TestcaseManagerDB())
             {
                 @case = MapPrimaryProperties(testCase);
                 @case.AreaID = areaId;
-                @case.CreatedBy = AuthenticationManager.Instance().GetCurrentUsername;
+                @case.CreatedBy = AuthenticationManager.SingletonInstance().GetCurrentUsername;
 
                 context.TestCases.Add(@case);
                 context.SaveChanges();
 
-                if (testCase.StepDefinitions != null)
-                {
-                    foreach (var item in testCase.StepDefinitions)
-                        if (item.Step != null)
-                        {
-                            var definition = new StepDefinition
-                            {
-                                Step = item.Step,
-                                ExpectedResult = item.ExpectedResult,
-                                TestCaseID = @case.ID
-                            };
-                            @case.StepDefinitions.Add(definition);
-                        }
+                if (testCase.StepDefinitions == null)
+                    return @case;
 
-                    context.SaveChanges();
-                }
+                foreach (var item in testCase.StepDefinitions)
+                    if (item.Step != null)
+                    {
+                        var definition = new StepDefinition
+                        {
+                            Step = item.Step,
+                            ExpectedResult = item.ExpectedResult,
+                            TestCaseID = @case.ID
+                        };
+                        @case.StepDefinitions.Add(definition);
+                    }
+
+                context.SaveChanges();
             }
 
             return @case;

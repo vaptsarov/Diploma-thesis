@@ -1,10 +1,10 @@
-﻿using System.ComponentModel;
-using System.Linq;
-using System.Windows.Media;
-using FirstFloor.ModernUI.Presentation;
-
-namespace TestCaseManager.Models
+﻿namespace TestCaseManager.Models
 {
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Windows.Media;
+    using FirstFloor.ModernUI.Presentation;
+
     /// <summary>
     ///     A simple view model for configuring theme, font and accent colors.
     /// </summary>
@@ -62,14 +62,14 @@ namespace TestCaseManager.Models
             get => _selectedTheme;
             set
             {
-                if (_selectedTheme != value)
-                {
-                    _selectedTheme = value;
-                    OnPropertyChanged("SelectedTheme");
+                if (_selectedTheme == value)
+                    return;
 
-                    // and update the actual theme
-                    AppearanceManager.Current.ThemeSource = value.Source;
-                }
+                _selectedTheme = value;
+                OnPropertyChanged("SelectedTheme");
+
+                // and update the actual theme
+                AppearanceManager.Current.ThemeSource = value.Source;
             }
         }
 

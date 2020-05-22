@@ -1,7 +1,7 @@
-﻿using System.Windows.Controls;
-
-namespace TestCaseManager.Views.Settings
+﻿namespace TestCaseManager.Views.Settings
 {
+    using System.Windows.Controls;
+
     /// <summary>
     ///     Interaction logic for About.xaml
     /// </summary>

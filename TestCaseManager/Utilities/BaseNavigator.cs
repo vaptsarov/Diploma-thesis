@@ -1,9 +1,9 @@
-﻿using System;
-using System.Windows;
-using FirstFloor.ModernUI.Windows.Navigation;
-
-namespace TestCaseManager.Utilities
+﻿namespace TestCaseManager.Utilities
 {
+    using System;
+    using System.Windows;
+    using FirstFloor.ModernUI.Windows.Navigation;
+
     /// <summary>
     ///     Contains methods which navigate to different views with option to set different parameters
     /// </summary>
@@ -17,7 +17,7 @@ namespace TestCaseManager.Utilities
         public void Navigate(FrameworkElement source, string url)
         {
             var navigator = new DefaultLinkNavigator();
-            navigator.Navigate(new Uri(url, UriKind.Relative), source, null);
+            navigator.Navigate(new Uri(url, UriKind.Relative), source);
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace TestCaseManager.Utilities
         /// <param name="source">The source.</param>
         public void NavigateBack(FrameworkElement source)
         {
-            var url = "cmd://browseback";
+            const string url = "cmd://browseback";
             var navigator = new DefaultLinkNavigator();
             navigator.Navigate(new Uri(url, UriKind.Absolute), source, "_self");
         }

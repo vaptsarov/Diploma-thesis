@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Timers;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Threading;
-using TestCaseManager.Models;
-
-namespace TestCaseManager.Views.CustomControls.MicrosoftAutoComplete
+﻿namespace TestCaseManager.Views.CustomControls.MicrosoftAutoComplete
 {
+    using System;
+    using System.Collections.ObjectModel;
+    using System.Linq;
+    using System.Timers;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Media;
+    using System.Windows.Threading;
+    using Models;
+
     public partial class AutoCompleteTextBox : Canvas
     {
         private readonly ObservableCollection<AutoCompleteModel> _autoCompletionList;
@@ -100,11 +100,11 @@ namespace TestCaseManager.Views.CustomControls.MicrosoftAutoComplete
                     foreach (var word in entry.KeywordStrings)
                         if (word.StartsWith(_textBox.Text, StringComparison.CurrentCultureIgnoreCase))
                         {
-                                var cbItem = new ComboBoxItem
-                                {
-                                    Content = entry.ToString()
-                                };
-                                _comboBox.Items.Add(cbItem);
+                            var cbItem = new ComboBoxItem
+                            {
+                                Content = entry.ToString()
+                            };
+                            _comboBox.Items.Add(cbItem);
                             break;
                         }
 

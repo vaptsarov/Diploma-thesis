@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using TestCaseManager.Core.AuthenticatePoint;
-using TestCaseManager.DB;
-
-namespace TestCaseManager.Core.Managers
+﻿namespace TestCaseManager.Core.Managers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using AuthenticatePoint;
+    using DB;
+
     public class ProjectManager : ITestManager<Project>
     {
         public List<Project> GetAll()
         {
-            List<Project> projectList = null;
+            List<Project> projectList;
             using (var context = new TestcaseManagerDB())
             {
                 projectList = context.Projects.ToList();
@@ -21,7 +21,7 @@ namespace TestCaseManager.Core.Managers
 
         public Project GetById(int id)
         {
-            Project project = null;
+            Project project;
             using (var context = new TestcaseManagerDB())
             {
                 project = context.Projects.FirstOrDefault(proj => proj.ID == id);
@@ -36,7 +36,7 @@ namespace TestCaseManager.Core.Managers
 
         public Project Update(Project project)
         {
-            Project projectToUpdate = null;
+            Project projectToUpdate;
             using (var context = new TestcaseManagerDB())
             {
                 projectToUpdate = context.Projects.FirstOrDefault(proj => proj.ID == project.ID);
@@ -44,7 +44,7 @@ namespace TestCaseManager.Core.Managers
                     throw new NullReferenceException();
 
                 projectToUpdate.Title = project.Title;
-                projectToUpdate.UpdatedBy = AuthenticationManager.Instance().GetCurrentUsername;
+                projectToUpdate.UpdatedBy = AuthenticationManager.SingletonInstance().GetCurrentUsername;
                 context.SaveChanges();
             }
 
@@ -67,13 +67,13 @@ namespace TestCaseManager.Core.Managers
 
         public Project Create(string title)
         {
-            Project project = null;
+            Project project;
             using (var context = new TestcaseManagerDB())
             {
                 project = new Project
                 {
                     Title = title,
-                    CreatedBy = AuthenticationManager.Instance().GetCurrentUsername
+                    CreatedBy = AuthenticationManager.SingletonInstance().GetCurrentUsername
                 };
 
                 context.Projects.Add(project);

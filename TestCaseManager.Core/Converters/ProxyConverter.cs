@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using TestCaseManager.Core.Managers;
-using TestCaseManager.Core.Proxy;
-using TestCaseManager.Core.Proxy.TestDefinition;
-using TestCaseManager.Core.Proxy.TestRun;
-using TestCaseManager.Core.Proxy.TestStatus;
-using TestCaseManager.DB;
-using TestCaseManager.Utilities.StringUtility;
-
-namespace TestCaseManager.Core.Converters
+﻿namespace TestCaseManager.Core.Converters
 {
+    using System.Collections.Generic;
+    using DB;
+    using Managers;
+    using Proxy;
+    using Proxy.TestDefinition;
+    using Proxy.TestRun;
+    using Proxy.TestStatus;
+    using Utilities.StringUtility;
+
     public static class ProxyConverter
     {
         public static ProjectProxy ProjectModelToProxy(Project model)
@@ -77,7 +77,9 @@ namespace TestCaseManager.Core.Converters
                 CreatedOn = run.CreatedOn
             };
 
-            IEnumerable<TestComposite> compositeModel = new TestRunManager().GetCompositeByRunId(runProxy.Id);
+            IEnumerable<TestComposite> compositeModel =
+                new TestRunManager().GetCompositeByRunId(runProxy.Id);
+
             foreach (var comp in compositeModel)
             {
                 var extendedTestCaseProxy = new ExtendedTestCaseProxy

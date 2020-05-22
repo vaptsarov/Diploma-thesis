@@ -1,14 +1,15 @@
-﻿using System;
-using System.Security.Cryptography;
-using System.Text;
-using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Crypto.Macs;
-using Org.BouncyCastle.Crypto.Modes;
-using Org.BouncyCastle.Crypto.Paddings;
-using Org.BouncyCastle.Crypto.Parameters;
-
-namespace TestCaseManager.Core.CryptoService.UserRelated
+﻿namespace TestCaseManager.Core.CryptoService.UserRelated
 {
+    using System;
+    using System.Security.Cryptography;
+    using System.Text;
+    using Org.BouncyCastle.Crypto;
+    using Org.BouncyCastle.Crypto.Macs;
+    using Org.BouncyCastle.Crypto.Modes;
+    using Org.BouncyCastle.Crypto.Paddings;
+    using Org.BouncyCastle.Crypto.Parameters;
+
+    // Taken from stackoverflow
     public class CredentialsCryptoService<TBlockCipher, TDigest>
         where TBlockCipher : IBlockCipher, new()
         where TDigest : IDigest, new()
@@ -24,15 +25,15 @@ namespace TestCaseManager.Core.CryptoService.UserRelated
 
         public CredentialsCryptoService(Encoding encoding, byte[] key, byte[] macKey)
         {
-            this._encoding = encoding;
-            this._key = key;
+            _encoding = encoding;
+            _key = key;
             Init(key, macKey, new Pkcs7Padding());
         }
 
         public CredentialsCryptoService(Encoding encoding, byte[] key, byte[] macKey, IBlockCipherPadding padding)
         {
-            this._encoding = encoding;
-            this._key = key;
+            _encoding = encoding;
+            _key = key;
             Init(key, macKey, padding);
         }
 
@@ -118,16 +119,9 @@ namespace TestCaseManager.Core.CryptoService.UserRelated
 
         private byte[] BouncyCastleCrypto(bool forEncrypt, byte[] input, ICipherParameters parameters)
         {
-            try
-            {
-                _cipher.Init(forEncrypt, parameters);
+            _cipher.Init(forEncrypt, parameters);
 
-                return _cipher.DoFinal(input);
-            }
-            catch (CryptoException)
-            {
-                throw;
-            }
+            return _cipher.DoFinal(input);
         }
 
         private byte[] GenerateIv()

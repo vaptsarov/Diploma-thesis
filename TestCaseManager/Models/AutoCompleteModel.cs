@@ -12,11 +12,7 @@
 
         public string[] KeywordStrings
         {
-            get
-            {
-                if (_keywordStrings == null) _keywordStrings = new[] {DisplayName};
-                return _keywordStrings;
-            }
+            get { return _keywordStrings ?? (_keywordStrings = new[] {DisplayName}); }
         }
 
         public string DisplayName { get; set; }

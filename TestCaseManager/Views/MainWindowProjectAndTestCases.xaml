@@ -7,11 +7,11 @@
              xmlns:converters="clr-namespace:TestCaseManager.BindingConverters"
              xmlns:local="clr-namespace:TestCaseManager.Core.Proxy;assembly=TestCaseManager.Core"
              mc:Ignorable="d"
-             d:DesignHeight="1024" d:DesignWidth="768" Loaded="MainWindowProjectAndTestCases_Loaded" >
+             d:DesignHeight="1024" d:DesignWidth="768" Loaded="MainWindowProjectAndTestCases_Loaded">
 
     <UserControl.Resources>
         <Style TargetType="{x:Type mui:ModernFrame}">
-            <Setter Property="Margin" Value="-10,0,0,0"/>
+            <Setter Property="Margin" Value="-10,0,0,0" />
         </Style>
 
         <local:ProjectList x:Key="projList" />
@@ -68,11 +68,12 @@
                 <SolidColorBrush Color="#ABFFFFFF" />
             </Grid.Background>
         </Grid>
-        
+
         <ProgressBar Name="progressBar" Minimum="0" Maximum="1" Height="16" IsIndeterminate="True" Margin="0,0,0,16" />
 
         <!-- Project/area and test cases left panel on the main screen. -->
-        <DockPanel Height="Auto" Name="MainTable" Width="auto" LastChildFill="True" Visibility="Hidden" Margin="0,5,0,0">
+        <DockPanel Height="Auto" Name="MainTable" Width="auto" LastChildFill="True" Visibility="Hidden"
+                   Margin="0,5,0,0">
             <Grid Name="ProjectGrid">
                 <TextBlock Text="Projects > Areas > Test Cases" Margin="0,-10,0,0" TextTrimming="CharacterEllipsis"
                            FontWeight="Medium" FontSize="16" />

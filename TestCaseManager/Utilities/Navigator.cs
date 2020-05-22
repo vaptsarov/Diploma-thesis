@@ -1,7 +1,7 @@
-﻿using System.Windows;
-
-namespace TestCaseManager.Utilities
+﻿namespace TestCaseManager.Utilities
 {
+    using System.Windows;
+
     public class Navigator : BaseNavigator
     {
         /// <summary>
@@ -15,25 +15,17 @@ namespace TestCaseManager.Utilities
         /// <value>
         ///     The instance.
         /// </value>
-        public static Navigator Instance
-        {
-            get
-            {
-                if (_instance == null) _instance = new Navigator();
-
-                return _instance;
-            }
-        }
+        public static Navigator Instance => _instance ?? (_instance = new Navigator());
 
         public void NavigateMainWindowProjectAndTestCases(FrameworkElement source)
         {
-            var url = "/Views/MainWindowProjectAndTestCases.xaml";
+            const string url = "/Views/MainWindowProjectAndTestCases.xaml";
             Navigate(source, url);
         }
 
         public void NavigateAuthorization(FrameworkElement source)
         {
-            var url = "/Views/AuthorizationHome.xaml";
+            const string url = "/Views/AuthorizationHome.xaml";
             Navigate(source, url);
         }
     }

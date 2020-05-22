@@ -1,8 +1,8 @@
-﻿using System.Collections.ObjectModel;
-using TestCaseManager.Core.Proxy.TestDefinition;
-
-namespace TestCaseManager.Core.Proxy
+﻿namespace TestCaseManager.Core.Proxy
 {
+    using System.Collections.ObjectModel;
+    using TestDefinition;
+
     public class TestCaseProxy
     {
         public TestCaseProxy()

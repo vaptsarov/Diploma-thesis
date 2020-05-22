@@ -1,21 +1,20 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using FirstFloor.ModernUI.Presentation;
-using TestCaseManager.Core;
-using TestCaseManager.Core.Converters;
-using TestCaseManager.Core.Managers;
-using TestCaseManager.Core.Proxy;
-using TestCaseManager.Core.Proxy.TestDefinition;
-using TestCaseManager.Models;
-using TestCaseManager.Utilities;
-using TestCaseManager.Utilities.StringUtility;
-
-namespace TestCaseManager.Views.CustomControls
+﻿namespace TestCaseManager.Views.CustomControls
 {
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using Core.Converters;
+    using Core.Managers;
+    using Core.Proxy;
+    using Core.Proxy.TestDefinition;
+    using FirstFloor.ModernUI.Presentation;
+    using Models;
+    using Utilities;
+    using Utilities.StringUtility;
+
     /// <summary>
     ///     Interaction logic for CreateTestCaseDialog.xaml
     /// </summary>
@@ -126,9 +125,11 @@ namespace TestCaseManager.Views.CustomControls
                     Id = _testCaseId,
                     Title = TestCaseTitle.Text,
                     Priority =
-                    EnumUtil.ParseEnum<Priority>((PriorityComboBox.SelectedItem as ComboBoxItem).Content.ToString()),
+                        EnumUtil.ParseEnum<Priority>((PriorityComboBox.SelectedItem as ComboBoxItem).Content
+                            .ToString()),
                     Severity =
-                    EnumUtil.ParseEnum<Severity>((SeverityComboBox.SelectedItem as ComboBoxItem).Content.ToString()),
+                        EnumUtil.ParseEnum<Severity>((SeverityComboBox.SelectedItem as ComboBoxItem).Content
+                            .ToString()),
                     IsAutomated = IsAutomatedCheckBox.IsChecked ?? false,
 
                     StepDefinitionList = new ObservableCollection<StepDefinitionProxy>()
@@ -149,10 +150,10 @@ namespace TestCaseManager.Views.CustomControls
                 var manager = new TestManager();
 
                 if (!_isEditingExistingTestCase)
-                    TestCaseDialog._testCase = ProxyConverter.TestCaseModelToProxy(manager.Create(_relatedArea.Id,
+                    _testCase = ProxyConverter.TestCaseModelToProxy(manager.Create(_relatedArea.Id,
                         ModelConverter.TestCaseProxyToModel(testCase)));
                 else
-                    TestCaseDialog._testCase =
+                    _testCase =
                         ProxyConverter.TestCaseModelToProxy(
                             manager.Update(ModelConverter.TestCaseProxyToModel(testCase)));
 

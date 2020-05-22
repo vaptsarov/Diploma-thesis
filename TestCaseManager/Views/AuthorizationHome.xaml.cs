@@ -1,21 +1,19 @@
-﻿using System;
-using System.Security;
-using System.Windows;
-using System.Windows.Controls;
-using TestCaseManager.Core.AuthenticatePoint;
-using TestCaseManager.Core.Managers;
-using TestCaseManager.Models;
-using TestCaseManager.Utilities;
-
-namespace TestCaseManager.Views
+﻿namespace TestCaseManager.Views
 {
+    using System;
+    using System.Security;
+    using System.Windows;
+    using System.Windows.Controls;
+    using Core.AuthenticatePoint;
+    using Core.Managers;
+    using Models;
+    using Utilities;
+
     /// <summary>
     ///     Interaction logic for AuthorizationHome.xaml
     /// </summary>
     public partial class AuthorizationPage : UserControl
     {
-        private TextboxViewModel _textboxViewModel;
-
         public AuthorizationPage()
         {
             InitializeComponent();
@@ -26,7 +24,7 @@ namespace TestCaseManager.Views
         private void RegisterEvents()
         {
             // Event for logged user
-            AuthenticationManager.Instance().ValidAuthenticationEvent += (s, e) =>
+            AuthenticationManager.SingletonInstance().ValidAuthenticationEvent += (s, e) =>
             {
                 Visibility = Visibility.Hidden;
                 Username.Clear();
@@ -35,7 +33,7 @@ namespace TestCaseManager.Views
                 Navigator.Instance.NavigateMainWindowProjectAndTestCases(this);
             };
 
-            AuthenticationManager.Instance().LogoutEvent += (s, e) => { Visibility = Visibility.Visible; };
+            AuthenticationManager.SingletonInstance().LogoutEvent += (s, e) => { Visibility = Visibility.Visible; };
         }
 
         private void AuthorizeCredentials_Button(object sender, RoutedEventArgs e)
@@ -44,45 +42,42 @@ namespace TestCaseManager.Views
             SetVisibilityForInvalidCredentialsLabel(false);
 
             // Verification if both of the properties are null or empty
-            if ((string.IsNullOrEmpty(Username.Text)) == false)
-            {
-                // Check whether the credentials are correct or not
-                var isUserCorrect = IsUserCredentialsCorrect(Username.Text, Password.SecurePassword);
-                if (isUserCorrect == false)
-                    SetVisibilityForInvalidCredentialsLabel();
-                else
-                    AuthenticationManager.Instance()
-                        .RegisterUserForAuthentication(Username.Text, Password.SecurePassword);
-            }
+            if (string.IsNullOrEmpty(Username.Text))
+                return;
+
+            // Check whether the credentials are correct or not
+            var isUserCorrect = IsUserCredentialsCorrect(Username.Text, Password.SecurePassword);
+            if (isUserCorrect == false)
+                SetVisibilityForInvalidCredentialsLabel();
+            else
+                AuthenticationManager.SingletonInstance()
+                    .RegisterUserForAuthentication(Username.Text, Password.SecurePassword);
         }
 
         private void RegisterUsernameValidation()
         {
-            _textboxViewModel = new TextboxViewModel
+            DataContext = new TextboxViewModel
             {
                 Text = Username.Text
             };
-            DataContext = _textboxViewModel;
         }
 
-        private bool IsUserCredentialsCorrect(string username, SecureString password)
+        private static bool IsUserCredentialsCorrect(string username, SecureString password)
         {
-            var userManager = new UserManager();
-            var isUserCredentialsCorrect = true;
             try
             {
-                userManager.GetUser(username, password);
+                new UserManager().GetUser(username, password);
             }
             catch (ArgumentNullException)
             {
-                isUserCredentialsCorrect = false;
+                return false;
             }
             catch (ArgumentException)
             {
-                isUserCredentialsCorrect = false;
+                return false;
             }
 
-            return isUserCredentialsCorrect;
+            return true;
         }
 
         private void SetVisibilityForInvalidCredentialsLabel(bool isVisible = true)

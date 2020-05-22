@@ -1,23 +1,22 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
-using FirstFloor.ModernUI.Presentation;
-using TestCaseManager.Core;
-using TestCaseManager.Core.Converters;
-using TestCaseManager.Core.Managers;
-using TestCaseManager.Core.Managers.ProxyManagers;
-using TestCaseManager.Core.Proxy;
-using TestCaseManager.Core.Proxy.TestRun;
-using TestCaseManager.Core.Proxy.TestStatus;
-using TestCaseManager.DB;
-
-namespace TestCaseManager.Views.CustomControls
+﻿namespace TestCaseManager.Views.CustomControls
 {
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using System.Windows;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using Core.Converters;
+    using Core.Managers;
+    using Core.Managers.ProxyManagers;
+    using Core.Proxy;
+    using Core.Proxy.TestRun;
+    using Core.Proxy.TestStatus;
+    using DB;
+    using FirstFloor.ModernUI.Presentation;
+
     /// <summary>
     ///     Interaction logic for CreateTestCaseDialog.xaml
     /// </summary>

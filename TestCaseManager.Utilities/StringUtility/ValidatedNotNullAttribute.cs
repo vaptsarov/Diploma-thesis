@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace TestCaseManager.Utilities.StringUtility
+﻿namespace TestCaseManager.Utilities.StringUtility
 {
+    using System;
+
     /// <summary>
     ///     Allows our custom argument checking methods to avoid rising FxCop analysis error/warnings
     /// </summary>

@@ -1,28 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Security;
-using TestCaseManager.Core.AuthenticatePoint;
-using TestCaseManager.Core.CryptoService;
-using TestCaseManager.Core.CryptoService.CertificateRelated;
-using TestCaseManager.DB;
-using TestCaseManager.Utilities;
-using TestCaseManager.Utilities.StringUtility;
-
-namespace TestCaseManager.Core.Managers
+﻿namespace TestCaseManager.Core.Managers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Security;
+    using AuthenticatePoint;
+    using CryptoService;
+    using CryptoService.CertificateRelated;
+    using DB;
+    using Utilities;
+    using Utilities.StringUtility;
+
     public class UserManager
     {
-        private readonly AppConfigManager _appConfigManager;
         private readonly X509Certificate2CryptoService _cryptoService;
 
         public UserManager()
         {
-            _appConfigManager = new AppConfigManager();
+            var appConfigManager = new AppConfigManager();
 
             var certificateResolver =
-                new X509Certificate2FromStoreResolver(_appConfigManager.GetCertificateThumbprint);
+                new X509Certificate2FromStoreResolver(appConfigManager.GetCertificateThumbprint);
 
             _cryptoService = new X509Certificate2CryptoService(certificateResolver);
         }
@@ -32,10 +30,10 @@ namespace TestCaseManager.Core.Managers
             if (userId < 0)
                 throw new ArgumentException("User ID must be a positive number.");
 
-            ApplicationUser user = null;
+            ApplicationUser user;
             using (var db = new TestcaseManagerDB())
             {
-                user = db.ApplicationUsers.Where(usr => usr.UserId == userId).FirstOrDefault();
+                user = db.ApplicationUsers.FirstOrDefault(usr => usr.UserId == userId);
             }
 
             if (user == null)
@@ -47,7 +45,7 @@ namespace TestCaseManager.Core.Managers
 
         public ICollection<ApplicationUser> GetAll()
         {
-            ICollection<ApplicationUser> users = new Collection<ApplicationUser>();
+            ICollection<ApplicationUser> users;
             using (var db = new TestcaseManagerDB())
             {
                 users = db.ApplicationUsers.ToList();
@@ -103,7 +101,7 @@ namespace TestCaseManager.Core.Managers
                 if (isAdmin)
                     user.IsAdmin = true;
 
-                user.CreatedBy = AuthenticationManager.Instance().GetCurrentUsername;
+                user.CreatedBy = "SelfAdmin";
                 user.CreatedOn = DateTime.UtcNow;
 
                 db.ApplicationUsers.Add(user);
@@ -135,7 +133,7 @@ namespace TestCaseManager.Core.Managers
                     }
 
                     user.IsAdmin = isAdmin;
-                    user.UpdatedBy = AuthenticationManager.Instance().GetCurrentUsername;
+                    user.UpdatedBy = AuthenticationManager.SingletonInstance().GetCurrentUsername;
 
                     db.SaveChanges();
                 }
@@ -159,13 +157,10 @@ namespace TestCaseManager.Core.Managers
 
         public bool CheckUsernameExists(string username)
         {
-            var userExists = false;
             using (var db = new TestcaseManagerDB())
             {
-                userExists = db.ApplicationUsers.Any(user => user.Username.Equals(username));
+                return db.ApplicationUsers.Any(user => user.Username.Equals(username));
             }
-
-            return userExists;
         }
     }
 }

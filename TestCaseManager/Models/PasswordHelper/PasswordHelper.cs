@@ -1,8 +1,8 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-
-namespace TestCaseManager.Models.PasswordHelper
+﻿namespace TestCaseManager.Models.PasswordHelper
 {
+    using System.Windows;
+    using System.Windows.Controls;
+
     public static class PasswordHelper
     {
         public static readonly DependencyProperty PasswordProperty =
@@ -52,10 +52,14 @@ namespace TestCaseManager.Models.PasswordHelper
         private static void OnPasswordPropertyChanged(DependencyObject sender,
             DependencyPropertyChangedEventArgs e)
         {
-            var passwordBox = sender as PasswordBox;
+            if (!(sender is PasswordBox passwordBox)) 
+                return;
+
             passwordBox.PasswordChanged -= PasswordChanged;
 
-            if (!GetIsUpdating(passwordBox)) passwordBox.Password = (string) e.NewValue;
+            if (!GetIsUpdating(passwordBox)) 
+                passwordBox.Password = (string) e.NewValue;
+
             passwordBox.PasswordChanged += PasswordChanged;
         }
 
@@ -76,6 +80,9 @@ namespace TestCaseManager.Models.PasswordHelper
         {
             var passwordBox = sender as PasswordBox;
             SetIsUpdating(passwordBox, true);
+            if (passwordBox == null) 
+                return;
+
             SetPassword(passwordBox, passwordBox.Password);
             SetIsUpdating(passwordBox, false);
         }

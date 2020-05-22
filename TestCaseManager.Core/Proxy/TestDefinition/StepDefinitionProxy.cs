@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace TestCaseManager.Core.Proxy.TestDefinition
+﻿namespace TestCaseManager.Core.Proxy.TestDefinition
 {
+    using System;
+
     [Serializable]
     public class StepDefinitionProxy
     {

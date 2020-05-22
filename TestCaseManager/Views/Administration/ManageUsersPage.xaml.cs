@@ -1,15 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using TestCaseManager.Core.Managers;
-using TestCaseManager.DB;
-using TestCaseManager.Models;
-
-namespace TestCaseManager.Views.Administration
+﻿namespace TestCaseManager.Views.Administration
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Media;
+    using Core.Managers;
+    using DB;
+    using Models;
+
     /// <summary>
     ///     Interaction logic for ManageUsersPage.xaml
     /// </summary>
@@ -49,7 +49,7 @@ namespace TestCaseManager.Views.Administration
             if (string.IsNullOrWhiteSpace(username) == false)
                 if (_users.Any(user => user.Username.Equals(username)))
                 {
-                    _selectedUser = _users.Where(user => user.Username.Equals(username)).First();
+                    _selectedUser = _users.First(user => user.Username.Equals(username));
                     Username.Text = _selectedUser.Username;
                     IsAdminCheckBox.IsChecked = _selectedUser.IsAdmin;
                 }
@@ -68,7 +68,7 @@ namespace TestCaseManager.Views.Administration
                 _users.Add(updatedUser);
                 _selectedUser = updatedUser;
 
-                MessageLabel.Content = "User is successfuly updated.";
+                MessageLabel.Content = "User is successfully updated.";
                 MessageLabel.Foreground = new SolidColorBrush(Color.FromRgb(0, 204, 0));
 
                 ClearFields();
@@ -77,17 +77,17 @@ namespace TestCaseManager.Views.Administration
 
         private void DeleteUser_Click(object sender, RoutedEventArgs e)
         {
-            if (_selectedUser != null)
-            {
-                var manager = new UserManager();
-                manager.DeleteUser(_selectedUser.UserId);
+            if (_selectedUser == null) 
+                return;
 
-                _users.Remove(_selectedUser);
-                AutoCompleteBox.RemoveItem(_selectedUser.Username);
-                _selectedUser = null;
+            var manager = new UserManager();
+            manager.DeleteUser(_selectedUser.UserId);
 
-                ClearFields();
-            }
+            _users.Remove(_selectedUser);
+            AutoCompleteBox.RemoveItem(_selectedUser.Username);
+            _selectedUser = null;
+
+            ClearFields();
         }
 
         private void ClearFields()

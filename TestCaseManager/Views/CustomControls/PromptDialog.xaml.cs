@@ -1,7 +1,7 @@
-﻿using System.Windows;
-
-namespace TestCaseManager.Views.CustomControls
+﻿namespace TestCaseManager.Views.CustomControls
 {
+    using System.Windows;
+
     /// <summary>
     ///     Interaction logic for PromptDialog.xaml
     /// </summary>

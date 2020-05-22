@@ -1,11 +1,11 @@
-﻿using System;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Security;
-using System.Text;
-
-namespace TestCaseManager.Utilities.StringUtility
+﻿namespace TestCaseManager.Utilities.StringUtility
 {
+    using System;
+    using System.Linq;
+    using System.Runtime.InteropServices;
+    using System.Security;
+    using System.Text;
+
     public static class UtilityExtensions
     {
         private const string ExceptionDetailsFormat = @"{0}

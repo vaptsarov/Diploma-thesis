@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using TestCaseManager.Core.Converters;
-using TestCaseManager.Core.Proxy;
-using TestCaseManager.DB;
-
-namespace TestCaseManager.Core.Managers.ProxyManagers
+﻿namespace TestCaseManager.Core.Managers.ProxyManagers
 {
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
+    using Converters;
+    using DB;
+    using Proxy;
+
     public class ProjectProxyManager : IProxyManager<ProjectProxy>
     {
         public ObservableCollection<ProjectProxy> GetAll()

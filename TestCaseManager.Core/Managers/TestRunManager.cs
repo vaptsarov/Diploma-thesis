@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using TestCaseManager.Core.AuthenticatePoint;
-using TestCaseManager.Core.Proxy.TestStatus;
-using TestCaseManager.DB;
-
-namespace TestCaseManager.Core.Managers
+﻿namespace TestCaseManager.Core.Managers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
+    using AuthenticatePoint;
+    using DB;
+    using Proxy.TestStatus;
+
     public class TestRunManager : ITestManager<TestRun>
     {
         public List<TestRun> GetAll()
         {
-            List<TestRun> testRun = null;
+            List<TestRun> testRun;
             using (var context = new TestcaseManagerDB())
             {
                 testRun = context.TestRuns.ToList();
@@ -48,7 +48,7 @@ namespace TestCaseManager.Core.Managers
             using (var context = new TestcaseManagerDB())
             {
                 testRun.Name = name;
-                testRun.CreatedBy = AuthenticationManager.Instance().GetCurrentUsername;
+                testRun.CreatedBy = AuthenticationManager.SingletonInstance().GetCurrentUsername;
                 testRun.CreatedOn = DateTime.UtcNow;
 
                 context.TestRuns.Add(testRun);
@@ -65,7 +65,7 @@ namespace TestCaseManager.Core.Managers
             {
                 var testRun = context.TestRuns.FirstOrDefault(run => run.ID == id);
 
-                if (testRun != null)
+                if (testRun != null && testRun.TestComposites.Any())
                     collection = testRun.TestComposites;
             }
 
@@ -80,7 +80,8 @@ namespace TestCaseManager.Core.Managers
                 ICollection<TestComposite> manyToManyRelationList = runToUpdate?.TestComposites.ToList();
 
                 foreach (var testCase in testCases)
-                    if (manyToManyRelationList != null && manyToManyRelationList.Any(cs => cs.TestCaseID == testCase.ID) == false)
+                    if (manyToManyRelationList != null &&
+                        manyToManyRelationList.Any(cs => cs.TestCaseID == testCase.ID) == false)
                     {
                         var composite = new TestComposite
                         {
@@ -92,9 +93,10 @@ namespace TestCaseManager.Core.Managers
                         runToUpdate.TestComposites.Add(composite);
                     }
 
-                foreach (var composite in manyToManyRelationList)
-                    if (testCases.Any(@case => @case.ID == composite.TestCaseID) == false)
-                        runToUpdate?.TestComposites.Remove(composite);
+                if (manyToManyRelationList != null)
+                    foreach (var composite in manyToManyRelationList)
+                        if (testCases.Any(@case => @case.ID == composite.TestCaseID) == false)
+                            runToUpdate.TestComposites.Remove(composite);
 
                 context.SaveChanges();
             }
@@ -104,7 +106,9 @@ namespace TestCaseManager.Core.Managers
         {
             using (var context = new TestcaseManagerDB())
             {
-                var testComposite = context.TestComposites.FirstOrDefault(comp => comp.TestRunID == runId && comp.TestCaseID == testCaseId);
+                var testComposite =
+                    context.TestComposites.FirstOrDefault(comp =>
+                        comp.TestRunID == runId && comp.TestCaseID == testCaseId);
 
                 if (testComposite == null) return;
 

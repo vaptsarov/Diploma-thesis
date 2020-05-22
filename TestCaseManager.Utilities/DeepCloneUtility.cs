@@ -1,8 +1,8 @@
-﻿using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-
-namespace TestCaseManager.Utilities
+﻿namespace TestCaseManager.Utilities
 {
+    using System.IO;
+    using System.Runtime.Serialization.Formatters.Binary;
+
     public static class DeepCloneUtility
     {
         public static T DeepClone<T>(T obj)

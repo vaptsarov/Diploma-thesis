@@ -1,7 +1,7 @@
-﻿using System.Windows;
-
-namespace TestCaseManager
+﻿namespace TestCaseManager
 {
+    using System.Windows;
+
     /// <summary>
     ///     Interaction logic for App.xaml
     /// </summary>

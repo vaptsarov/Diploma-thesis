@@ -12,11 +12,11 @@
                 <SolidColorBrush Color="#ABFFFFFF" />
             </Grid.Background>
         </Grid>
-        
+
         <ProgressBar Name="progressBar" Minimum="0" Maximum="1" Height="16" IsIndeterminate="True" Margin="0,0,0,16" />
         <DockPanel Height="Auto" Name="MainTable" Width="Auto" LastChildFill="True" Visibility="Hidden">
             <Grid Name="TestRunGrid">
-                <TextBlock Text="Test Runs" Margin="0,-5,0,36" FontWeight="Medium" FontSize="16"/>
+                <TextBlock Text="Test Runs" Margin="0,-5,0,36" FontWeight="Medium" FontSize="16" />
                 <Border Name="TestRunBorder" BorderBrush="Black" BorderThickness="1.6" Width="270" Margin="0,20,0,35"
                         VerticalAlignment="Stretch" HorizontalAlignment="Left">
                     <ListBox Name="TestRunListBox" FontSize="13" Grid.Row="1" VerticalAlignment="Stretch"

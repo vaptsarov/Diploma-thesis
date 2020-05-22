@@ -1,7 +1,7 @@
-﻿using System.Windows.Controls;
-
-namespace TestCaseManager.Views.Administration
+﻿namespace TestCaseManager.Views.Administration
 {
+    using System.Windows.Controls;
+
     /// <summary>
     ///     Interaction logic for UserManagementPage.xaml
     /// </summary>

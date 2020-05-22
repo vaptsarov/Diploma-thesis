@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Navigation;
-using FirstFloor.ModernUI.Presentation;
-using TestCaseManager.GitHub;
-using TestCaseManager.Utilities;
-using TestCaseManager.Utilities.StringUtility;
-
-namespace TestCaseManager.Views.CustomControls
+﻿namespace TestCaseManager.Views.CustomControls
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Threading.Tasks;
+    using System.Windows;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using System.Windows.Navigation;
+    using FirstFloor.ModernUI.Presentation;
+    using GitHub;
+    using Utilities.StringUtility;
+
     /// <summary>
     ///     Interaction logic for GitHubRepoSelectorDialog.xaml
     /// </summary>

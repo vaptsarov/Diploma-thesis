@@ -1,8 +1,8 @@
-﻿using System.ComponentModel;
-using System.Security;
-
-namespace TestCaseManager.Models
+﻿namespace TestCaseManager.Models
 {
+    using System.ComponentModel;
+    using System.Security;
+
     public class PasswordViewModel : INotifyPropertyChanged, IDataErrorInfo
     {
         private SecureString _securePassword;

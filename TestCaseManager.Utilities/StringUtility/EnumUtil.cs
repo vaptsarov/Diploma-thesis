@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace TestCaseManager.Utilities.StringUtility
+﻿namespace TestCaseManager.Utilities.StringUtility
 {
+    using System;
+
     public static class EnumUtil
     {
         public static T ParseEnum<T>(string value)

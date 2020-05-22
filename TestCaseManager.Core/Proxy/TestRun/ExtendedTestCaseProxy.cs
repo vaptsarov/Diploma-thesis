@@ -1,7 +1,7 @@
-﻿using TestCaseManager.Core.Proxy.TestStatus;
-
-namespace TestCaseManager.Core.Proxy.TestRun
+﻿namespace TestCaseManager.Core.Proxy.TestRun
 {
+    using TestStatus;
+
     public class ExtendedTestCaseProxy : TestCaseProxy
     {
         public ExtendedTestCaseProxy(TestCaseProxy proxy, Status status) :
@@ -13,7 +13,6 @@ namespace TestCaseManager.Core.Proxy.TestRun
 
         public ExtendedTestCaseProxy()
         {
-           
         }
 
         public Status Status { get; set; }

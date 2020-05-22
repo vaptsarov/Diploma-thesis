@@ -1,16 +1,16 @@
-﻿using System;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-
-namespace TestCaseManager.Core.CryptoService
+﻿namespace TestCaseManager.Core.CryptoService
 {
+    using System;
+    using System.Linq;
+    using System.Security.Cryptography.X509Certificates;
+
     public class X509Certificate2FromStoreResolver : IX509Certificate2Resolver
     {
         private readonly string _thumbprint;
 
         public X509Certificate2FromStoreResolver(string thumbprint)
         {
-            this._thumbprint = thumbprint;
+            _thumbprint = thumbprint;
         }
 
         public X509Certificate2 GetCertificate()
@@ -34,13 +34,14 @@ namespace TestCaseManager.Core.CryptoService
 
         protected virtual X509Store GetStore(StoreName storeName, StoreLocation? storeLocation = null)
         {
-            return !storeLocation.HasValue ? new X509Store(storeName) : new X509Store(storeName, storeLocation.GetValueOrDefault());
+            return !storeLocation.HasValue
+                ? new X509Store(storeName)
+                : new X509Store(storeName, storeLocation.GetValueOrDefault());
         }
 
         private X509Certificate2 GetCertificateFromStore(X509Store store)
         {
-            X509Certificate2 certificate = null;
-
+            X509Certificate2 certificate;
             store.Open(OpenFlags.ReadOnly);
 
             try

@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace TestCaseManager.Core.Managers
+﻿namespace TestCaseManager.Core.Managers
 {
+    using System.Collections.Generic;
+
     internal interface ITestManager<T>
     {
         List<T> GetAll();
